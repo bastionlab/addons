@@ -1,5 +1,5 @@
 import type { Chat } from '~/composables/useChats'
-import { sinceClear, type Tool, type Turn } from '~/composables/useAsk'
+import { sinceClear, type Turn } from '~/composables/useAsk'
 
 const base = (p = '') => p.split('/').filter(Boolean).pop() ?? p
 const short = (s = '', n = 70) => (s = s.replace(/\s+/g, ' ').trim()).length > n ? s.slice(0, n - 1) + '…' : s
