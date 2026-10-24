@@ -13,7 +13,7 @@ onMounted(() => {
 })
 
 const turns = computed<Turn[]>({ get: () => current.value?.turns ?? [], set: v => (current.value!.turns = v) })
-const { ask, run, stop: stopLocal, busy: busyLocal, models, model: localModel } = useAsk('chat', turns as any, touch)
+const { ask, run, stop: stopLocal, models, model: localModel } = useAsk('chat', turns as any, touch)
 
 // which engine a new chat starts with is remembered; each chat keeps its own afterwards
 const lastEngine = () => { try { return localStorage.getItem('chat.engine') === 'claude' ? 'claude' : 'local' } catch { return 'local' } }
