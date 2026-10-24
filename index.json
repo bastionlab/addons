@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792865793,
+  "updated": 1792869433,
   "addons": [
     {
       "id": "ai",
@@ -35,7 +35,7 @@
       "id": "deals",
       "name": "Deals",
       "icon": "deals",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "Watches Kleinanzeigen for your keywords, lets the local model judge each ad and pings Discord on a steal.",
       "routes": [
@@ -46,7 +46,8 @@
       ],
       "ct": "deals",
       "depends_on": [
-        "ai"
+        "ai",
+        "hunters"
       ],
       "backend": "https://github.com/pvedash/deals",
       "path": "deals"
@@ -71,7 +72,7 @@
       "id": "flats",
       "name": "Flats",
       "icon": "key",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "Rental flats from several portals, warm rent worked out, duplicates folded, a landlord message ready to send.",
       "routes": [
@@ -79,7 +80,8 @@
       ],
       "ct": "deals",
       "depends_on": [
-        "ai"
+        "ai",
+        "hunters"
       ],
       "backend": "https://github.com/pvedash/deals",
       "path": "flats"
@@ -88,7 +90,7 @@
       "id": "habits",
       "name": "Habits",
       "icon": "check",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "Offline-first habit tracker with streaks, a calendar and a perfect-day celebration.",
       "routes": [
@@ -102,10 +104,27 @@
       "path": "habits"
     },
     {
+      "id": "hunters",
+      "name": "Hunters backend",
+      "icon": "deals",
+      "version": "1.0.0",
+      "author": "MaxJC0",
+      "desc": "The app behind Deals, Flats and Jobs: polls the portals, lets the local model judge, keeps the feeds. No tab of its own.",
+      "needs": [
+        "own CT"
+      ],
+      "ct": "deals",
+      "depends_on": [
+        "ai"
+      ],
+      "backend": "https://github.com/pvedash/deals",
+      "path": "hunters"
+    },
+    {
       "id": "jobs",
       "name": "Jobs",
       "icon": "briefcase",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "Reads your CV, polls job portals and scores every posting for fit, with the apply link found for you.",
       "routes": [
@@ -116,7 +135,8 @@
       ],
       "ct": "deals",
       "depends_on": [
-        "ai"
+        "ai",
+        "hunters"
       ],
       "backend": "https://github.com/pvedash/deals",
       "path": "jobs"
@@ -169,7 +189,7 @@
       "id": "money",
       "name": "Money",
       "icon": "euro",
-      "version": "1.1.0",
+      "version": "1.2.0",
       "author": "MaxJC0",
       "desc": "Firefly III with bank sync: categories, subscriptions, depot, net worth, forecast and a monthly report.",
       "routes": [

@@ -1,0 +1,13 @@
+# one add-on: this file is what the Add-ons page (and the marketplace index) shows
+id: hunters
+name: Hunters backend
+icon: deals
+order: 60
+author: MaxJC0
+version: 1.0.0
+desc: "The app behind Deals, Flats and Jobs: polls the portals, lets the local model judge, keeps the feeds. No tab of its own."
+routes: []
+ct: deals
+backend: https://github.com/pvedash/deals   # the app behind this tab, in its own CT
+needs: [own CT]
+depends_on: [ai]

@@ -4,11 +4,11 @@ name: Jobs
 icon: briefcase
 order: 10
 author: MaxJC0
-version: 1.0.0
+version: 1.1.0
 desc: "Reads your CV, polls job portals and scores every posting for fit, with the apply link found for you."
 routes: [/jobs]
 home: true          # brings app/components/HomeJobs.global.vue for the home page
 ct: deals
 backend: https://github.com/pvedash/deals   # the app behind this tab, in its own CT
 needs: [your CV]
-depends_on: [ai]
+depends_on: [ai, hunters]
