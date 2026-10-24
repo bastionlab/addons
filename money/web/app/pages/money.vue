@@ -200,6 +200,19 @@ const run = computed(() => d.value?.last_run)
 const runErrors = computed(() => Object.entries(run.value?.summary ?? {}).filter(([, v]) => typeof v === 'string' && /error|login/.test(v as string)))
 const linkFor = (a: any) => d.value?.links?.find((l: any) => l.session_id === a.session_id)
 const daysLeft = (iso: string) => Math.round((new Date(iso).getTime() - Date.now()) / 86400000)
+/** the one line about connections the Money page still shows: what needs the owner, if anything */
+const attention = computed(() => {
+  const s = d.value?.setup
+  if (!s) return ''
+  if (!s.eb) return 'No bank connected yet'
+  const st = s.tr_login?.state
+  if (st === 'need_code') return 'Trade Republic: enter the code'
+  if (st === 'waiting_app') return 'Trade Republic: confirm in the app'
+  const soon = (d.value.links ?? []).filter((l: any) => daysLeft(l.valid_until) <= 14)
+  if (soon.length) return `${soon.map((l: any) => l.aspsp).join(', ')}: bank consent ends in ${Math.max(0, Math.min(...soon.map((l: any) => daysLeft(l.valid_until))))} days`
+  const tr = (d.value.accounts ?? []).find((a: any) => a.source === 'tr' && a.error)
+  return tr ? 'Trade Republic: log in again' : ''
+})
 </script>
 
 <template>
@@ -217,7 +230,8 @@ const daysLeft = (iso: string) => Math.round((new Date(iso).getTime() - Date.now
       </div>
       <p v-if="linkMsg" class="small note">{{ linkMsg }}</p>
 
-      <MoneySetup :d="d" @changed="load" />
+      <!-- bank + TR setup live on /settings; here only what needs you now -->
+      <p v-if="attention" class="small warn note">{{ attention }} — <NuxtLink to="/settings#money">Settings</NuxtLink></p>
 
       <div class="tiles">
         <button class="tile" @click="goTab('konten')"><span class="lbl">Net worth</span><span class="big num">{{ fmtEur(d.net_worth, 0) }}</span>
@@ -397,7 +411,6 @@ const daysLeft = (iso: string) => Math.round((new Date(iso).getTime() - Date.now
           </div>
         </Panel>
         <MoneyWorth class="gap" />
-        <MoneyNotify class="gap" :n="d.setup?.notify" @changed="load" />
       </template>
 
       <MoneyTxSheet v-if="open" :tx="open" :categories="d.categories" :subs="activeSubs" @close="open = null" @category="setCat" @changed="load" />

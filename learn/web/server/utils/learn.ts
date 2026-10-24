@@ -43,7 +43,9 @@ let migrated = false
 for (const col of ['week TEXT', 'skills_state TEXT', 'skills_job TEXT']) try { db.exec(`ALTER TABLE lessons ADD COLUMN ${col}`); migrated = true } catch {}
 
 export const TRACKS = ['languages', 'concepts', 'cloud', 'devops', 'systems', 'networking', 'security', 'data', 'web', 'ai'] as const
-const WEEKLY_HOUR = 12 // Monday, Berlin time: the server is usually on by then; if not, the first tick after that catches up
+// the owner's choices on /settings (addon.yaml `settings:`), refreshed every tick; until the agent answers these hold.
+// hour: Monday, Berlin time — the server is usually on by then; if not, the first tick after that catches up
+const learnOpts = { hour: 12, model: 'sonnet' }
 export const LEVELS = ['', 'aware', 'basics', 'working', 'strong', 'expert'] as const
 
 const now = () => Date.now() / 1000
@@ -54,7 +56,7 @@ const addDays = (day: string, n: number) => new Date(Date.parse(`${day}T12:00:00
 /** the Monday whose noon slot is the latest one that has begun (before Monday noon that is last week's) */
 export function lessonWeek() {
   const wd = berlinWeekday()
-  const back = wd === 0 && berlinHour() < WEEKLY_HOUR ? 7 : wd
+  const back = wd === 0 && berlinHour() < learnOpts.hour ? 7 : wd
   return addDays(berlinDay(), -back)
 }
 /** when the next automatic lesson is due */
@@ -281,7 +283,7 @@ async function start(id: number) {
   const job = `l${id}${randomBytes(3).toString('hex')}`
   db.prepare('UPDATE lessons SET status = \'writing\', job = ?, error = NULL WHERE id = ?').run(job, id)
   try {
-    await agentCall('/learn/start', { method: 'POST', body: { job, prompt: prompt(l.topic), schema: LESSON_SCHEMA, model: 'sonnet' } })
+    await agentCall('/learn/start', { method: 'POST', body: { job, prompt: prompt(l.topic), schema: LESSON_SCHEMA, model: learnOpts.model } })
   } catch (e: any) {
     db.prepare('UPDATE lessons SET status = \'failed\', error = ? WHERE id = ?').run(String(e?.statusMessage || e?.message).slice(0, 300), id)
   }
@@ -291,7 +293,7 @@ async function startSkills(id: number) {
   const job = `s${id}${randomBytes(3).toString('hex')}`
   db.prepare('UPDATE lessons SET skills_state = \'writing\', skills_job = ? WHERE id = ?').run(job, id)
   try {
-    await agentCall('/learn/start', { method: 'POST', body: { job, prompt: skillsPrompt(getLesson(id)), schema: SKILLS_SCHEMA, model: 'sonnet' } })
+    await agentCall('/learn/start', { method: 'POST', body: { job, prompt: skillsPrompt(getLesson(id)), schema: SKILLS_SCHEMA, model: learnOpts.model } })
   } catch { db.prepare('UPDATE lessons SET skills_state = \'failed\' WHERE id = ?').run(id) }
 }
 
@@ -328,6 +330,7 @@ async function check(r: any) {
 
 let busy = false
 export async function tick() {
+  Object.assign(learnOpts, await addonSettings('learn').catch(() => ({})))
   if (busy) return
   busy = true
   try {

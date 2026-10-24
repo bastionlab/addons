@@ -4,9 +4,13 @@ name: Learn
 icon: book
 order: 2
 author: MaxJC0
-version: 1.0.0
+version: 1.1.0
 desc: "Every Monday Claude writes a one-hour tech lesson pitched at your skill map; finished lessons grow the library."
 routes: [/learn]
 needs: [Claude login]
 depends_on: []
 # web/ is a Nuxt layer (pages, components, server routes); agent/*.py are loaded by the agent through dash_sdk
+# fields on /settings (values on pve, read by web/server/utils/learn.ts through addonSettings('learn'))
+settings:
+  - { key: hour, label: "Lesson hour (Monday, Berlin time)", type: number, min: 0, max: 23, default: 12 }
+  - { key: model, label: "Claude model for lessons", type: select, options: [sonnet, opus, haiku], default: sonnet }

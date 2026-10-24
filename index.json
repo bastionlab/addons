@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792858750,
+  "updated": 1792865793,
   "addons": [
     {
       "id": "ai",
@@ -137,7 +137,7 @@
       "id": "learn",
       "name": "Learn",
       "icon": "book",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "Every Monday Claude writes a one-hour tech lesson pitched at your skill map; finished lessons grow the library.",
       "routes": [
@@ -152,7 +152,7 @@
       "id": "media",
       "name": "Media",
       "icon": "media",
-      "version": "1.2.0",
+      "version": "1.3.0",
       "author": "MaxJC0",
       "desc": "VPN-isolated download stack (*arr, qBittorrent, Seerr) feeding Jellyfin and Audiobookshelf; queues, library, removal.",
       "routes": [
@@ -169,7 +169,7 @@
       "id": "money",
       "name": "Money",
       "icon": "euro",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "Firefly III with bank sync: categories, subscriptions, depot, net worth, forecast and a monthly report.",
       "routes": [
