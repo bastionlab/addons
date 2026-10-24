@@ -4,7 +4,7 @@ name: Money
 icon: euro
 order: 11
 author: MaxJC0
-version: 1.2.0
+version: 1.2.1
 desc: "Firefly III with bank sync: categories, subscriptions, depot, net worth, forecast and a monthly report."
 routes: [/money]
 ct: money
