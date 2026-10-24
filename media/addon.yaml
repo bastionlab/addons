@@ -4,7 +4,7 @@ name: Media
 icon: media
 order: 5
 author: MaxJC0
-version: 1.0.0
+version: 1.1.0
 desc: "VPN-isolated download stack (*arr, qBittorrent, Seerr) feeding Jellyfin and Audiobookshelf; queues, library, removal."
 routes: [/media]
 home: true          # brings app/components/HomeMedia.global.vue for the home page

@@ -5,7 +5,7 @@ label: Servers
 icon: gamepad
 order: 7
 author: MaxJC0
-version: 1.0.0
+version: 1.1.0
 desc: "Minecraft, ARK and Satisfactory servers in Docker: power, console, settings, backups, playit.gg tunnel for friends."
 routes: [/servers]
 ct: gameservers

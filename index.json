@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792854529,
+  "updated": 1792856959,
   "addons": [
     {
       "id": "ai",
@@ -54,7 +54,7 @@
       "id": "dev",
       "name": "Dev",
       "icon": "dev",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "Dev boxes as LXCs: projects, previews, git/GitHub, Claude Code and /ship lanes, web terminals.",
       "routes": [
@@ -148,7 +148,7 @@
       "id": "media",
       "name": "Media",
       "icon": "media",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "VPN-isolated download stack (*arr, qBittorrent, Seerr) feeding Jellyfin and Audiobookshelf; queues, library, removal.",
       "routes": [
@@ -200,7 +200,7 @@
       "id": "servers",
       "name": "Game servers",
       "icon": "gamepad",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "Minecraft, ARK and Satisfactory servers in Docker: power, console, settings, backups, playit.gg tunnel for friends.",
       "routes": [
