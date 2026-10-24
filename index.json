@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792876794,
+  "updated": 1792877013,
   "addons": [
     {
       "id": "ai",
@@ -20,7 +20,7 @@
       "id": "chat",
       "name": "Chat",
       "icon": "chat",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": "MaxJC0",
       "desc": "Full-page chat with Claude (on the host, read-only or Auto) or a local model; chats sync across devices.",
       "routes": [
