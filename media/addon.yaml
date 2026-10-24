@@ -4,10 +4,21 @@ name: Media
 icon: media
 order: 5
 author: MaxJC0
-version: 1.1.0
+version: 1.2.0
 desc: "VPN-isolated download stack (*arr, qBittorrent, Seerr) feeding Jellyfin and Audiobookshelf; queues, library, removal."
 routes: [/media]
 home: true          # brings app/components/HomeMedia.global.vue for the home page
 ct: dl
 needs: [VPN account, storage pool]
 depends_on: []
+# tiles on Home (group app) and the service checks on Media/Metrics; url = http://<ct ip>:<port>, or the CT's
+# tailnet name (ts: true); health = path checked on http://<ct ip>:<port>
+apps:
+  - { name: Seerr, icon: "🍿", note: "Request movies & shows", group: app, hue: 195, ct: dl, port: 5055, ts: true, health: /api/v1/status }
+  # qBittorrent and Prowlarr are published by gluetun: a red dot on those two also means the VPN tunnel is down
+  - { name: qBittorrent, icon: "⬇️", note: "Torrents (via VPN)", group: media, ct: dl, port: 8080, health: / }
+  - { name: Prowlarr, icon: "🔎", note: "Indexers (via VPN)", group: media, ct: dl, port: 9696, health: /ping }
+  - { name: Radarr, icon: "🎞️", note: "Movie automation", group: media, ct: dl, port: 7878, health: /ping }
+  - { name: Sonarr, icon: "📺", note: "Series automation", group: media, ct: dl, port: 8989, health: /ping }
+  - { name: Bazarr, icon: "💬", note: "Subtitles", group: media, ct: dl, port: 6767, health: / }
+  - { name: LazyLibrarian, icon: "📚", note: "Audiobook automation", group: media, ct: dl, port: 5299, health: / }
