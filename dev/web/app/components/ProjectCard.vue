@@ -235,7 +235,7 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
 .fs { font-size: 14px; }
 .attach { margin-left: auto; cursor: pointer; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; min-width: 0; }
 .pane { height: 300px; }
-pre { margin: 0; padding: 10px 12px; height: 260px; overflow: auto; font: 12px/1.5 var(--mono); color: #d5d9e0; white-space: pre-wrap; word-break: break-all; }
+pre { margin: 0; padding: 10px 12px; height: 260px; overflow: auto; font: 12px/1.5 var(--mono); color: var(--term-fg, #d5d9e0); white-space: pre-wrap; word-break: break-all; }
 pre.empty { color: var(--faint); display: grid; place-items: center; text-align: center; height: 120px; }
 @media (max-width: 900px) {
   .proj.wide { grid-template-columns: minmax(0, 1fr); }

@@ -48,7 +48,7 @@ async function draw(force = false) {
   const h = wrap.value.clientHeight - 12
   const fs = Math.max(MIN_FONT, Math.min(MAX_FONT, Math.floor((w / (s.cols * ratio)) * 2) / 2))
   if (fs !== size.font) cellH = 0
-  let rows = Math.max(3, Math.floor(h / (cellH || fs * 1.25)))
+  const rows = Math.max(3, Math.floor(h / (cellH || fs * 1.25)))
   const resized = fs !== size.font || s.cols !== size.cols || rows !== size.rows
   if (resized) {
     term.options.fontSize = fs
