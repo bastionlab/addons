@@ -199,7 +199,7 @@ header { display: flex; align-items: center; gap: 10px; }
 .row { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; }
 .tabs { margin-left: auto; }
 .pane { border-top: 1px solid var(--line); padding-top: 10px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
-.log { margin: 0; height: 320px; overflow: auto; background: var(--term-bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: 11.5px/1.45 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; color: #c8ccd4; }
+.log { margin: 0; height: 320px; overflow: auto; background: var(--term-bg); border: 1px solid var(--line); border-radius: 8px; padding: 8px 10px; font: 11.5px/1.45 var(--mono); white-space: pre-wrap; overflow-wrap: anywhere; color: var(--term-fg, #c8ccd4); }
 .cmd { display: flex; gap: 6px; }
 .cmd input { flex: 1; min-width: 0; font-family: var(--mono); }
 .out { margin: 0; white-space: pre-wrap; background: var(--panel-2); border-radius: 8px; padding: 6px 10px; font-family: var(--mono); }
