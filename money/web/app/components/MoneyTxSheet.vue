@@ -90,7 +90,7 @@ async function saveSub() {
 }
 const months = computed(() => (p.value?.months ?? []).slice(-12))
 const mMax = computed(() => Math.max(1, ...months.value.map((m: any) => Math.abs(m.amount))))
-const subs = computed(() => (p.value?.subs ?? []).filter((s: any) => !s.dismissed))
+const paySubs = computed(() => (p.value?.subs ?? []).filter((s: any) => !s.dismissed))
 function onKey(e: KeyboardEvent) { if (e.key === 'Escape') emit('close') }
 onMounted(() => document.addEventListener('keydown', onKey))
 onUnmounted(() => document.removeEventListener('keydown', onKey))
@@ -131,7 +131,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKey))
         <div class="stats small">
           <span>{{ p.count }} booking{{ p.count === 1 ? '' : 's' }}</span>
           <span>12 months: <b class="num">{{ fmtEur(p.total_12m, 0) }}</b></span>
-          <span v-for="s in subs" :key="s.key" class="pill accent">{{ s.kind === 'in' ? 'Income' : 'Sub' }} · {{ fmtEur(s.amount) }} / {{ PERIODS[s.period]?.per }}</span>
+          <span v-for="s in paySubs" :key="s.key" class="pill accent">{{ s.kind === 'in' ? 'Income' : 'Sub' }} · {{ fmtEur(s.amount) }} / {{ PERIODS[s.period]?.per }}</span>
           <span v-if="tx.share_of" class="pill accent">Share of {{ tx.share_of }}</span>
         </div>
         <div v-if="months.length > 1" class="mbars">

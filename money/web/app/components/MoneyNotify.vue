@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /** where money pushes go (Discord #money / #alerts), test it, send/preview the month report */
-const props = defineProps<{ n: any }>()
+defineProps<{ n: any }>()
 const emit = defineEmits<{ changed: [] }>()
 const msg = ref('')
 const busy = ref(false)
