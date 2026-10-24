@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792877084,
+  "updated": 1792877154,
   "addons": [
     {
       "id": "ai",
@@ -189,7 +189,7 @@
       "id": "money",
       "name": "Money",
       "icon": "euro",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": "MaxJC0",
       "desc": "Firefly III with bank sync: categories, subscriptions, depot, net worth, forecast and a monthly report.",
       "routes": [
