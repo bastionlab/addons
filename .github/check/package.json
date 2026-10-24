@@ -1,0 +1,12 @@
+{
+  "private": true,
+  "description": "lint tooling for check.py (installed on the GitHub runner only)",
+  "type": "module",
+  "devDependencies": {
+    "eslint": "9.39.1",
+    "eslint-plugin-vue": "10.5.1",
+    "typescript": "5.9.3",
+    "typescript-eslint": "8.46.4",
+    "vue-eslint-parser": "10.2.0"
+  }
+}

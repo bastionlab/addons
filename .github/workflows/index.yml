@@ -1,0 +1,29 @@
+# A push straight to main (the owner editing add-ons on pve) keeps index.json in step with the addon.yaml files.
+# Publishes rebuild it themselves (a push made with the workflow token doesn't start other workflows).
+name: index
+on:
+  push:
+    branches: [main]
+    paths: ['*/addon.yaml']
+
+concurrency:
+  group: publish-main
+  cancel-in-progress: false
+
+permissions:
+  contents: write
+
+jobs:
+  index:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          pip install -q pyyaml
+          git pull -q --ff-only
+          python3 build-index.py
+          git diff --quiet -I'"updated"' index.json && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -qam "index: rebuilt from addon.yaml"
+          git push -q
