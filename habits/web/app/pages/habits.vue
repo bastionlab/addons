@@ -1,6 +1,6 @@
 <script setup lang="ts">
 useHead({ title: 'Habits · pve' })
-// the tracker is its own offline-first app in CT 204 (MaxJC0/habits); the dash only frames it
+// the tracker is its own offline-first app in CT 204 (pvedash/habits); the dash only frames it
 const { ts } = useDashConfig()
 const src = computed(() => ts('habits') && `${ts('habits')}/`)
 </script>

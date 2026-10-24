@@ -9,5 +9,6 @@ desc: "Reads your CV, polls job portals and scores every posting for fit, with t
 routes: [/jobs]
 home: true          # brings app/components/HomeJobs.global.vue for the home page
 ct: deals
+backend: https://github.com/pvedash/deals   # the app behind this tab, in its own CT
 needs: [your CV]
 depends_on: [ai]

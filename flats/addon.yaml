@@ -9,5 +9,6 @@ desc: "Rental flats from several portals, warm rent worked out, duplicates folde
 routes: [/wohnungen]
 home: true          # brings app/components/HomeFlats.global.vue for the home page
 ct: deals
+backend: https://github.com/pvedash/deals   # the app behind this tab, in its own CT
 needs: []
 depends_on: [ai]

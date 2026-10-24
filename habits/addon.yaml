@@ -9,6 +9,7 @@ desc: "Offline-first habit tracker with streaks, a calendar and a perfect-day ce
 routes: [/habits]
 home: true
 ct: habits
+backend: https://github.com/pvedash/habits   # the app behind this tab, in its own CT
 needs: [own CT]
 depends_on: []
-# web/ only frames the tracker, which is its own app (MaxJC0/habits) in the `habits` CT of config.json
+# web/ only frames the tracker, which is its own app (pvedash/habits) in the `habits` CT of config.json

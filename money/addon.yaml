@@ -8,5 +8,6 @@ version: 1.0.0
 desc: "Firefly III with bank sync: categories, subscriptions, depot, net worth, forecast and a monthly report."
 routes: [/money]
 ct: money
+backend: https://github.com/pvedash/money   # the app behind this tab, in its own CT
 needs: [bank login (Enable Banking), own CT]
 depends_on: [ai]

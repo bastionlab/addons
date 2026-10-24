@@ -12,7 +12,7 @@ import yaml
 
 HERE = Path(__file__).resolve().parent
 OUT = HERE / "index.json"
-KEYS = ("id", "name", "icon", "version", "author", "desc", "routes", "needs", "ct", "depends_on")
+KEYS = ("id", "name", "icon", "version", "author", "desc", "routes", "needs", "ct", "depends_on", "backend")
 
 old = json.loads(OUT.read_text()) if OUT.exists() else {"addons": []}
 local = {}

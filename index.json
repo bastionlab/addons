@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792857945,
+  "updated": 1792858750,
   "addons": [
     {
       "id": "ai",
@@ -48,6 +48,7 @@
       "depends_on": [
         "ai"
       ],
+      "backend": "https://github.com/pvedash/deals",
       "path": "deals"
     },
     {
@@ -80,6 +81,7 @@
       "depends_on": [
         "ai"
       ],
+      "backend": "https://github.com/pvedash/deals",
       "path": "flats"
     },
     {
@@ -96,6 +98,7 @@
         "own CT"
       ],
       "ct": "habits",
+      "backend": "https://github.com/pvedash/habits",
       "path": "habits"
     },
     {
@@ -115,6 +118,7 @@
       "depends_on": [
         "ai"
       ],
+      "backend": "https://github.com/pvedash/deals",
       "path": "jobs"
     },
     {
@@ -179,6 +183,7 @@
       "depends_on": [
         "ai"
       ],
+      "backend": "https://github.com/pvedash/money",
       "path": "money"
     },
     {

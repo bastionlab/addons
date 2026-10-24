@@ -9,5 +9,6 @@ desc: "Watches Kleinanzeigen for your keywords, lets the local model judge each 
 routes: [/deals]
 home: true          # brings app/components/HomeDeals.global.vue for the home page
 ct: deals
+backend: https://github.com/pvedash/deals   # the app behind this tab, in its own CT
 needs: [Discord webhook (optional)]
 depends_on: [ai]
