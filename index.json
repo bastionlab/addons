@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792955167,
+  "updated": 1792955242,
   "addons": [
     {
       "id": "ai",
@@ -15,6 +15,21 @@
       ],
       "ct": "ai",
       "path": "ai"
+    },
+    {
+      "id": "aliases",
+      "name": "Aliases",
+      "icon": "shield",
+      "version": "0.1.0",
+      "author": "MaxJC0",
+      "desc": "Your DuckDuckGo @duck.com aliases in one list: make new ones with a label, switch them off, find which site has which.",
+      "routes": [
+        "/aliases"
+      ],
+      "needs": [
+        "DuckDuckGo Email Protection account"
+      ],
+      "path": "aliases"
     },
     {
       "id": "chat",
