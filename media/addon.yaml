@@ -4,7 +4,9 @@ name: Media
 icon: media
 order: 5
 author: MaxJC0
-version: 1.3.0
+license: AGPL-3.0
+warning: "Downloads through torrent indexers. What you download and whether that is legal where you live is your responsibility."
+version: 1.3.2
 desc: "VPN-isolated download stack (*arr, qBittorrent, Seerr) feeding Jellyfin and Audiobookshelf; queues, library, removal."
 routes: [/media]
 home: true          # brings app/components/HomeMedia.global.vue for the home page
@@ -12,6 +14,8 @@ ct: dl
 connections: /api/media/connections   # status of its outside links, shown on /settings
 needs: [VPN account, storage pool]
 depends_on: []
+roles: { view: viewer, use: admin }   # shared/utils/roles.ts in the core
+admin_actions: [media_remove]
 # tiles on Home (group app) and the service checks on Media/Metrics; url = http://<ct ip>:<port>, or the CT's
 # tailnet name (ts: true); health = path checked on http://<ct ip>:<port>
 apps:
