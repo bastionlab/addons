@@ -1,6 +1,6 @@
 <script setup lang="ts">
 const { ip } = useDashConfig()
-useHead({ title: 'Money · pve' })
+useHead({ title: 'Money · Bastion' })
 const route = useRoute()
 const router = useRouter()
 
@@ -217,7 +217,7 @@ const attention = computed(() => {
 
 <template>
   <div class="money">
-    <div v-if="!d && pending" class="muted pad">Loading…</div>
+    <Skeleton v-if="!d && pending" kind="cards" :n="6" />
     <div v-else-if="error && !d" class="bad pad">Money API in CT 108 unreachable: {{ errText(error) }}</div>
 
     <template v-if="d">

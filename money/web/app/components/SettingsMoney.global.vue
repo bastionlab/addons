@@ -5,7 +5,7 @@ const { data: d, refresh } = useFetch<any>('/api/money', { server: false })
 
 <template>
   <div>
-    <div v-if="!d" class="faint small">Loading…</div>
+    <Skeleton v-if="!d" kind="rows" :n="3" />
     <template v-else>
       <MoneySetup :d="d" @changed="refresh" />
       <MoneyNotify class="gap" :n="d.setup?.notify" @changed="refresh" />
