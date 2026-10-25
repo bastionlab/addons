@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792955740,
+  "updated": 1792955810,
   "addons": [
     {
       "id": "ai",
@@ -122,7 +122,7 @@
       "id": "hunters",
       "name": "Hunters backend",
       "icon": "deals",
-      "version": "1.0.0",
+      "version": "1.1.0",
       "author": "MaxJC0",
       "desc": "The app behind Deals, Flats and Jobs: polls the portals, lets the local model judge, keeps the feeds. No tab of its own.",
       "needs": [
@@ -132,7 +132,7 @@
       "depends_on": [
         "ai"
       ],
-      "backend": "https://github.com/pvedash/deals",
+      "backend": "https://github.com/bastionlab/deals",
       "path": "hunters"
     },
     {
