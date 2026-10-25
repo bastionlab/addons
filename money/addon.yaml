@@ -4,15 +4,17 @@ name: Money
 icon: euro
 order: 11
 author: MaxJC0
-version: 1.2.1
+license: AGPL-3.0
+warning: "Uses pytr, an unofficial Trade Republic API, and Enable Banking under its personal-use terms. Your bank data, your responsibility."
+version: 1.2.3
 desc: "Firefly III with bank sync: categories, subscriptions, depot, net worth, forecast and a monthly report."
 routes: [/money]
 ct: money
-backend: https://github.com/pvedash/money   # the app behind this tab, in its own CT
+backend: https://github.com/bastionlab/money   # the app behind this tab, in its own CT
 connections: /api/money/connections   # status of its outside links, shown on /settings
 settings_ui: true    # brings web/app/components/SettingsMoney.global.vue (bank + TR setup) for /settings
 needs: [bank login (Enable Banking), own CT]
 depends_on: [ai]
-# fields on /settings; deploy.sh of pvedash/money hands the token into the money CT
+# fields on /settings; deploy.sh of bastionlab/money hands the token into the money CT
 settings:
   - { key: firefly_token, label: "Firefly personal access token", secret: true, help: "Firefly → Profile → OAuth → Personal access tokens" }
