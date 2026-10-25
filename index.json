@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792956174,
+  "updated": 1792956484,
   "addons": [
     {
       "id": "ai",
@@ -187,7 +187,7 @@
       "id": "media",
       "name": "Media",
       "icon": "media",
-      "version": "1.3.0",
+      "version": "1.3.2",
       "author": "MaxJC0",
       "desc": "VPN-isolated download stack (*arr, qBittorrent, Seerr) feeding Jellyfin and Audiobookshelf; queues, library, removal.",
       "routes": [
