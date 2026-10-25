@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792956028,
+  "updated": 1792956097,
   "addons": [
     {
       "id": "ai",
@@ -160,7 +160,7 @@
       "id": "kanji",
       "name": "Kanji",
       "icon": "kanji",
-      "version": "1.0.0",
+      "version": "1.0.1",
       "author": "MaxJC0",
       "desc": "Anki-style JLPT kanji reviews with stroke-order tracing and write-the-word cards.",
       "routes": [
