@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792955663,
+  "updated": 1792955740,
   "addons": [
     {
       "id": "ai",
@@ -105,7 +105,7 @@
       "id": "habits",
       "name": "Habits",
       "icon": "check",
-      "version": "1.1.0",
+      "version": "1.1.1",
       "author": "MaxJC0",
       "desc": "Offline-first habit tracker with streaks, a calendar and a perfect-day celebration.",
       "routes": [
@@ -115,7 +115,7 @@
         "own CT"
       ],
       "ct": "habits",
-      "backend": "https://github.com/pvedash/habits",
+      "backend": "https://github.com/bastionlab/habits",
       "path": "habits"
     },
     {
