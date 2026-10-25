@@ -3,7 +3,7 @@ import type { Turn } from '~/composables/useAsk'
 import { COMMANDS, parseCommand } from '~/utils/commands'
 import type { Question } from '~/utils/questions'
 const { ts } = useDashConfig()
-useHead({ title: 'Chat · pve' })
+useHead({ title: 'Chat · Bastion' })
 const { chats, current, currentId, create, remove, load, save, touch, status } = useChats()
 const claude = useClaude(save)
 onMounted(() => {
@@ -156,6 +156,17 @@ function deliver(q: string, imgs: string[] = []) {
   } else ask(q)
   nextTick(touch)
 }
+// from the command palette: ?c=<id> opens that chat, ?ask=<question> asks it in a fresh one
+const route = useRoute()
+function fromQuery() {
+  const { c, ask: q } = route.query
+  if (!c && !q) return
+  if (typeof c === 'string' && chats.value.some(x => x.id === c)) currentId.value = c
+  if (typeof q === 'string' && q.trim() && !busy.value) { if (current.value?.turns.length) create(); nextTick(() => send(q.trim())) }
+  navigateTo({ query: {} }, { replace: true })
+}
+onMounted(() => nextTick(fromQuery))
+watch(() => route.query, fromQuery)
 /** like Claude Code's /clear: the screen empties and the model starts over (Claude gets a fresh session) */
 function clear() {
   const c = current.value
@@ -214,7 +225,7 @@ function answer(text: string, picked: Record<number, string[]>) {
         <span v-if="status(current) === 'input'" class="st input small hide-phone"><span class="sd" />your turn</span>
         <div class="seg" role="group" aria-label="engine">
           <button :class="{ on: !isClaude }" :disabled="busy" title="local model on the 3060 (Ollama)" @click="engine = 'local'"><span class="only-phone-i">◆</span><span class="hide-phone">Local</span></button>
-          <button :class="{ on: isClaude }" :disabled="busy" title="Claude Code on pve, your subscription" @click="engine = 'claude'"><span class="only-phone-i">✳</span><span class="hide-phone">Claude</span></button>
+          <button :class="{ on: isClaude }" :disabled="busy" title="Claude Code on the host, your subscription" @click="engine = 'claude'"><span class="only-phone-i">✳</span><span class="hide-phone">Claude</span></button>
         </div>
         <button
           v-if="isClaude" class="btn ghost autobtn" :class="{ armed: auto }" :disabled="busy"
