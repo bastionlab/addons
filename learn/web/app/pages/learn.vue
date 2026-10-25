@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Learn · pve' })
+useHead({ title: 'Learn · Bastion' })
 
 const lessons = ref<any[]>([])
 const today = ref('')
@@ -91,7 +91,7 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
     <!-- today -->
     <section class="today">
       <div class="label faint small">This week · next lesson {{ nextLabel }}, 12:00</div>
-      <div v-if="!loaded" class="muted small">Loading…</div>
+      <Skeleton v-if="!loaded" kind="lines" :n="6" />
       <template v-else-if="hero?.lesson">
         <div class="hero" @click="open(hero.id)">
           <div class="pills">
