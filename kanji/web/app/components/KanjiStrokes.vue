@@ -1,12 +1,13 @@
 <script setup lang="ts">
+import type { Strokes } from '../utils/kanji'
 /** KanjiVG stroke order, drawn one stroke after another; tap to replay */
 const props = defineProps<{ k: string }>()
-const data = ref<{ paths: string[], nums: number[][] } | null>(null)
+const data = ref<Strokes | null>(null)
 const error = ref('')
 const run = ref(0)
 watch(() => props.k, async (k) => {
-  data.value = null; error.value = ''
-  try { data.value = await $fetch(`/api/kanji/strokes`, { query: { k } }) } catch (e: any) { error.value = e?.data?.statusMessage || 'no stroke order' }
+  data.value = cachedStrokes(k); error.value = ''
+  if (!data.value) try { data.value = await loadStrokes(k) } catch (e: any) { error.value = e?.data?.statusMessage || 'no stroke order' }
 }, { immediate: true })
 const STEP = 0.45 // seconds per stroke
 </script>

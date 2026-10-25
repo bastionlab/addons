@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import type { Strokes } from '../utils/kanji'
 /**
  * Draw a kanji with a finger, stroke by stroke. Each stroke is checked against the next KanjiVG stroke (shape,
  * position, direction, order); a right one snaps into place, a wrong one flashes red. Two misses on the same stroke
@@ -7,7 +8,7 @@
 const props = defineProps<{ k: string, guide?: boolean }>()
 const emit = defineEmits<{ done: [{ mistakes: number, hints: number }] }>()
 
-const data = ref<{ paths: string[] } | null>(null)
+const data = ref<Strokes | null>(null)
 const error = ref('')
 const idx = ref(0)
 const mistakes = ref(0)
@@ -21,8 +22,9 @@ const els: SVGPathElement[] = [] // v-for template refs don't keep order, so ind
 let expected: number[][][] = []
 
 watch(() => props.k, async (k) => {
-  data.value = null; error.value = ''; reset(); els.length = 0
-  try { data.value = await $fetch(`/api/kanji/strokes`, { query: { k } }) } catch (e: any) { error.value = e?.data?.statusMessage || 'no stroke order' }
+  data.value = cachedStrokes(k); error.value = ''; reset(); els.length = 0
+  if (!data.value) try { data.value = await loadStrokes(k) } catch (e: any) { error.value = e?.data?.statusMessage || 'no stroke order' }
+  if (props.k !== k) return
   await nextTick()
   expected = data.value ? data.value.paths.map((_, i) => sample(els[i]!)) : []
 }, { immediate: true })

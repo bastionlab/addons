@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Kanji · pve' })
+useHead({ title: 'Kanji · Bastion' })
 
 const o = ref<any>(null)
 const error = ref('')
@@ -63,7 +63,7 @@ function toggleLevel(n: number) {
 <template>
   <div class="kj">
     <p v-if="error" class="errbox">{{ error }}</p>
-    <div v-if="!o" class="muted small">Loading…</div>
+    <Skeleton v-if="!o" kind="cards" :n="4" />
     <template v-else>
       <section class="hero">
         <div class="counts">
@@ -126,7 +126,7 @@ function toggleLevel(n: number) {
       <div v-if="deck" class="kgrid">
         <button v-for="x in shown" :key="x.k" type="button" lang="ja" :class="`s${st(x.k)}`" :title="x.m.join(', ')" @click="go({ k: x.k })">{{ x.k }}</button>
       </div>
-      <p v-else class="muted small">Loading…</p>
+      <Skeleton v-else kind="lines" :n="4" />
       <p v-if="deck && !shown.length" class="faint small">Nothing matches.</p>
       <div class="legend faint small"><i class="sw s0" /> new <i class="sw s1" /> learning <i class="sw s2" /> young <i class="sw s3" /> mature</div>
 

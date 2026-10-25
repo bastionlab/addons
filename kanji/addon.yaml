@@ -4,7 +4,8 @@ name: Kanji
 icon: kanji
 order: 3
 author: MaxJC0
-version: 1.0.0
+license: AGPL-3.0
+version: 1.0.1
 desc: "Anki-style JLPT kanji reviews with stroke-order tracing and write-the-word cards."
 routes: [/kanji]
 needs: []
