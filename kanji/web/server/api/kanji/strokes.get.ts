@@ -1,20 +1,17 @@
-import { mkdir, readFile, writeFile } from 'node:fs/promises'
+import { mkdir, readFile, readdir, writeFile } from 'node:fs/promises'
 import { join } from 'node:path'
 
 /**
- * Stroke order from KanjiVG (CC BY-SA 3.0), fetched once per kanji from jsDelivr and cached in CT 104.
+ * Stroke order from KanjiVG (CC BY-SA 3.0), fetched from jsDelivr and cached in CT 104.
  * Only the stroke paths and number positions are kept: the page draws its own SVG, nothing from the file is rendered.
+ * The first request also fills the cache for the whole deck in the background, so the pad never waits on the CDN.
  */
 const DIR = join(process.env.NOTES_DIR || '/var/lib/dash', 'kanjivg')
 const NUM = /^-?\d+(\.\d+)?$/
+const hexOf = (k: string) => k.codePointAt(0)!.toString(16).padStart(5, '0')
 
-export default defineEventHandler(async (event) => {
-  const k = String(getQuery(event).k ?? '')
-  if (!DECK.some(x => x.k === k)) throw createError({ statusCode: 404, statusMessage: 'no such kanji' })
-  const hex = k.codePointAt(0)!.toString(16).padStart(5, '0')
-  const file = join(DIR, `${hex}.json`)
-  setHeader(event, 'cache-control', 'private, max-age=604800')
-  try { return JSON.parse(await readFile(file, 'utf8')) } catch {}
+async function download(k: string) {
+  const hex = hexOf(k)
   const r = await fetch(`https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`, { signal: AbortSignal.timeout(8000) })
   if (!r.ok) throw createError({ statusCode: 404, statusMessage: 'no stroke order for this kanji' })
   const svg = await r.text()
@@ -24,6 +21,25 @@ export default defineEventHandler(async (event) => {
   if (!paths.length) throw createError({ statusCode: 502, statusMessage: 'unreadable stroke data' })
   const out = { paths, nums }
   await mkdir(DIR, { recursive: true })
-  await writeFile(file, JSON.stringify(out))
+  await writeFile(join(DIR, `${hex}.json`), JSON.stringify(out))
   return out
+}
+
+let warming = false
+async function warm() {
+  if (warming) return
+  warming = true
+  const have = new Set(await readdir(DIR).catch(() => [] as string[]))
+  const todo = DECK.map(x => x.k).filter(k => !have.has(`${hexOf(k)}.json`))
+  const next = async () => { for (let k; (k = todo.shift());) await download(k).catch(() => {}) }
+  await Promise.all(Array.from({ length: 4 }, next))
+}
+
+export default defineEventHandler(async (event) => {
+  const k = String(getQuery(event).k ?? '')
+  if (!DECK.some(x => x.k === k)) throw createError({ statusCode: 404, statusMessage: 'no such kanji' })
+  setHeader(event, 'cache-control', 'private, max-age=604800')
+  warm().catch(() => {})
+  try { return JSON.parse(await readFile(join(DIR, `${hexOf(k)}.json`), 'utf8')) } catch {}
+  return download(k)
 })

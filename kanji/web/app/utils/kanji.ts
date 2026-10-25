@@ -20,3 +20,22 @@ export function useKanjiDeck() {
   if (!deck.value && import.meta.client) $fetch<KanjiCard[]>('/api/kanji/deck').then(d => (deck.value = d)).catch(() => {})
   return deck
 }
+
+export type Strokes = { paths: string[], nums: number[][] }
+/** stroke data per kanji, kept for the app's lifetime so the pad never waits twice for the same kanji */
+const STROKES = new Map<string, Strokes>()
+const PENDING = new Map<string, Promise<Strokes>>()
+export const cachedStrokes = (k: string) => STROKES.get(k) ?? null
+/** one retry: an app rebuild briefly answers 502 */
+export function loadStrokes(k: string): Promise<Strokes> {
+  if (STROKES.has(k)) return Promise.resolve(STROKES.get(k)!)
+  if (!PENDING.has(k)) {
+    const get = () => $fetch<Strokes>('/api/kanji/strokes', { query: { k } })
+    PENDING.set(k, get().catch(() => new Promise(r => setTimeout(r, 1500)).then(get))
+      .then((d) => { STROKES.set(k, d); return d })
+      .finally(() => PENDING.delete(k)))
+  }
+  return PENDING.get(k)!
+}
+/** warm the cache for every kanji in a word (the pad moves on without a Loading… between them) */
+export const prefetchStrokes = (s: string) => { for (const c of new Set(s)) if (/[一-鿿]/.test(c)) loadStrokes(c).catch(() => {}) }

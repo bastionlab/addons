@@ -8,7 +8,7 @@ const todo = computed(() => chars.value.map((c, i) => (isKanji(c) && c !== '々'
 const at = ref(0) // index into todo
 const sum = { mistakes: 0, hints: 0 }
 const pad = ref<any>()
-watch(() => props.form, () => { at.value = 0; sum.mistakes = 0; sum.hints = 0 })
+watch(() => props.form, (f) => { at.value = 0; sum.mistakes = 0; sum.hints = 0; prefetchStrokes(f) }, { immediate: true })
 
 function next(r: { mistakes: number, hints: number }) {
   sum.mistakes += r.mistakes; sum.hints += r.hints

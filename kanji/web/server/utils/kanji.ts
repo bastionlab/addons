@@ -5,7 +5,7 @@ import deck from '../data/kanji.json'
 /**
  * The Kanji tab (2026-10-24): the 2,211 JLPT kanji (N5 → N1, by frequency) as an Anki-style deck. One card per kanji
  * (kanji → meaning + readings), scheduled with Anki's SM-2: learning steps 1 m / 10 m, graduate at 1 d (Easy 4 d),
- * ease 250 %, lapses relearn at 10 m and lose 20 % ease. Days roll over at 04:00 Berlin, like Anki.
+ * ease 250 %, lapses relearn at 10 m and lose 20 % ease. Days roll over at midnight Berlin (owner's pick over Anki's 04:00).
  * State lives here in CT 104 (nightly vzdump) so every device studies the same queue. The deck itself is built by
  * scripts/build-kanji.py from KANJIDIC2 + JMdict.
  *
@@ -56,9 +56,9 @@ const MAX_IVL = 36500
 
 const now = () => Date.now() / 1000
 const berlinDay = (t: number) => new Intl.DateTimeFormat('sv-SE', { timeZone: 'Europe/Berlin' }).format(t)
-/** the study day a moment belongs to: a day runs 04:00 → 04:00 Berlin */
-export const studyDay = (t = now()) => berlinDay((t - 4 * 3600) * 1000)
-const dayNum = (d: string) => Math.round(Date.parse(`${d}T12:00:00Z`) / 86_400_000)
+/** the study day a moment belongs to: the Berlin calendar day */
+export const studyDay = (t = now()) => berlinDay(t * 1000)
+const dayNum = (d: string) => Math.floor(Date.parse(`${d}T12:00:00Z`) / 86_400_000)
 
 // --- settings ---
 export type Settings = { newPerDay: number, levels: number[], writing: boolean }
