@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Notes · pve' })
+useHead({ title: 'Notes · Bastion' })
 
 const notes = ref<any[]>([])
 const loaded = ref(false)
@@ -27,7 +27,10 @@ const add = (text: string, images: string[], ai: boolean) => post({ action: 'add
 async function patch(n: any, fields: Record<string, any>) {
   const before = { ...n }
   Object.assign(n, fields) // instant; the server's answer replaces it
-  try { await post({ action: 'edit', id: n.id, ...fields }) } catch { Object.assign(n, before) }
+  try { await post({ action: 'edit', id: n.id, ...fields }) } catch (e: any) {
+    Object.assign(n, before)
+    useToast().toast(`Edit not saved: ${e?.data?.statusMessage || e?.statusMessage || e?.message || 'failed'}`, { tone: 'bad' })
+  }
 }
 async function act(n: any, action: string, extra: any = {}) {
   const { ok, no, ...rest } = extra

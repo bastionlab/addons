@@ -17,8 +17,10 @@ const drag = ref(false)
 const ai = ref(true)
 const box = ref<HTMLTextAreaElement>()
 const file = ref<HTMLInputElement>()
+const mac = ref(false) // set on mount: the server render can't know the platform
 
 onMounted(() => {
+  mac.value = /Mac|iPhone|iPad/.test(navigator.platform)
   try {
     if (props.draftKey) {
       const d = JSON.parse(localStorage.getItem(props.draftKey) || 'null')
@@ -90,7 +92,7 @@ defineExpose({ focus: () => box.value?.focus() })
       </label>
       <span v-if="err" class="bad small err">{{ err }}</span>
       <span class="sp" />
-      <span class="faint small hide-s">⌘↵</span>
+      <span class="faint small hide-s">{{ mac ? '⌘' : 'Ctrl' }} ↵</span>
       <button type="button" class="btn primary" :disabled="!ready" @click="submit">{{ busy ? 'Saving…' : label ?? 'Save' }}</button>
     </div>
   </div>

@@ -12,8 +12,10 @@ const chips = computed(() => notes.value
       ...(open.value ? [{ text: `${open.value} open`, tone: 'warn' }] : []),
     ]
   : [])
+// large card: the latest notes
+const more = computed(() => [...active.value].sort((a: any, b: any) => b.updated - a.updated).slice(0, 4).map((n: any) => ({ text: n.title || '…', sub: n.topic })))
 </script>
 
 <template>
-  <TopicCard to="/notes" icon="note" name="Notes" sub="Quick capture" :chips="chips" />
+  <TopicCard to="/notes" icon="note" name="Notes" sub="Quick capture" :chips="chips" :more="more" />
 </template>
