@@ -9,8 +9,10 @@ const chips = computed(() => d.value
       ...(fresh.value ? [{ text: `${fresh.value} new`, tone: 'accent' }] : []),
     ]
   : [])
+// large card: the newest flats
+const more = computed(() => (d.value?.feed ?? []).slice(0, 4).map((i: any) => ({ text: i.title, sub: [i.district, i.warm ? `${i.warm} €` : ''].filter(Boolean).join(' · ') })))
 </script>
 
 <template>
-  <TopicCard to="/wohnungen" icon="key" name="Flats" sub="Flat hunter" :chips="chips" />
+  <TopicCard to="/wohnungen" icon="key" name="Flats" sub="Flat hunter" :chips="chips" :more="more" />
 </template>
