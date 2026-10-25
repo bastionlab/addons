@@ -112,7 +112,7 @@ export function useClaude(save: () => void) {
           if (res.status === 410 || res.status === 400) { t.error = 'this answer is no longer on the server'; break }
           if (res.ok && res.body && await read(t, res.body)) break
         } catch {}
-        if (attempt >= 150) { t.error = 'lost the connection to pve'; break } // ~5 min: a deploy takes ~2
+        if (attempt >= 150) { t.error = 'lost the connection to the server'; break } // ~5 min: a deploy takes ~2
         await sleep(2000)
       }
     } finally {

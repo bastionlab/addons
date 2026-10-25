@@ -4,8 +4,11 @@ const { usage, load } = useClaudeUsage()
 onMounted(() => { if (!usage.value) load() })
 const used = computed(() => usage.value?.windows?.five_hour?.used)
 const chips = computed(() => used.value != null ? [{ text: `Claude ${Math.round(used.value * 100)}%`, tone: used.value > 0.8 ? 'warn' : '' }] : [])
+// large card: the latest conversations
+const { chats } = useChats()
+const more = computed(() => chats.value.filter(c => c.turns.length).slice(0, 4).map(c => ({ text: c.title, sub: c.engine === 'claude' ? 'Claude' : '' })))
 </script>
 
 <template>
-  <TopicCard to="/chat" icon="chat" name="Chat" sub="Local model & Claude" :chips="chips" />
+  <TopicCard to="/chat" icon="chat" name="Chat" sub="Local model & Claude" :chips="chips" :more="more" />
 </template>
