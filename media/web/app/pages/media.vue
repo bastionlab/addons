@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Media · pve' })
+useHead({ title: 'Media · Bastion' })
 const { data: m, error, pending, refresh } = useMedia()
 usePoll(refresh, 8000)
 
@@ -15,7 +15,7 @@ const queue = computed(() => [...(q.value.movies ?? []), ...(q.value.series ?? [
       @refresh="refresh"
     />
 
-    <div v-if="!m && pending" class="muted pad">Loading…</div>
+    <Skeleton v-if="!m && pending" kind="cards" :n="6" />
     <div v-else-if="error && !m" class="bad pad">Could not read the media stack: {{ error.statusMessage || error.message }}</div>
 
     <template v-if="m">

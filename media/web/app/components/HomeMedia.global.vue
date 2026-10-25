@@ -11,8 +11,10 @@ const chips = computed(() => m.value
       { text: bytes(m.value.sizes?.used) },
     ]
   : [])
+// large card: the download queue
+const more = computed(() => Object.values(m.value?.queues ?? {}).flat().filter(Boolean).slice(0, 4).map((i: any) => ({ text: `${i.title}${i.sub ? ` · ${i.sub}` : ''}`, sub: i.progress != null ? `${Math.round(i.progress)}%` : '', tone: i.error ? 'bad' : '' })))
 </script>
 
 <template>
-  <TopicCard to="/media" icon="media" name="Media" sub="VPN, downloads, library" :chips="chips" />
+  <TopicCard to="/media" icon="media" name="Media" sub="VPN, downloads, library" :chips="chips" :more="more" />
 </template>
