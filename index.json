@@ -1,12 +1,12 @@
 {
   "format": 1,
-  "updated": 1792877154,
+  "updated": 1792955167,
   "addons": [
     {
       "id": "ai",
       "name": "Local AI",
       "icon": "spark",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": "MaxJC0",
       "desc": "Ollama + Open WebUI on the GPU. Powers the Ask bar and reads ads, postings and bank lines for the hunters, Notes and Money.",
       "needs": [
