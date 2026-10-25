@@ -1,6 +1,6 @@
 <script setup lang="ts">
 /** game servers in CT 110 (gameservers): docker compose stacks managed by gsm, friends join via a playit.gg tunnel */
-useHead({ title: 'Servers · pve' })
+useHead({ title: 'Servers · Bastion' })
 const { data: g, error, refresh } = useShared<any>('games', '/api/games')
 usePoll(refresh, 5000)
 
