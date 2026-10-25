@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792955810,
+  "updated": 1792956028,
   "addons": [
     {
       "id": "ai",
@@ -139,7 +139,7 @@
       "id": "jobs",
       "name": "Jobs",
       "icon": "briefcase",
-      "version": "1.1.0",
+      "version": "1.1.2",
       "author": "MaxJC0",
       "desc": "Reads your CV, polls job portals and scores every posting for fit, with the apply link found for you.",
       "routes": [
@@ -153,7 +153,7 @@
         "ai",
         "hunters"
       ],
-      "backend": "https://github.com/pvedash/deals",
+      "backend": "https://github.com/bastionlab/deals",
       "path": "jobs"
     },
     {
