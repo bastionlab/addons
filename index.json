@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792955450,
+  "updated": 1792955518,
   "addons": [
     {
       "id": "ai",
@@ -50,7 +50,7 @@
       "id": "deals",
       "name": "Deals",
       "icon": "deals",
-      "version": "1.1.0",
+      "version": "1.1.2",
       "author": "MaxJC0",
       "desc": "Watches Kleinanzeigen for your keywords, lets the local model judge each ad and pings Discord on a steal.",
       "routes": [
@@ -64,7 +64,7 @@
         "ai",
         "hunters"
       ],
-      "backend": "https://github.com/pvedash/deals",
+      "backend": "https://github.com/bastionlab/deals",
       "path": "deals"
     },
     {
