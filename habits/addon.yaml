@@ -4,12 +4,13 @@ name: Habits
 icon: check
 order: 4
 author: MaxJC0
-version: 1.1.0
+license: AGPL-3.0
+version: 1.1.1
 desc: "Offline-first habit tracker with streaks, a calendar and a perfect-day celebration."
 routes: [/habits]
 home: true
 ct: habits
-backend: https://github.com/pvedash/habits   # the app behind this tab, in its own CT
+backend: https://github.com/bastionlab/habits   # the app behind this tab, in its own CT
 needs: [own CT]
 depends_on: []
-# web/ only frames the tracker, which is its own app (pvedash/habits) in the `habits` CT of config.json
+# web/ only frames the tracker, which is its own app (bastionlab/habits) in the `habits` CT of config.json
