@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Flats · pve' })
+useHead({ title: 'Flats · Bastion' })
 
 const show = ref<'passed' | 'liked' | 'rejected'>('passed')
 const { selected, d, error, pending, load, searches, st, counts, tabs, verdict, isBusy, onChanged } = useHunter('/api/flats', 30000,
