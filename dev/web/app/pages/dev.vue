@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Dev · pve' })
+useHead({ title: 'Dev · Bastion' })
 const { data: boxes, pending, refresh } = useProjects()
 const { data: o } = useOverview()
 usePoll(refresh, 5000)
