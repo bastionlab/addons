@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792956484,
+  "updated": 1792956561,
   "addons": [
     {
       "id": "ai",
@@ -204,7 +204,7 @@
       "id": "money",
       "name": "Money",
       "icon": "euro",
-      "version": "1.2.1",
+      "version": "1.2.3",
       "author": "MaxJC0",
       "desc": "Firefly III with bank sync: categories, subscriptions, depot, net worth, forecast and a monthly report.",
       "routes": [
@@ -218,7 +218,7 @@
       "depends_on": [
         "ai"
       ],
-      "backend": "https://github.com/pvedash/money",
+      "backend": "https://github.com/bastionlab/money",
       "path": "money"
     },
     {
