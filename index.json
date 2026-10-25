@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792956643,
+  "updated": 1792956706,
   "addons": [
     {
       "id": "ai",
@@ -240,7 +240,7 @@
       "id": "servers",
       "name": "Game servers",
       "icon": "gamepad",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "author": "MaxJC0",
       "desc": "Minecraft, ARK and Satisfactory servers in Docker: power, console, settings, backups, playit.gg tunnel for friends.",
       "routes": [
