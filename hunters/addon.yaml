@@ -4,10 +4,14 @@ name: Hunters backend
 icon: deals
 order: 60
 author: MaxJC0
-version: 1.0.0
+license: AGPL-3.0
+version: 1.1.0
 desc: "The app behind Deals, Flats and Jobs: polls the portals, lets the local model judge, keeps the feeds. No tab of its own."
 routes: []
 ct: deals
-backend: https://github.com/pvedash/deals   # the app behind this tab, in its own CT
+backend: https://github.com/bastionlab/deals   # the app behind this tab, in its own CT
 needs: [own CT]
 depends_on: [ai]
+# its feeds, searches and profiles, in Settings → Backup (SQLite copied consistently)
+backup:
+  - { ct: deals, path: /var/lib/deals }
