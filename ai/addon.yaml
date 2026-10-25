@@ -4,12 +4,15 @@ name: Local AI
 icon: spark
 order: 50
 author: MaxJC0
-version: 1.2.0
+license: AGPL-3.0
+version: 1.2.1
 desc: "Ollama + Open WebUI on the GPU. Powers the Ask bar and reads ads, postings and bank lines for the hunters, Notes and Money."
 routes: []
 ct: ai
 needs: [NVIDIA GPU (8 GB+), 16 GB RAM]
 depends_on: []
+roles: { view: admin, use: admin }
+admin_actions: [ollama_pull, ollama_stop]
 # tiles on Home (group app) and the service checks on Metrics (see media/addon.yaml for the fields)
 apps:
   - { name: Open WebUI, icon: "🤖", note: "Local AI chat", group: app, hue: 210, ct: ai, port: 8080, ts: true, health: /health }
