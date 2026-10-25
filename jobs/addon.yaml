@@ -4,11 +4,13 @@ name: Jobs
 icon: briefcase
 order: 10
 author: MaxJC0
-version: 1.1.0
+license: AGPL-3.0
+warning: "Scrapes job portals (StepStone, LinkedIn, XING and others) whose terms forbid automated access. Personal use only, at your own risk."
+version: 1.1.2
 desc: "Reads your CV, polls job portals and scores every posting for fit, with the apply link found for you."
 routes: [/jobs]
 home: true          # brings app/components/HomeJobs.global.vue for the home page
 ct: deals
-backend: https://github.com/pvedash/deals   # the app behind this tab, in its own CT
+backend: https://github.com/bastionlab/deals   # the app behind this tab, in its own CT
 needs: [your CV]
 depends_on: [ai, hunters]

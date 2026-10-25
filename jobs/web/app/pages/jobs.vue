@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Jobs · pve' })
+useHead({ title: 'Jobs · Bastion' })
 
 const show = ref<'passed' | 'rejected' | 'pending' | 'applied'>('passed')
 const { selected, d, error, pending, load, searches, st, counts, feed, tabs, feedback, verdict, isBusy, onChanged } = useHunter('/api/jobs', 30000,
