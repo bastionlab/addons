@@ -26,7 +26,7 @@ def github_repos():
     """the owner's repos, for the project picker. With a token in keys/github_token this is every repo
     (private included); without one we still list the public repos of keys/github_user (GH_USER)."""
     user = _gh_user()
-    headers = {"Accept": "application/vnd.github+json", "User-Agent": "pve-dashboard"}
+    headers = {"Accept": "application/vnd.github+json", "User-Agent": "bastion"}
     token = GH_TOKEN_FILE.read_text().strip() if GH_TOKEN_FILE.exists() else ""
     if token:
         url = "https://api.github.com/user/repos?per_page=100&sort=pushed&affiliation=owner,collaborator"
@@ -36,6 +36,9 @@ def github_repos():
     out = {"configured": bool(token), "user": user, "url": f"https://github.com/{user}?tab=repositories",
            "scope": "all repos incl. private" if token else "public repos only",
            "repos": []}
+    if not token and not user:
+        out["hint"] = "put your GitHub name in /root/devbox/keys/github_user, or a token (repo scope) in keys/github_token"
+        return out
     if not token:
         out["hint"] = ("listing public repos of " + user + " — put a GitHub token (repo scope) in "
                        "/root/devbox/keys/github_token to see private ones too")

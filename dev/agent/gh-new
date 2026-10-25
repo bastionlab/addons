@@ -37,7 +37,7 @@ def api(path, payload):
         f"https://api.github.com{path}", method="POST",
         data=json.dumps(payload).encode(),
         headers={"Authorization": f"Bearer {token}", "Accept": "application/vnd.github+json",
-                 "Content-Type": "application/json", "User-Agent": "pve-dashboard"})
+                 "Content-Type": "application/json", "User-Agent": "bastion"})
     try:
         with urllib.request.urlopen(req, timeout=30) as r:
             return json.load(r)
@@ -54,7 +54,7 @@ def api(path, payload):
 def publish(vmid, path, name, private):
     say(f"→ creating {'private' if private else 'public'} repo {name} on GitHub")
     repo = api("/user/repos", {"name": name, "private": private, "auto_init": False,
-                               "description": "created from the pve dashboard"})
+                               "description": "created from the Bastion"})
     say(f"   {repo['html_url']}")
     say(f"→ pointing origin at {repo['ssh_url']}")
     pct(vmid, "/usr/local/bin/pv", "remote", path, repo["ssh_url"])

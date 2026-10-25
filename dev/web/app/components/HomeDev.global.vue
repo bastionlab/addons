@@ -12,8 +12,10 @@ const chips = computed(() => boxes.value
       ...(claudes.value ? [{ text: `${claudes.value} Claude`, tone: 'accent' }] : []),
     ]
   : [])
+// large card: what is running right now
+const more = computed(() => projects.value.filter((p: any) => p.running || p.cc?.running).slice(0, 4).map((p: any) => ({ text: p.name, sub: [p.running && 'preview', p.cc?.running && 'Claude'].filter(Boolean).join(' · '), tone: 'ok' })))
 </script>
 
 <template>
-  <TopicCard to="/dev" icon="dev" name="Dev" sub="Projects & terminals" :chips="chips" />
+  <TopicCard to="/dev" icon="dev" name="Dev" sub="Projects & terminals" :chips="chips" :more="more" />
 </template>
