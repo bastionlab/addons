@@ -1,5 +1,5 @@
 <script setup lang="ts">
-useHead({ title: 'Deals · pve' })
+useHead({ title: 'Deals · Bastion' })
 
 const shipping = ref<'all' | 'pickup' | 'ship'>('all')
 const show = ref<'passed' | 'liked' | 'rejected'>('passed')

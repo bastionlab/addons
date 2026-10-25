@@ -9,8 +9,11 @@ const chips = computed(() => d.value
       ...(fresh.value ? [{ text: `${fresh.value} new`, tone: 'accent' }] : []),
     ]
   : [])
+// large card: the newest finds
+const eur = (c: number | null | undefined) => (c == null ? '' : `${Math.round(c / 100)} €`)
+const more = computed(() => (d.value?.feed ?? []).slice(0, 4).map((i: any) => ({ text: i.title, sub: eur(i.price_cents) })))
 </script>
 
 <template>
-  <TopicCard to="/deals" icon="deals" name="Deals" sub="Kleinanzeigen hunter" :chips="chips" />
+  <TopicCard to="/deals" icon="deals" name="Deals" sub="Kleinanzeigen hunter" :chips="chips" :more="more" />
 </template>
