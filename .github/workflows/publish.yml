@@ -1,4 +1,5 @@
-# Publish = a pull request from a `publish/<id>` branch (the dashboard's Publish button opens it).
+# Publish = a pull request from a `publish/<id>` branch (the dashboard's Publish button opens it), or from a
+# `design/<slug>` branch (Publish on /designs: one `_designs/<slug>.json`, checked by check_design.py).
 # This checks it and, when everything passes, merges it and rebuilds index.json: every install then sees the new
 # version on /addons. pull_request_target runs main's copy of this file and of .github/check, never the PR's, and
 # the PR's files are only read (scanned, linted), never run; that is what keeps a PR from waving itself through.
@@ -83,4 +84,65 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git commit -qam "index: ${{ steps.check.outputs.id }}"
+          git push -q
+
+  design:
+    if: startsWith(github.head_ref, 'design/')
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      GH_TOKEN: ${{ github.token }}
+      PR: ${{ github.event.pull_request.number }}
+      AUTHOR: ${{ github.event.pull_request.user.login }}
+      HEAD_REF: ${{ github.head_ref }}
+    steps:
+      - name: main (the trusted checker)
+        uses: actions/checkout@v4
+        with: { ref: main, path: base }
+
+      - name: the pull request (data only)
+        uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+          path: pr
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: check
+        id: check
+        run: |
+          slug="${HEAD_REF#design/}"
+          echo "slug=$slug" >> "$GITHUB_OUTPUT"
+          git -C pr diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" > files.txt
+          perm=$(gh api "repos/${{ github.repository }}/collaborators/$AUTHOR/permission" --jq .permission || echo none)
+          admin=(); [ "$perm" = admin ] && admin=(--admin)
+          set +e
+          python3 base/.github/check/check_design.py --slug "$slug" --pr pr --base base --files files.txt \
+            --author "$AUTHOR" "${admin[@]}" --report report.md
+          rc=$?
+          set -e
+          cat report.md >> "$GITHUB_STEP_SUMMARY"
+          echo "rc=$rc" >> "$GITHUB_OUTPUT"
+
+      - name: report on the PR
+        if: always() && steps.check.outputs.rc != ''
+        run: gh pr comment "$PR" -R "${{ github.repository }}" --body-file report.md --edit-last 2>/dev/null || gh pr comment "$PR" -R "${{ github.repository }}" --body-file report.md
+
+      - name: stop here when it failed
+        if: steps.check.outputs.rc != '0'
+        run: exit 1
+
+      - name: merge
+        run: gh pr merge "$PR" -R "${{ github.repository }}" --squash --delete-branch --subject "design ${{ steps.check.outputs.slug }} (#$PR)"
+
+      - name: rebuild index.json
+        run: |
+          pip install -q pyyaml
+          rm -rf main && git clone -q --depth 1 "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}" main
+          cd main
+          python3 build-index.py
+          git diff --quiet -I'"updated"' index.json && exit 0
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -qam "index: design ${{ steps.check.outputs.slug }}"
           git push -q

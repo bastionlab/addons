@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1792956706,
+  "updated": 1793014642,
   "addons": [
     {
       "id": "ai",
@@ -253,5 +253,6 @@
       "ct": "gameservers",
       "path": "servers"
     }
-  ]
+  ],
+  "designs": []
 }

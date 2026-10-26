@@ -20,6 +20,9 @@ for f in sorted(HERE.glob("*/addon.yaml")):
     m = yaml.safe_load(f.read_text())
     local[m["id"]] = {k: m[k] for k in KEYS if m.get(k) not in (None, [], "")} | {"path": f.parent.name}
 external = [a for a in old["addons"] if a.get("repo") and a["id"] not in local]
-out = {"format": 1, "updated": int(time.time()), "addons": sorted([*local.values(), *external], key=lambda a: a["id"])}
+# the design catalogue: _designs/<slug>.json, each one checked by .github/check/check_design.py when it was published
+designs = [{k: d[k] for k in ("slug", "name", "author", "tokens", "updated") if k in d}
+           for d in (json.loads(f.read_text()) for f in sorted(HERE.glob("_designs/*.json")))]
+out = {"format": 1, "updated": int(time.time()), "addons": sorted([*local.values(), *external], key=lambda a: a["id"]), "designs": designs}
 OUT.write_text(json.dumps(out, indent=2, ensure_ascii=False) + "\n")
-print(f"{OUT}: {len(local)} here, {len(external)} in their own repos")
+print(f"{OUT}: {len(local)} here, {len(external)} in their own repos, {len(designs)} designs")

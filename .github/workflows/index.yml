@@ -4,7 +4,7 @@ name: index
 on:
   push:
     branches: [main]
-    paths: ['*/addon.yaml']
+    paths: ['*/addon.yaml', '_designs/*.json']
 
 concurrency:
   group: publish-main
