@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793014642,
+  "updated": 1793014774,
   "addons": [
     {
       "id": "ai",
@@ -66,6 +66,18 @@
       ],
       "backend": "https://github.com/bastionlab/deals",
       "path": "deals"
+    },
+    {
+      "id": "designs",
+      "name": "Designs",
+      "icon": "palette",
+      "version": "0.1.0",
+      "author": "MaxJC0",
+      "desc": "Make your own look for the dashboard: colours, corners, light or dark. Each person picks their own; share designs with everyone or as a code.",
+      "routes": [
+        "/designs"
+      ],
+      "path": "designs"
     },
     {
       "id": "dev",
