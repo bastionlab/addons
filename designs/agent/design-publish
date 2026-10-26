@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+"""design-publish <id> — a design from /designs → the marketplace catalogue (`_designs/<slug>.json`).
+
+  1. reads the design from the app in the dashboard's CT (a request from inside the CT is the owner's)
+  2. writes `_designs/<login>-<name>.json` in a sparse clone of the marketplace repo's main
+  3. runs main's .github/check/check_design.py as a quick no, then pushes a `design/<slug>` branch + PR
+  4. waits for publish.yml's design job: green = merged, index.json gets the design, every install lists it
+The GitHub token goes to GitHub only, through the environment / headers, never an argv.
+"""
+import importlib.machinery, importlib.util, json, re, subprocess, sys, tempfile, time
+from pathlib import Path
+
+CORE = Path(__file__).resolve().parents[3] / "agent"
+sys.path.insert(0, str(CORE))
+
+
+def _load(name, file):
+    loader = importlib.machinery.SourceFileLoader(name, str(CORE / file))
+    mod = importlib.util.module_from_spec(importlib.util.spec_from_loader(name, loader))
+    loader.exec_module(mod)
+    return mod
+
+
+ap = _load("addon_publish", "addon-publish")  # gh(), REPO, SLUG and addon-get (ap.ag) with the token
+from config import ct  # noqa: E402
+
+ag, say, gh = ap.ag, ap.say, ap.gh
+WAIT = 20 * 60
+
+
+def slugify(s):
+    return re.sub(r"-+", "-", re.sub(r"[^a-z0-9]+", "-", s.lower())).strip("-")[:40] or "design"
+
+
+def main():
+    if len(sys.argv) != 2 or not sys.argv[1].isdigit():
+        sys.exit(__doc__)
+    if not ag.token():
+        sys.exit("no GitHub token: set one on Settings → Connections")
+    r = subprocess.run(["pct", "exec", str(ct("dash")), "--", "curl", "-sf", f"http://127.0.0.1:3000/api/designs/{sys.argv[1]}"],
+                       capture_output=True, text=True, timeout=30)
+    if r.returncode:
+        sys.exit(f"design {sys.argv[1]} not found")
+    d = json.loads(r.stdout)
+    me = gh("/user")
+    login = me["login"]
+    slug = f"{slugify(login)}-{slugify(d['name'])}"[:60]
+    doc = {"slug": slug, "name": d["name"], "author": login, "tokens": d["tokens"]}
+
+    with tempfile.TemporaryDirectory() as t:
+        src = Path(t) / "repo"
+        say(f"fetching {ap.REPO}")
+        ag.git("clone", "-q", "--filter=blob:none", "--sparse", ap.REPO, str(src))
+        ag.git("sparse-checkout", "set", ".github", "_designs", cwd=src)
+        f = src / "_designs" / f"{slug}.json"
+        old = json.loads(f.read_text()) if f.exists() else None
+        if old and old.get("author") != login:
+            sys.exit(f"{slug} in the catalogue belongs to {old.get('author')}; rename your design and publish again")
+        if old and {k: old.get(k) for k in ("name", "tokens")} == {k: doc[k] for k in ("name", "tokens")}:
+            say(f"nothing to publish: the catalogue has “{d['name']}” exactly like this")
+            return
+        if not (src / ".github/check/check_design.py").exists():
+            sys.exit(f"{ap.REPO} cannot take designs yet (no .github/check/check_design.py on main); nothing was sent")
+        f.parent.mkdir(exist_ok=True)
+        f.write_text(json.dumps({**doc, "updated": int(time.time())}, indent=2, ensure_ascii=False) + "\n")
+        say("pre-check (the same gate GitHub runs)")
+        rel = f"_designs/{slug}.json"
+        lst = Path(t) / "files.txt"
+        lst.write_text(rel + "\n")
+        c = subprocess.run([sys.executable, "-I", str(src / ".github/check/check_design.py"), "--slug", slug, "--pr", str(src),
+                            "--files", str(lst), "--author", login], capture_output=True, text=True, timeout=120)
+        if c.returncode:
+            say(c.stdout)
+            sys.exit("the pre-check failed; nothing was sent")
+        branch = f"design/{slug}"
+        ag.git("checkout", "-q", "-B", branch, cwd=src)
+        ag.git("add", "--", rel, cwd=src)
+        ident = ["-c", f"user.name={login}", "-c", f"user.email={me['id']}+{login}@users.noreply.github.com"]
+        ag.git(*ident, "commit", "-q", "-m", f"design {slug}", cwd=src)
+        say(f"pushing {branch}")
+        ag.git("push", "-q", "-f", "origin", f"HEAD:refs/heads/{branch}", cwd=src)
+        sha = ap.run("git", "rev-parse", "HEAD", cwd=src).strip()
+
+    owner = ap.SLUG.split("/")[0]
+    pr = next(iter(gh(f"/repos/{ap.SLUG}/pulls?state=open&head={owner}:{branch}") or []), None)
+    if not pr:
+        pr = gh(f"/repos/{ap.SLUG}/pulls", "POST", {"title": f"Design: {d['name']} by {login}", "head": branch, "base": "main",
+                                                     "body": f"Published from /designs by @{login}. `publish.yml` checks it and merges it when it passes."})
+    n = pr["number"]
+    say(f"pull request #{n}: {pr['html_url']}")
+    say("checks running on GitHub …")
+    t0, seen = time.time(), ""
+    while time.time() - t0 < WAIT:
+        time.sleep(10)
+        p = gh(f"/repos/{ap.SLUG}/pulls/{n}")
+        if p.get("merged"):
+            say(f"✅ “{d['name']}” is in the catalogue (other installs see it within a few minutes)")
+            return
+        if p.get("head", {}).get("sha") != sha:
+            sys.exit("the branch moved on (published again from somewhere else?); stopped waiting")
+        runs = (gh(f"/repos/{ap.SLUG}/commits/{sha}/check-runs") or {}).get("check_runs", [])
+        state = ", ".join(f"{r['name']} {r.get('conclusion') or r['status']}" for r in runs) or "queued"
+        if state != seen:
+            say(f"  {state}")
+            seen = state
+        if any(r.get("conclusion") in ("failure", "cancelled", "timed_out", "action_required") for r in runs):
+            com = [c for c in gh(f"/repos/{ap.SLUG}/issues/{n}/comments") or [] if any(m in (c.get("body") or "") for m in ("bastion-check", "pvedash-check"))]
+            if com:
+                say(com[-1]["body"].replace("<!-- bastion-check -->", "").replace("<!-- pvedash-check -->", "").strip())
+            sys.exit(f"❌ not published: {pr['html_url']}")
+    sys.exit(f"still not merged after {WAIT // 60} minutes; see {pr['html_url']}")
+
+
+if __name__ == "__main__":
+    main()
