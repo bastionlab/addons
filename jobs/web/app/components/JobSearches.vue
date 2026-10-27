@@ -131,11 +131,11 @@ function summary(sp: any) {
         <span class="inl">
           <input v-model="form.keywords" placeholder="empty = automatic" title="empty = derived from wish and CV">
           <button class="btn ghost" type="button" :disabled="!!busy || (!form.wish.trim() && !hasCv)" title="suggest from wish and CV" @click="suggest">
-            {{ busy === 'suggest' ? '…' : '✦ Suggest' }}
+            {{ busy === 'suggest' ? '…' : 'Suggest' }}
           </button>
         </span>
       </label>
-      <div v-if="hint" class="small muted">✦ {{ hint }}</div>
+      <div v-if="hint" class="small muted">{{ hint }}</div>
 
       <div class="grp">
         <span class="lbl">Work mode</span>
@@ -172,7 +172,7 @@ function summary(sp: any) {
       <label class="chk"><input v-model="form.noAgency" type="checkbox"> Reject recruiters &amp; temp agencies</label>
       <label class="chk"><input v-model="form.permanentOnly" type="checkbox"> permanent only</label>
 
-      <button type="button" class="btn ghost more" @click="more = !more">{{ more ? '▾' : '▸' }} Exclusions &amp; portals</button>
+      <button type="button" class="btn ghost more" @click="more = !more"><Icon :name="more ? 'chevron-down' : 'chevron-right'" :size="14"/> Exclusions &amp; portals</button>
       <template v-if="more">
         <div class="row">
           <label>Not in title (comma-separated)<input v-model="form.exclude" placeholder="Werkstudent, SAP, Vertrieb"></label>
@@ -205,10 +205,10 @@ function summary(sp: any) {
       </div>
       <span class="small faint when">{{ s.last_polled_at ? vor(s.last_polled_at) : 'soon' }}</span>
       <div class="acts">
-        <button class="btn ghost ic" :disabled="!!busy || !s.enabled" title="Search now" @click="act('run', { id: s.id })">⟳</button>
-        <button class="btn ghost ic" title="Edit" @click="openEdit(s)">✎</button>
-        <button class="btn ghost ic" :disabled="!!busy" :title="s.enabled ? 'Pause' : 'Resume'" @click="act(s.enabled ? 'disable' : 'enable', { id: s.id })">{{ s.enabled ? '❙❙' : '▶' }}</button>
-        <button class="btn ghost ic danger" :disabled="!!busy" :class="{ sure: armed === String(s.id) }" :title="armed === String(s.id) ? 'Delete search and hits' : 'Delete'" @click="remove(s)">{{ armed === String(s.id) ? 'Sure?' : '✕' }}</button>
+        <button class="btn ghost ic" :disabled="!!busy || !s.enabled" title="Search now" aria-label="Search now" @click="act('run', { id: s.id })"><Icon name="refresh" :size="16"/></button>
+        <button class="btn ghost ic" title="Edit" aria-label="Edit" @click="openEdit(s)"><Icon name="pencil" :size="16"/></button>
+        <button class="btn ghost ic" :disabled="!!busy" :title="s.enabled ? 'Pause' : 'Resume'" @click="act(s.enabled ? 'disable' : 'enable', { id: s.id })"><Icon :name="s.enabled ? 'pause' : 'play'" :size="16"/></button>
+        <button class="btn ghost ic danger" :disabled="!!busy" :class="{ sure: armed === String(s.id) }" :title="armed === String(s.id) ? 'Delete search and hits' : 'Delete'" @click="remove(s)"><template v-if="armed === String(s.id)">Sure?</template><Icon v-else name="x" :size="16"/></button>
       </div>
     </div>
   </Panel>

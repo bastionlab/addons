@@ -96,12 +96,12 @@ async function remove() {
     <template #actions>
       <span v-if="cv?.present" class="small muted head" :title="cv.filename">{{ p.headline || cv.filename }}</span>
       <button class="btn" :disabled="!!busy" @click.stop="pickFile">
-        {{ busy === 'upload' ? 'reading…' : sname && !cv?.own ? '↥ Upload own' : cv?.present ? '↥ Re-upload' : '↥ Upload PDF' }}
+        {{ busy === 'upload' ? 'reading…' : sname && !cv?.own ? 'Upload own' : cv?.present ? 'Re-upload' : 'Upload PDF' }}
       </button>
     </template>
     <input ref="file" type="file" accept="application/pdf,.pdf" hidden @change="upload">
 
-    <div v-if="busy === 'upload'" class="small muted">✦ reading the CV…</div>
+    <div v-if="busy === 'upload'" class="small muted">Reading the CV…</div>
     <div v-if="err" class="small bad">{{ err }}</div>
     <div v-if="note" class="small ok">{{ note }}</div>
 
@@ -122,8 +122,8 @@ async function remove() {
       <div class="bar">
         <span class="small faint">{{ cv.filename }} · {{ vor(cv.uploaded_at) }} · {{ cv.chars.toLocaleString('de-DE') }} chars</span>
         <!-- a search on the shared CV: editing it here would change every search, so only from the shared view -->
-        <button v-if="!sname || cv.own" class="btn ghost" @click="edit">✎ Correct</button>
-        <button v-if="!sname || cv.own" class="btn ghost danger" :class="{ sure: armed === 'cv' }" :disabled="!!busy" :title="armed === 'cv' ? (sname ? 'The search then falls back to the shared CV' : 'New postings will then be scored against the search wish only') : 'Delete CV'" @click="remove">{{ armed === 'cv' ? 'Sure?' : '✕' }}</button>
+        <button v-if="!sname || cv.own" class="btn ghost" @click="edit"><Icon name="pencil" :size="14"/> Correct</button>
+        <button v-if="!sname || cv.own" class="btn ghost danger" :class="{ sure: armed === 'cv' }" :disabled="!!busy" :title="armed === 'cv' ? (sname ? 'The search then falls back to the shared CV' : 'New postings will then be scored against the search wish only') : 'Delete CV'" @click="remove"><template v-if="armed === 'cv'">Sure?</template><Icon v-else name="x" :size="16"/></button>
       </div>
     </template>
 
