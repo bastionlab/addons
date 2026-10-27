@@ -1,0 +1,92 @@
+{
+  "habits": {
+    "title": "Habits",
+    "tabs": {
+      "today": "Today",
+      "habits": "Habits"
+    },
+    "dow": {
+      "0": "Mon",
+      "1": "Tue",
+      "2": "Wed",
+      "3": "Thu",
+      "4": "Fri",
+      "5": "Sat",
+      "6": "Sun"
+    },
+    "greet": {
+      "late": "Still up",
+      "morning": "Good morning",
+      "afternoon": "Good afternoon",
+      "evening": "Good evening"
+    },
+    "sub": {
+      "perfect": "Perfect day",
+      "oneMore": "One more for a perfect day",
+      "keep": "{n} of {total} — keep your {streak}-day streak alive",
+      "progress": "{n} of {total} done"
+    },
+    "nothingToday": "Nothing scheduled today. Enjoy it.",
+    "nothingTodayShort": "Nothing scheduled today",
+    "noneYet": "No habits yet — add one under Habits.",
+    "perfectInARow": "Perfect days in a row",
+    "dayStreak": "day streak",
+    "inARow": "{n} days in a row · best {best}",
+    "inARowWeeks": "{n} weeks in a row · best {best}",
+    "soundOn": "Sounds on",
+    "soundOff": "Sounds off",
+    "xp": "+10 XP",
+    "newHabit": "New habit",
+    "editHabit": "Edit habit",
+    "placeholder": "What do you want to do?",
+    "freq": {
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "days": "Certain days"
+    },
+    "add": "Add",
+    "save": "Save",
+    "cancel": "Cancel",
+    "delete": "Delete",
+    "edit": "Edit",
+    "back": "Back",
+    "retry": "Retry",
+    "count": "{n} habit | {n} habits",
+    "everyDay": "Every day",
+    "every": "Every {day}",
+    "deleteQ": "Delete “{name}”?",
+    "deleteWarn": "Its streak and calendar go with it.",
+    "streak": "streak",
+    "best": "best",
+    "last30": "last 30 days",
+    "doneTotal": "done total",
+    "prevMonth": "Previous month",
+    "nextMonth": "Next month",
+    "what": {
+      "check": "Check-in",
+      "habit": "Habit",
+      "delete": "Delete"
+    },
+    "celebrate": {
+      "perfect": "Perfect day!",
+      "milestone": "{n}-day streak!",
+      "milestoneBody": "Milestone unlocked — {n} perfect days in a row.",
+      "xp": "XP today",
+      "habits": "habits",
+      "continue": "Continue"
+    },
+    "cheer": {
+      "0": "You showed up for yourself today.",
+      "1": "Every single one. Look at you.",
+      "2": "That’s how habits are built.",
+      "3": "Future you says thanks.",
+      "4": "Clean sweep!",
+      "5": "Nothing left on the list. Go enjoy the rest of the day.",
+      "6": "Consistency looks good on you."
+    },
+    "home": {
+      "sub": "Today’s check-ins",
+      "today": "{n}/{total} today"
+    }
+  }
+}

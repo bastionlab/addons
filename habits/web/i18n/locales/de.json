@@ -1,0 +1,92 @@
+{
+  "habits": {
+    "title": "Gewohnheiten",
+    "tabs": {
+      "today": "Heute",
+      "habits": "Gewohnheiten"
+    },
+    "dow": {
+      "0": "Mo",
+      "1": "Di",
+      "2": "Mi",
+      "3": "Do",
+      "4": "Fr",
+      "5": "Sa",
+      "6": "So"
+    },
+    "greet": {
+      "late": "Noch wach",
+      "morning": "Guten Morgen",
+      "afternoon": "Guten Tag",
+      "evening": "Guten Abend"
+    },
+    "sub": {
+      "perfect": "Perfekter Tag",
+      "oneMore": "Noch eine für den perfekten Tag",
+      "keep": "{n} von {total} — halte deine {streak}-Tage-Serie am Leben",
+      "progress": "{n} von {total} erledigt"
+    },
+    "nothingToday": "Heute steht nichts an. Genieß es.",
+    "nothingTodayShort": "Heute steht nichts an",
+    "noneYet": "Noch keine Gewohnheiten — füge eine unter Gewohnheiten hinzu.",
+    "perfectInARow": "Perfekte Tage in Folge",
+    "dayStreak": "Tage in Folge",
+    "inARow": "{n} Tage in Folge · Rekord {best}",
+    "inARowWeeks": "{n} Wochen in Folge · Rekord {best}",
+    "soundOn": "Ton an",
+    "soundOff": "Ton aus",
+    "xp": "+10 XP",
+    "newHabit": "Neue Gewohnheit",
+    "editHabit": "Gewohnheit bearbeiten",
+    "placeholder": "Was möchtest du tun?",
+    "freq": {
+      "daily": "Täglich",
+      "weekly": "Wöchentlich",
+      "days": "Bestimmte Tage"
+    },
+    "add": "Hinzufügen",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "delete": "Löschen",
+    "edit": "Bearbeiten",
+    "back": "Zurück",
+    "retry": "Erneut versuchen",
+    "count": "{n} Gewohnheit | {n} Gewohnheiten",
+    "everyDay": "Jeden Tag",
+    "every": "Jeden {day}",
+    "deleteQ": "„{name}“ löschen?",
+    "deleteWarn": "Serie und Kalender gehen damit verloren.",
+    "streak": "Serie",
+    "best": "Rekord",
+    "last30": "letzte 30 Tage",
+    "doneTotal": "insgesamt",
+    "prevMonth": "Vorheriger Monat",
+    "nextMonth": "Nächster Monat",
+    "what": {
+      "check": "Abhaken",
+      "habit": "Gewohnheit",
+      "delete": "Löschen"
+    },
+    "celebrate": {
+      "perfect": "Perfekter Tag!",
+      "milestone": "{n}-Tage-Serie!",
+      "milestoneBody": "Meilenstein erreicht — {n} perfekte Tage in Folge.",
+      "xp": "XP heute",
+      "habits": "Gewohnheiten",
+      "continue": "Weiter"
+    },
+    "cheer": {
+      "0": "Du hast dich heute um dich gekümmert.",
+      "1": "Jede einzelne. Stark.",
+      "2": "So entstehen Gewohnheiten.",
+      "3": "Dein zukünftiges Ich sagt danke.",
+      "4": "Alles erledigt!",
+      "5": "Nichts mehr auf der Liste. Genieß den Rest des Tages.",
+      "6": "Beständigkeit steht dir."
+    },
+    "home": {
+      "sub": "Heutige Check-ins",
+      "today": "{n}/{total} heute"
+    }
+  }
+}
