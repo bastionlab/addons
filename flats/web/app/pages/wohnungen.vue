@@ -1,7 +1,9 @@
 <script setup lang="ts">
 useHead({ title: 'Flats · Bastion' })
 
-const show = ref<'passed' | 'liked' | 'rejected'>('passed')
+const tab = usePageTab('passed')
+// "Searches" is a tab of its own (setup); the feed underneath keeps showing matches
+const show = computed(() => (tab.value === 'searches' ? 'passed' : tab.value) as 'passed' | 'liked' | 'rejected')
 const { selected, d, error, pending, load, searches, st, counts, tabs, verdict, isBusy, onChanged } = useHunter('/api/flats', 30000,
   sel => ({ search: sel ?? undefined, show: show.value === 'rejected' ? 'rejected' : 'passed', limit: 200 }), [show])
 
@@ -37,11 +39,11 @@ const sources = computed(() => Object.entries(st.value?.per_source ?? {}).map(([
         <span class="muted"><b>{{ st.read_by_ai }}</b> read by AI</span>
         <span v-if="sources" class="faint src">{{ sources }}</span>
       </HunterStrip>
-
-      <FlatSearches :searches="searches" @changed="onChanged" />
-      <FlatProfile class="prof" :search="selected" :searches="searches" />
-
-      <HunterTabs v-model:show="show" v-model:selected="selected" title="Flats" :views="VIEWS" :tabs="tabs(hits)">
+      <HunterTabs v-model:show="tab" v-model:selected="selected" :setup-badge="searches.length ? 0 : 1" :views="VIEWS" :tabs="tabs(hits)">
+        <template #setup>
+          <FlatSearches :searches="searches" @changed="onChanged" />
+          <FlatProfile class="prof" :search="selected" :searches="searches" />
+        </template>
         <template #note>
           <div v-if="show === 'liked' && liked.length > likedLive" class="small muted q">
             {{ likedLive }} online · {{ liked.length - likedLive }} offline
@@ -49,6 +51,7 @@ const sources = computed(() => Object.entries(st.value?.per_source ?? {}).map(([
         </template>
       </HunterTabs>
 
+      <template v-if="tab !== 'searches'">
       <div v-if="!feed.length" class="muted pad">
         <template v-if="!searches.length">No searches yet.</template>
         <template v-else-if="show === 'liked'">Nothing saved yet · 👍 a flat to keep it here.</template>
@@ -61,6 +64,7 @@ const sources = computed(() => Object.entries(st.value?.per_source ?? {}).map(([
           :busy="isBusy(i)" @verdict="verdict(i, $event)"
         />
       </div>
+      </template>
     </template>
   </div>
 </template>
