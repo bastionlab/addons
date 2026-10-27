@@ -56,10 +56,10 @@ const vote = (v: 'up' | 'down') => emit('verdict', props.item.verdict === v ? nu
         <span class="pill ghost">{{ item.search_name }}</span>
       </div>
       <div v-if="item.pros?.length || item.gaps?.length" class="why small">
-        <span v-for="p in item.pros" :key="'p' + p" class="pro">✓ {{ p }}</span>
-        <span v-for="g in item.gaps" :key="'g' + g" class="gap">✗ {{ g }}</span>
+        <span v-for="p in item.pros" :key="'p' + p" class="pro"><Icon name="check" :size="14"/> {{ p }}</span>
+        <span v-for="g in item.gaps" :key="'g' + g" class="gap"><Icon name="x" :size="14"/> {{ g }}</span>
       </div>
-      <div v-if="item.passed !== 0 && item.reason" class="small muted note">✦ {{ item.reason }}</div>
+      <div v-if="item.passed !== 0 && item.reason" class="small muted note">{{ item.reason }}</div>
       <div class="small src">
         <a :href="item.url" target="_blank" rel="noopener" class="muted">{{ item.source_label }}</a>
         <a v-for="a in item.also" :key="a.source + a.url" :href="a.url" target="_blank" rel="noopener" class="muted">· {{ a.label }}</a>
@@ -70,16 +70,16 @@ const vote = (v: 'up' | 'down') => emit('verdict', props.item.verdict === v ? nu
     <div class="side">
       <div class="small" :class="fresh ? 'accent' : 'muted'">{{ when }}</div>
       <a class="btn primary go" :href="apply.url" target="_blank" rel="noopener" :title="apply.via === 'search' ? 'found on the employer\'s site' : apply.url">
-        Apply ↗
+        Apply <Icon name="ext" :size="14"/>
       </a>
       <span class="small muted chan">{{ apply.label }}</span>
-      <a v-if="apply.email && apply.ch !== 'email'" :href="`mailto:${apply.email}`" class="small chan">✉ {{ apply.email }}</a>
+      <a v-if="apply.email && apply.ch !== 'email'" :href="`mailto:${apply.email}`" class="small chan"><Icon name="mail-open" :size="14"/> {{ apply.email }}</a>
       <div class="votes">
         <button class="btn ghost" :class="{ on: item.applied_at }" :disabled="busy" :title="item.applied_at ? `applied ${vor(item.applied_at)} – undo` : 'mark as applied'" @click="emit('applied', !item.applied_at)">
-          {{ item.applied_at ? '✓ applied' : '✓' }}
+          <Icon name="check" :size="14"/><template v-if="item.applied_at"> applied</template>
         </button>
-        <button class="btn ghost" :class="{ on: item.verdict === 'up' }" :disabled="busy" title="Save" @click="vote('up')">👍</button>
-        <button class="btn ghost" :class="{ on: item.verdict === 'down' }" :disabled="busy" title="Not for me" @click="vote('down')">👎</button>
+        <button class="btn ghost" :class="{ on: item.verdict === 'up' }" :disabled="busy" title="Save" aria-label="Save" @click="vote('up')"><Icon name="thumbs-up" :size="16"/></button>
+        <button class="btn ghost" :class="{ on: item.verdict === 'down' }" :disabled="busy" title="Not for me" aria-label="Not for me" @click="vote('down')"><Icon name="thumbs-down" :size="16"/></button>
       </div>
     </div>
   </article>
