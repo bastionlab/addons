@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793061335,
+  "updated": 1793125670,
   "addons": [
     {
       "id": "ai",
@@ -14,6 +14,7 @@
         "16 GB RAM"
       ],
       "ct": "ai",
+      "license": "AGPL-3.0",
       "path": "ai"
     },
     {
@@ -29,6 +30,8 @@
       "needs": [
         "DuckDuckGo Email Protection account"
       ],
+      "license": "AGPL-3.0",
+      "warning": "Uses DuckDuckGo Email Protection's unofficial API (the one its browsers use); it may change without notice.",
       "path": "aliases"
     },
     {
@@ -44,7 +47,25 @@
       "needs": [
         "Claude login"
       ],
+      "license": "AGPL-3.0",
       "path": "chat"
+    },
+    {
+      "id": "cost",
+      "name": "Cost",
+      "icon": "layers",
+      "version": "0.1.1",
+      "author": "MaxJC0",
+      "desc": "What Claude, the local GPU and the server cost per day: tokens, watts and euros, next to your plan windows.",
+      "routes": [
+        "/cost"
+      ],
+      "needs": [
+        "Claude login",
+        "NVIDIA GPU"
+      ],
+      "license": "AGPL-3.0",
+      "path": "cost"
     },
     {
       "id": "deals",
@@ -65,6 +86,8 @@
         "hunters"
       ],
       "backend": "https://github.com/bastionlab/deals",
+      "license": "AGPL-3.0",
+      "warning": "Scrapes Kleinanzeigen, whose terms forbid automated access. Personal use only, at your own risk.",
       "path": "deals"
     },
     {
@@ -77,6 +100,7 @@
       "routes": [
         "/designs"
       ],
+      "license": "AGPL-3.0",
       "path": "designs"
     },
     {
@@ -93,6 +117,7 @@
         "Claude login",
         "GitHub token (optional)"
       ],
+      "license": "AGPL-3.0",
       "path": "dev"
     },
     {
@@ -111,6 +136,8 @@
         "hunters"
       ],
       "backend": "https://github.com/bastionlab/deals",
+      "license": "AGPL-3.0",
+      "warning": "Scrapes Kleinanzeigen, ImmoScout24 (unofficial mobile API) and other portals whose terms forbid automated access. Personal use only, at your own risk.",
       "path": "flats"
     },
     {
@@ -128,6 +155,7 @@
       ],
       "ct": "habits",
       "backend": "https://github.com/bastionlab/habits",
+      "license": "AGPL-3.0",
       "path": "habits"
     },
     {
@@ -145,6 +173,7 @@
         "ai"
       ],
       "backend": "https://github.com/bastionlab/deals",
+      "license": "AGPL-3.0",
       "path": "hunters"
     },
     {
@@ -166,6 +195,8 @@
         "hunters"
       ],
       "backend": "https://github.com/bastionlab/deals",
+      "license": "AGPL-3.0",
+      "warning": "Scrapes job portals (StepStone, LinkedIn, XING and others) whose terms forbid automated access. Personal use only, at your own risk.",
       "path": "jobs"
     },
     {
@@ -178,6 +209,7 @@
       "routes": [
         "/kanji"
       ],
+      "license": "AGPL-3.0",
       "path": "kanji"
     },
     {
@@ -193,6 +225,7 @@
       "needs": [
         "Claude login"
       ],
+      "license": "AGPL-3.0",
       "path": "learn"
     },
     {
@@ -210,6 +243,8 @@
         "storage pool"
       ],
       "ct": "dl",
+      "license": "AGPL-3.0",
+      "warning": "Downloads through torrent indexers. What you download and whether that is legal where you live is your responsibility.",
       "path": "media"
     },
     {
@@ -231,6 +266,8 @@
         "ai"
       ],
       "backend": "https://github.com/bastionlab/money",
+      "license": "AGPL-3.0",
+      "warning": "Uses pytr, an unofficial Trade Republic API, and Enable Banking under its personal-use terms. Your bank data, your responsibility.",
       "path": "money"
     },
     {
@@ -246,6 +283,7 @@
       "needs": [
         "Local AI (for tidying)"
       ],
+      "license": "AGPL-3.0",
       "path": "notes"
     },
     {
@@ -263,6 +301,7 @@
         "playit.gg (optional)"
       ],
       "ct": "gameservers",
+      "license": "AGPL-3.0",
       "path": "servers"
     }
   ],
