@@ -1,7 +1,9 @@
 <script setup lang="ts">
 useHead({ title: 'Jobs · Bastion' })
 
-const show = ref<'passed' | 'rejected' | 'pending' | 'applied'>('passed')
+const tab = usePageTab('passed')
+// "Searches" is a tab of its own (setup); the feed underneath keeps showing matches
+const show = computed(() => (tab.value === 'searches' ? 'passed' : tab.value) as 'passed' | 'rejected' | 'pending' | 'applied')
 const { selected, d, error, pending, load, searches, st, counts, feed, tabs, feedback, verdict, isBusy, onChanged } = useHunter('/api/jobs', 30000,
   sel => ({ search: sel ?? undefined, show: show.value, limit: 200 }), [show])
 
@@ -35,12 +37,14 @@ function applied(item: any, v: boolean) {
         <span v-if="st.pending" class="muted"><b>{{ st.pending }}</b> being read</span>
         <span v-if="perSource" class="faint src">{{ perSource }}</span>
       </HunterStrip>
+      <HunterTabs v-model:show="tab" v-model:selected="selected" :setup-badge="searches.length ? 0 : 1" :views="VIEWS" :tabs="tabs()">
+        <template #setup>
+          <JobCv :search="selected" :searches="searches" @changed="load" />
+          <JobSearches class="srch" :searches="searches" :sources="st.sources ?? []" :has-cv="st.cv" @changed="onChanged" />
+        </template>
+      </HunterTabs>
 
-      <JobCv :search="selected" :searches="searches" @changed="load" />
-      <JobSearches class="srch" :searches="searches" :sources="st.sources ?? []" :has-cv="st.cv" @changed="onChanged" />
-
-      <HunterTabs v-model:show="show" v-model:selected="selected" title="Postings" :views="VIEWS" :tabs="tabs()" />
-
+      <template v-if="tab !== 'searches'">
       <div v-if="!feed.length" class="muted pad">
         <template v-if="!searches.length">Upload a CV and add a search.</template>
         <template v-else-if="show === 'passed' && counts.pending">The AI is reading {{ counts.pending }} postings…</template>
@@ -53,6 +57,7 @@ function applied(item: any, v: boolean) {
           :busy="isBusy(i)" @verdict="verdict(i, $event)" @applied="applied(i, $event)"
         />
       </div>
+      </template>
     </template>
   </div>
 </template>
