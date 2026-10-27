@@ -5,7 +5,7 @@ icon: chat
 order: 99
 author: MaxJC0
 license: AGPL-3.0
-version: 1.0.2
+version: 1.3.0
 desc: "Full-page chat with Claude (on the host, read-only or Auto) or a local model; chats sync across devices."
 routes: [/chat]
 home: true          # brings app/components/HomeChat.global.vue for the home page
