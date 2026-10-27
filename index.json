@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793126190,
+  "updated": 1793143425,
   "addons": [
     {
       "id": "ai",
@@ -33,6 +33,19 @@
       "license": "AGPL-3.0",
       "warning": "Uses DuckDuckGo Email Protection's unofficial API (the one its browsers use); it may change without notice.",
       "path": "aliases"
+    },
+    {
+      "id": "armenian",
+      "name": "Armenian",
+      "icon": "armenian",
+      "version": "1.2.0",
+      "author": "MaxJC0",
+      "desc": "Anki-style Eastern Armenian: the alphabet, then word packs, with write-it-back cards.",
+      "routes": [
+        "/armenian"
+      ],
+      "license": "AGPL-3.0",
+      "path": "armenian"
     },
     {
       "id": "chat",
