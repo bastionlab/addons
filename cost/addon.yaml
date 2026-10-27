@@ -1,0 +1,23 @@
+# one add-on: this file is what the Add-ons page and the marketplace show
+id: cost
+name: Cost
+label: Cost
+icon: layers           # a name from web/app/components/Icon.vue in the core
+order: 12              # where its tab sits among the add-on tabs
+author: MaxJC0
+license: AGPL-3.0
+version: 0.1.1
+desc: "What Claude, the local GPU and the server cost per day: tokens, watts and euros, next to your plan windows."
+routes: [/cost]
+home: true             # web/app/components/HomeCost.global.vue = its card in Home's Sections
+needs: [Claude login, NVIDIA GPU]
+depends_on: []
+roles: { view: owner, use: owner }
+# fields on /settings; values in /etc/dash/settings/cost.json, read by agent/cost.py
+settings:
+  - { key: eur_kwh, label: "Electricity €/kWh", type: number, default: 0.38, min: 0, max: 5 }
+  - { key: usd_eur, label: "USD→EUR", type: number, default: 0.92, min: 0, max: 5 }
+  - { key: idle_w, label: "Server idle watts, excluding GPU (estimate)", type: number, default: 45, min: 0, max: 2000 }
+  - { key: max_w, label: "Server max watts, excluding GPU (estimate)", type: number, default: 65, min: 0, max: 2000 }
+  - { key: gpu_idle_w, label: "GPU idle watts", type: number, default: 14, min: 0, max: 200, help: "GPU power up to this counts as Idle; only the excess is split between Ollama, Speech and Games" }
+  - { key: prices_json, label: "Price table override (JSON)", type: text, default: "", help: "Optional, USD per million tokens: {\"opus\":{\"in\":5,\"out\":25,\"cache_read\":0.5,\"cache_write\":6.25}}" }
