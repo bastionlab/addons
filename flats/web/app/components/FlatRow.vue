@@ -53,7 +53,7 @@ async function copy() {
   <article class="flat" :class="{ out: item.passed === 0 || item.verdict === 'down' || item.status === 'reserved', gone: item.status === 'gone' }">
     <a :href="item.url" target="_blank" rel="noopener" class="shot">
       <img v-if="item.image_url" :src="item.image_url" :alt="item.title" loading="lazy">
-      <span v-else>🏠</span>
+      <span v-else><Icon name="house" :size="24"/></span>
     </a>
 
     <div class="main">
@@ -69,7 +69,7 @@ async function copy() {
         <span class="pill">{{ SOURCES[item.source] ?? item.source }}</span>
         <!-- the same flat seen elsewhere, folded into this card by the hunter -->
         <a v-for="d in item.dupes ?? []" :key="d.source + d.source_id" :href="d.url" target="_blank" rel="noopener"
-           class="pill ghost" title="Same ad, also found there">also {{ SOURCES[d.source] ?? d.source }} ↗</a>
+           class="pill ghost" title="Same ad, also found there">also {{ SOURCES[d.source] ?? d.source }} <Icon name="ext" :size="12"/></a>
         <span v-if="item.wbs === 1" class="pill warn">WBS required</span>
         <span v-else-if="item.wbs === 0 && item.source === 'inberlinwohnen'" class="pill">no WBS</span>
         <span v-if="item.tausch === 1" class="pill warn">Swap</span>
@@ -78,17 +78,17 @@ async function copy() {
           <span v-if="item.kind === 'zwischenmiete'" class="pill warn">Sublet</span>
           <span v-if="item.kind === 'wg_zimmer'" class="pill warn">Shared-flat room</span>
         </template>
-        <span v-if="item.scam === 'mittel'" class="pill warn" title="The AI noticed red flags">⚠ check</span>
+        <span v-if="item.scam === 'mittel'" class="pill warn" title="The AI noticed red flags"><Icon name="triangle-alert" :size="14"/> check</span>
         <span v-if="item.status === 'reserved'" class="pill warn">Reserved</span>
         <span v-if="item.status === 'gone'" class="pill bad">offline{{ item.gone_at ? ` · ${vor(item.gone_at)}` : '' }}</span>
         <span v-if="item.passed === 0 && item.reason" class="pill bad">{{ item.reason }}</span>
         <span class="pill ghost">{{ item.search_name }}</span>
       </div>
-      <div v-if="item.ai_note" class="small muted note">✦ {{ item.ai_note }}</div>
+      <div v-if="item.ai_note" class="small muted note">{{ item.ai_note }}</div>
       <div class="contact small">
         <span class="muted">{{ item.contact?.how }}<template v-if="item.contact?.name && !item.contact.how?.includes(item.contact.name)"> · {{ item.contact.name }}</template></span>
         <a v-for="c in channels" :key="c.value" :href="c.type === 'email' ? `mailto:${c.value}` : `tel:${c.value}`" class="chan">
-          {{ c.type === 'email' ? '✉' : '☎' }} {{ c.type === 'email' ? c.value : phoneText(c.value) }}
+          <Icon :name="c.type === 'email' ? 'mail-open' : 'smartphone'" :size="14"/> {{ c.type === 'email' ? c.value : phoneText(c.value) }}
         </a>
       </div>
     </div>
@@ -98,27 +98,27 @@ async function copy() {
       <div class="small muted bd">{{ breakdown }}</div>
       <div class="small" :class="fresh ? 'accent' : 'muted'">{{ when }}</div>
       <div v-if="checked && item.status !== 'gone'" class="small faint" title="last checked whether the ad is still online">
-        {{ item.checked_at ? `✓ checked ${vor(item.checked_at)}` : 'not checked yet' }}
+        {{ item.checked_at ? `checked ${vor(item.checked_at)}` : 'not checked yet' }}
       </div>
       <div class="votes">
-        <button class="btn ghost" :class="{ on: msg.open }" title="Message to the landlord" @click="toggleMsg">💬</button>
-        <button class="btn ghost" :class="{ on: item.verdict === 'up' }" :disabled="busy" title="Interesting" @click="vote('up')">👍</button>
-        <button class="btn ghost" :class="{ on: item.verdict === 'down' }" :disabled="busy" title="Not for me" @click="vote('down')">👎</button>
+        <button class="btn ghost" :class="{ on: msg.open }" title="Message to the landlord" aria-label="Message to the landlord" @click="toggleMsg"><Icon name="message-square" :size="16"/></button>
+        <button class="btn ghost" :class="{ on: item.verdict === 'up' }" :disabled="busy" title="Interesting" aria-label="Interesting" @click="vote('up')"><Icon name="thumbs-up" :size="16"/></button>
+        <button class="btn ghost" :class="{ on: item.verdict === 'down' }" :disabled="busy" title="Not for me" aria-label="Not for me" @click="vote('down')"><Icon name="thumbs-down" :size="16"/></button>
       </div>
     </div>
 
     <div v-if="msg.open" class="msg">
-      <div v-if="msg.loading" class="small muted">✦ writing a message for this ad…</div>
+      <div v-if="msg.loading" class="small muted">Writing a message for this ad…</div>
       <div v-else-if="msg.err" class="small bad">{{ msg.err }}</div>
       <template v-else>
         <textarea ref="ta" v-model="msg.text" rows="14" class="ta" />
         <div v-if="msg.missing.length" class="small warn">Ad asks for this, not in the profile: {{ msg.missing.join(', ') }}</div>
       </template>
       <div class="msgbar">
-        <button class="btn ghost" :disabled="msg.loading" title="Rewrite" @click="draft(true)">↻ Rewrite</button>
+        <button class="btn ghost" :disabled="msg.loading" title="Rewrite" @click="draft(true)"><Icon name="refresh" :size="14"/> Rewrite</button>
         <!-- the <a> opens the ad natively (no popup blocker); the click also puts the text on the clipboard -->
         <a v-if="msg.text && !msg.loading" :href="item.url" target="_blank" rel="noopener" class="btn" @click="copy">Copy &amp; open ad</a>
-        <button class="btn primary" :disabled="!msg.text || msg.loading" @click="copy">{{ msg.copied ? '✓ Copied' : 'Copy' }}</button>
+        <button class="btn primary" :disabled="!msg.text || msg.loading" @click="copy">{{ msg.copied ? 'Copied' : 'Copy' }}</button>
       </div>
     </div>
   </article>
