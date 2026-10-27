@@ -162,7 +162,7 @@ function tip(s: any) {
     sp.keyword,
     sp.exclude?.length && `without: ${sp.exclude.join(', ')}`,
     sp.shipping && sp.shipping !== 'any' && shipLabel(sp),
-    sp.intent && `✦ ${sp.intent}`,
+    sp.intent && `AI: ${sp.intent}`,
   ].filter(Boolean).join('\n')
 }
 const shipLabel = (sp: any) => SHIPPING.find(x => x.v === (sp?.shipping === 'only' ? 'ship' : sp?.shipping))?.label
@@ -176,7 +176,7 @@ const shipLabel = (sp: any) => SHIPPING.find(x => x.v === (sp?.shipping === 'onl
 
     <form v-if="editing !== null" class="new" @submit.prevent="submit">
       <div class="ask">
-        <span class="spark">✦</span>
+        <span class="spark"><Icon name="sparkles" :size="16"/></span>
         <input
           v-model="wish" :disabled="composing" class="wish"
           placeholder="What are you looking for? e.g. 27″ monitor, max 150 €"
@@ -188,7 +188,7 @@ const shipLabel = (sp: any) => SHIPPING.find(x => x.v === (sp?.shipping === 'onl
       </div>
       <div v-if="steps.length" class="trace small">
         <div v-for="(st, n) in steps" :key="n" class="stepline" :class="st.tone">
-          <span class="bul">{{ n === steps.length - 1 && composing ? '◌' : '·' }}</span>{{ st.text }}
+          <span class="bul">{{ n === steps.length - 1 && composing ? '…' : '·' }}</span>{{ st.text }}
         </div>
       </div>
 
@@ -203,7 +203,7 @@ const shipLabel = (sp: any) => SHIPPING.find(x => x.v === (sp?.shipping === 'onl
         </div>
       </div>
 
-      <div v-if="composed" class="small muted why">✦ {{ composed }}</div>
+      <div v-if="composed" class="small muted why">{{ composed }}</div>
 
       <div class="row">
         <label>Name<input v-model="form.name" placeholder="road bike" required></label>
@@ -246,21 +246,21 @@ const shipLabel = (sp: any) => SHIPPING.find(x => x.v === (sp?.shipping === 'onl
         <div class="ell">
           <b>{{ s.name }}</b>
           <span class="small muted kw">{{ s.spec?.keyword }}</span>
-          <span v-if="s.spec?.intent" class="ai small">✦</span>
+          <span v-if="s.spec?.intent" class="ai small"><Icon name="sparkles" :size="14"/></span>
         </div>
         <div v-if="s.last_error" class="small bad ell">{{ s.last_error }}</div>
       </div>
       <span class="small faint when">{{ s.last_polled_at ? vor(s.last_polled_at) : 'never' }}</span>
       <div class="acts">
-        <a class="btn ghost ic" :href="s.url" target="_blank" rel="noopener" title="Open on Kleinanzeigen">↗</a>
-        <button class="btn ghost ic" title="Edit" @click="openEdit(s)">✎</button>
+        <a class="btn ghost ic" :href="s.url" target="_blank" rel="noopener" title="Open on Kleinanzeigen" aria-label="Open on Kleinanzeigen"><Icon name="ext" :size="16"/></a>
+        <button class="btn ghost ic" title="Edit" aria-label="Edit" @click="openEdit(s)"><Icon name="pencil" :size="16"/></button>
         <button
           v-if="s.spec?.intent" class="btn ghost ic" :disabled="!!busy"
           title="Have the AI re-check all stored ads"
           @click="act('rejudge', { id: s.id, all: true })"
-        >{{ busy === 'rejudge' + s.id ? '…' : '✦' }}</button>
-        <button class="btn ghost ic" :disabled="!!busy" :title="s.enabled ? 'Pause' : 'Resume'" @click="act(s.enabled ? 'disable' : 'enable', { id: s.id })">{{ s.enabled ? '❙❙' : '▶' }}</button>
-        <button class="btn ghost ic danger" :disabled="!!busy" :class="{ sure: armed === String(s.id) }" :title="armed === String(s.id) ? 'Delete search and hits' : 'Delete'" @click="remove(s)">{{ armed === String(s.id) ? 'Sure?' : '✕' }}</button>
+        ><template v-if="busy === 'rejudge' + s.id">…</template><Icon v-else name="sparkles" :size="16"/></button>
+        <button class="btn ghost ic" :disabled="!!busy" :title="s.enabled ? 'Pause' : 'Resume'" @click="act(s.enabled ? 'disable' : 'enable', { id: s.id })"><Icon :name="s.enabled ? 'pause' : 'play'" :size="16"/></button>
+        <button class="btn ghost ic danger" :disabled="!!busy" :class="{ sure: armed === String(s.id) }" :title="armed === String(s.id) ? 'Delete search and hits' : 'Delete'" @click="remove(s)"><template v-if="armed === String(s.id)">Sure?</template><Icon v-else name="x" :size="16"/></button>
       </div>
     </div>
   </Panel>
