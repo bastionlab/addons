@@ -1,0 +1,16 @@
+# one add-on: this file is what the Add-ons page (and later the marketplace index) shows
+id: armenian
+name: Armenian
+icon: armenian
+order: 4
+author: MaxJC0
+license: AGPL-3.0
+version: 1.2.0
+desc: "Anki-style Eastern Armenian: the alphabet, then word packs, with write-it-back cards."
+routes: [/armenian]
+home: false
+needs: []
+depends_on: []
+palette:
+  - { label: Armenian, to: /armenian, icon: armenian, keywords: [language, alphabet, flashcards, hayeren] }
+# web/ is a Nuxt layer; the deck (web/server/data/armenian.json) is rebuilt with scripts/build-armenian.py
