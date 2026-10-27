@@ -9,6 +9,17 @@ const act = (name: string, args: any) => run(name, args, refresh)
 
 const count = (box: any, f: (p: any) => any) => (box.projects ?? []).filter(f).length
 const copy = (s: string) => navigator.clipboard?.writeText(s)
+
+// sections as tabs (?s=…); Projects and Terminals stay mounted (v-show) so live terminals survive a tab switch
+const { t } = useI18n()
+const tab = usePageTab('projects')
+const unpushed = computed(() => (boxes.value ?? []).reduce((n: number, b: any) => n + count(b, p => p.git?.dirty || p.git?.ahead), 0))
+const tabs = computed(() => [
+  { key: 'projects', label: t('dev.tabs.projects'), badge: unpushed.value || undefined, tone: 'warn' as const },
+  { key: 'terminals', label: t('dev.tabs.terminals') },
+  { key: 'github', label: t('dev.tabs.github') },
+  { key: 'containers', label: t('dev.tabs.containers') },
+])
 </script>
 
 <template>
@@ -21,8 +32,11 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
 
     <JobList :jobs="jobs" @dismiss="dismiss" />
 
-    <ShellsPanel class="shells" />
+    <PageTabs v-model="tab" :tabs="tabs" />
 
+    <div v-show="tab === 'terminals'"><ShellsPanel /></div>
+
+    <div v-show="tab === 'projects'">
     <div v-if="!boxes && pending" class="muted pad">Loading dev boxes…</div>
     <section v-for="box in boxes ?? []" :key="box.vmid" class="box">
       <h2 class="sec">
@@ -42,13 +56,14 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
       </div>
       <div v-if="!box.projects?.length && !box.error" class="faint small">No projects yet.</div>
     </section>
+    </div>
 
-    <div class="grid two">
+    <div v-if="tab === 'github'" class="grid two">
       <GithubPanel :boxes="boxes ?? []" @action="act" />
       <NewProjectPanel :boxes="boxes ?? []" @action="act" />
     </div>
 
-    <div v-if="o" class="grid">
+    <div v-if="tab === 'containers' && o" class="grid">
       <ContainersPanel title="Dev containers" :cts="o.cts.filter((c: any) => c.tags?.includes('dev'))" :updates="o.updates" @action="act" />
     </div>
   </div>
@@ -56,7 +71,6 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
 
 <style scoped>
 .pad { padding: 40px 0; text-align: center; }
-.shells { margin-bottom: 18px; }
 .box { margin-bottom: 22px; }
 .box .sec { margin-top: 8px; flex-wrap: wrap; }
 .tail { margin-left: auto; display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 400; }
