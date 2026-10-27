@@ -2,7 +2,9 @@
 useHead({ title: 'Deals · Bastion' })
 
 const shipping = ref<'all' | 'pickup' | 'ship'>('all')
-const show = ref<'passed' | 'liked' | 'rejected'>('passed')
+const tab = usePageTab('passed')
+// "Searches" is a tab of its own (setup); the feed underneath keeps showing matches
+const show = computed(() => (tab.value === 'searches' ? 'passed' : tab.value) as 'passed' | 'liked' | 'rejected')
 const { selected, d, error, pending, load, searches, st, counts, feed, tabs, verdict, isBusy, onChanged } = useHunter('/api/deals', 20000,
   sel => ({ search: sel ?? undefined, shipping: shipping.value === 'all' ? undefined : shipping.value, show: show.value, limit: 120 }),
   [shipping, show])
@@ -35,15 +37,16 @@ const VIEWS = computed(() => [
         <span class="muted" title="rejected by the AI"><b>{{ st.filtered ?? 0 }}</b> rejected</span>
         <span v-if="st.queued" class="muted"><b>{{ st.queued }}</b> → Discord</span>
       </HunterStrip>
-
-      <DealSearches :searches="searches" @changed="onChanged" />
-
-      <HunterTabs v-model:show="show" v-model:selected="selected" title="Listings" :views="VIEWS" :tabs="tabs()">
+      <HunterTabs v-model:show="tab" v-model:selected="selected" :setup-badge="searches.length ? 0 : 1" :views="VIEWS" :tabs="tabs()">
+        <template #setup>
+          <DealSearches :searches="searches" @changed="onChanged" />
+        </template>
         <div class="seg">
           <button v-for="o in SHIP" :key="o.v" :class="{ on: shipping === o.v }" @click="shipping = o.v">{{ o.label }}</button>
         </div>
       </HunterTabs>
 
+      <template v-if="tab !== 'searches'">
       <div v-if="!feed.length" class="muted pad">
         <template v-if="show === 'liked'">Nothing saved yet · 👍 a listing to keep it here.</template>
         <template v-else-if="show === 'passed' && counts.rejected">No matches yet · {{ counts.rejected }} rejected.</template>
@@ -56,6 +59,7 @@ const VIEWS = computed(() => [
           :busy="isBusy(i)" @verdict="verdict(i, $event)"
         />
       </div>
+      </template>
     </template>
   </div>
 </template>
