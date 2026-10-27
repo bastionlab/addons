@@ -1,0 +1,5 @@
+{
+  "dev": {
+    "tabs": { "projects": "Projekte", "terminals": "Terminals", "github": "GitHub", "containers": "Container" }
+  }
+}

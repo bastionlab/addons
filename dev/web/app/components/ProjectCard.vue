@@ -5,6 +5,7 @@ const emit = defineEmits<{ refresh: [], action: [string, any] }>()
 const busy = ref('')
 const error = ref('')
 const showPush = ref(false)
+const showShare = ref(false)
 const message = ref('')
 const profile = ref<'noven' | 'work'>('noven')
 const visibility = ref<'private' | 'public'>('private')
@@ -157,6 +158,7 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
             <option value="public">pub</option>
           </select>
         </span>
+        <button class="btn ghost" :class="{ on: showShare }" title="public link to the preview" @click="showShare = !showShare">⤴</button>
         <button v-if="!anyLive" class="btn ghost" :class="{ on: opened }" title="show the tmux pane" @click="opened = !opened">▤</button>
       </div>
 
@@ -164,6 +166,7 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
         <input v-model="message" :placeholder="g.dirty ? `commit message for ${g.dirty} file(s)` : 'nothing to commit — push only'" @keydown.enter.prevent="push">
         <button class="btn primary" @click="push">{{ message.trim() ? 'Commit & push' : 'Push' }}</button>
       </div>
+      <ShareBox v-if="showShare" :box="box" :p="p" />
     </div>
 
     <div v-if="showTerm" class="term">
