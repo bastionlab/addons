@@ -3,6 +3,8 @@
     "title": "Designs",
     "yours": "Your designs",
     "shared": "Shared by others",
+    "tabYours": "Yours",
+    "tabShared": "Shared",
     "builtin": "Built-in",
     "new": "New design",
     "import": "Import code",
@@ -57,6 +59,30 @@
     "publish": "Publish",
     "publishLabel": "Publish “{name}” to the marketplace",
     "search": "Search designs",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "describe": "Describe a look",
+    "describeHint": "e.g. Windows 95, airy like Notion, neon cyberpunk, warm paper notebook…",
+    "describeNote": "Claude writes colours, styles and picks a skin; you can tweak before saving",
+    "generate": "Generate",
+    "aiWorking": "Designing… {s}s",
+    "aiDone": "Design ready: tweak it or Save",
+    "aiFailed": "Claude could not make a design",
+    "skin": "Skin (replaces nav, cards, stats, home tiles)",
+    "noSkin": "None",
+    "skinOn": "Skin: {skin}",
+    "skinMissing": "Needs the {skin} skin add-on",
+    "css": "Stylesheet",
+    "cssHint": "Plain CSS, e.g. html body .panel with a shadow",
+    "safe": "A design hides something you need? Open any page with ?design=off (back with ?design=on).",
+    "addImage": "Add image",
+    "uploading": "Uploading…",
+    "imageAdded": "Image added to the stylesheet",
+    "appliesTo": "Applies to",
+    "everyDevice": "Every device",
+    "onlyThis": {
+      "phone": "Only this phone",
+      "tablet": "Only this tablet",
+      "desktop": "Only this computer"
+    }
   }
 }
