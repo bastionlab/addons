@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793060961,
+  "updated": 1793061032,
   "addons": [
     {
       "id": "ai",
@@ -117,7 +117,7 @@
       "id": "habits",
       "name": "Habits",
       "icon": "check",
-      "version": "1.1.1",
+      "version": "1.1.2",
       "author": "MaxJC0",
       "desc": "Offline-first habit tracker with streaks, a calendar and a perfect-day celebration.",
       "routes": [
