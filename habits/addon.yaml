@@ -5,12 +5,10 @@ icon: check
 order: 4
 author: MaxJC0
 license: AGPL-3.0
-version: 1.1.2
-desc: "Offline-first habit tracker with streaks, a calendar and a perfect-day celebration."
+version: 2.0.1
+desc: "Habit tracker with daily, weekly and weekday schedules, streaks, a calendar and a perfect-day celebration."
 routes: [/habits]
 home: true
-ct: habits
-backend: https://github.com/bastionlab/habits   # the app behind this tab, in its own CT
-needs: [own CT]
+needs: []
 depends_on: []
-# web/ only frames the tracker, which is its own app (bastionlab/habits) in the `habits` CT of config.json
+# web/ is a Nuxt layer; data lives in /var/lib/dash/habits.db in CT 104 (scripts/import-ct204.mjs loaded the old app's once)
