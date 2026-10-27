@@ -3,10 +3,20 @@ useHead({ title: 'Habits · Bastion' })
 // the tracker is its own offline-first app in CT 204 (bastionlab/habits); the dash only frames it
 const { ts } = useDashConfig()
 const src = computed(() => ts('habits') && `${ts('habits')}/`)
+
+// the viewer's design (Designs add-on, if installed) goes into the frame: the app asks with bastion:ready
+const frame = ref<HTMLIFrameElement | null>(null)
+function sendLook() {
+  if (!frame.value?.contentWindow || !src.value) return
+  frame.value.contentWindow.postMessage({ type: 'bastion:look', look: (window as any).__bastionLook ?? null }, new URL(src.value).origin)
+}
+const onMsg = (e: MessageEvent) => { if (e.source === frame.value?.contentWindow && e.data?.type === 'bastion:ready') sendLook() }
+onMounted(() => { addEventListener('message', onMsg); addEventListener('bastion:look', sendLook) })
+onUnmounted(() => { removeEventListener('message', onMsg); removeEventListener('bastion:look', sendLook) })
 </script>
 
 <template>
-  <iframe v-if="src" class="habits" :src="src" title="Habits" />
+  <iframe v-if="src" ref="frame" class="habits" :src="src" title="Habits" />
 </template>
 
 <style scoped>
