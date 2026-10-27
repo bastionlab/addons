@@ -34,18 +34,18 @@ async function ask() {
   <article class="card" :class="{ down: item.verdict === 'down', filtered: item.passed === 0, reserved: item.status === 'reserved' }">
     <a :href="item.url" target="_blank" rel="noopener" class="shot">
       <img v-if="item.image_url" :src="item.image_url" :alt="item.title" loading="lazy">
-      <div v-else class="noshot">🏷️</div>
+      <div v-else class="noshot"><Icon name="tag" :size="24"/></div>
     </a>
 
     <div class="body">
       <div class="head">
         <a :href="item.url" target="_blank" rel="noopener" class="title">{{ item.title }}</a>
-        <span v-if="item.passed === 0" class="pill bad" title="rejected by the AI">✦</span>
+        <span v-if="item.passed === 0" class="pill bad" title="rejected by the AI">AI</span>
         <!-- the poller re-opens listings; sold ones are dropped server-side, reserved ones may still fall through -->
         <span v-if="item.status === 'reserved'" class="pill warn" title="The seller has reserved it">Reserved</span>
         <!-- account younger than NEW_SELLER_DAYS when first seen: the poller never pushes these -->
         <span v-if="item.new_seller" class="pill bad"
-              :title="'Account active since ' + new Date(item.seller_since * 1000).toLocaleDateString('en-GB')">⚠ New account – phishing?</span>
+              :title="'Account active since ' + new Date(item.seller_since * 1000).toLocaleDateString('en-GB')"><Icon name="triangle-alert" :size="14"/> New account – phishing?</span>
       </div>
 
       <div class="price">
@@ -57,19 +57,19 @@ async function ask() {
         <span v-if="item.district">{{ item.district }}</span>
         <span v-if="item.distance_km != null">{{ item.distance_km.toFixed(0) }} km</span>
         <!-- shipped is the derived meaning: KA's own flag is set by nearby sellers too -->
-        <span v-if="item.shipped" class="pill">📦 Shipping</span>
+        <span v-if="item.shipped" class="pill"><Icon name="package" :size="14"/> Shipping</span>
         <span :class="{ accent: fresh }">{{ when }}</span>
       </div>
 
-      <div v-if="item.reason" class="small muted why" :class="{ bad: item.passed === 0 }">✦ {{ item.reason }}</div>
+      <div v-if="item.reason" class="small muted why" :class="{ bad: item.passed === 0 }">{{ item.reason }}</div>
 
       <div class="foot">
         <span class="pill ghost">{{ item.search_name }}</span>
         <div class="votes">
           <a class="btn ghost" :class="{ on: copied }" :href="item.url" target="_blank" rel="noopener"
-             :title="copied ? 'Copied – paste it into Kleinanzeigen' : inquiry" @click="ask">{{ copied ? '✓' : '💬' }}</a>
-          <button class="btn ghost" :class="{ on: item.verdict === 'up' }" :disabled="busy" title="Good match" @click="vote('up')">👍</button>
-          <button class="btn ghost" :class="{ on: item.verdict === 'down' }" :disabled="busy" title="Not it" @click="vote('down')">👎</button>
+             :title="copied ? 'Copied – paste it into Kleinanzeigen' : inquiry" @click="ask" :aria-label="copied ? 'Copied' : 'Copy message'"><Icon :name="copied ? 'check' : 'message-square'" :size="16"/></a>
+          <button class="btn ghost" :class="{ on: item.verdict === 'up' }" :disabled="busy" title="Good match" aria-label="Good match" @click="vote('up')"><Icon name="thumbs-up" :size="16"/></button>
+          <button class="btn ghost" :class="{ on: item.verdict === 'down' }" :disabled="busy" title="Not it" aria-label="Not it" @click="vote('down')"><Icon name="thumbs-down" :size="16"/></button>
         </div>
       </div>
     </div>

@@ -11,8 +11,8 @@ const { selected, d, error, pending, load, searches, st, counts, feed, tabs, ver
 
 const SHIP = [
   { v: 'all' as const, label: 'All' },
-  { v: 'pickup' as const, label: '🚗 Pickup' },
-  { v: 'ship' as const, label: '📦 Shipping' },
+  { v: 'pickup' as const, label: 'Pickup' },
+  { v: 'ship' as const, label: 'Shipping' },
 ]
 // counts come from the server under the exact filters in force, so a tab's number always equals the cards it shows.
 // Aussortiert = AI-rejected, reserved by the seller, or 👎; a 👍 stays in Passend too
@@ -48,7 +48,7 @@ const VIEWS = computed(() => [
 
       <template v-if="tab !== 'searches'">
       <div v-if="!feed.length" class="muted pad">
-        <template v-if="show === 'liked'">Nothing saved yet · 👍 a listing to keep it here.</template>
+        <template v-if="show === 'liked'">Nothing saved yet · Thumbs-up a listing to keep it here.</template>
         <template v-else-if="show === 'passed' && counts.rejected">No matches yet · {{ counts.rejected }} rejected.</template>
         <template v-else-if="shipping !== 'all'">Nothing {{ shipping === 'pickup' ? 'for pickup' : 'with shipping' }}.</template>
         <template v-else>Nothing yet.</template>
