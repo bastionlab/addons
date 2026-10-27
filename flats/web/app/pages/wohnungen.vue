@@ -54,7 +54,7 @@ const sources = computed(() => Object.entries(st.value?.per_source ?? {}).map(([
       <template v-if="tab !== 'searches'">
       <div v-if="!feed.length" class="muted pad">
         <template v-if="!searches.length">No searches yet.</template>
-        <template v-else-if="show === 'liked'">Nothing saved yet · 👍 a flat to keep it here.</template>
+        <template v-else-if="show === 'liked'">Nothing saved yet · Thumbs-up a flat to keep it here.</template>
         <template v-else-if="show === 'passed' && counts.rejected">No matches yet · {{ counts.rejected }} rejected.</template>
         <template v-else>Nothing here.</template>
       </div>

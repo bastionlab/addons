@@ -164,7 +164,7 @@ const remove = (s: any) => arm(String(s.id)) && act('delete', { id: s.id })
 const eur = (v: number) => `${Math.round(v).toLocaleString('de-DE')} €`
 function summary(sp: any) {
   const parts: string[] = []
-  parts.push(sp.mode === 'pin' ? `📍 ${sp.place} · ${sp.radius_km} km` : `${sp.place}${sp.radius_km ? ` +${sp.radius_km} km` : ''}`)
+  parts.push(sp.mode === 'pin' ? `${sp.place} · ${sp.radius_km} km` : `${sp.place}${sp.radius_km ? ` +${sp.radius_km} km` : ''}`)
   if (sp.max_warm) parts.push(`≤ ${eur(sp.max_warm)} warm`)
   if (sp.min_rooms || sp.max_rooms) parts.push(`${sp.min_rooms ?? ''}–${sp.max_rooms ?? ''} rooms`.replace(/^–/, '≤ ').replace(/–$/, '+'))
   if (sp.min_area || sp.max_area) parts.push(`${sp.min_area ?? ''}–${sp.max_area ?? ''} m²`.replace(/^–/, '≤ ').replace(/– m²$/, '+ m²'))
@@ -187,7 +187,7 @@ function summary(sp: any) {
         <div class="lbl">Where?
           <div class="seg">
             <button type="button" :class="{ on: form.mode === 'city' }" @click="setMode('city')">Place</button>
-            <button type="button" :class="{ on: form.mode === 'pin' }" @click="setMode('pin')">📍 Map</button>
+            <button type="button" :class="{ on: form.mode === 'pin' }" @click="setMode('pin')"><Icon name="map-pin" :size="14"/> Map</button>
           </div>
         </div>
       </div>
@@ -269,10 +269,10 @@ function summary(sp: any) {
       </div>
       <span class="small faint when">{{ s.last_polled_at ? vor(s.last_polled_at) : 'never' }}</span>
       <div class="acts">
-        <a v-if="s.url" class="btn ghost ic" :href="s.url" target="_blank" rel="noopener" title="Open on the portal">↗</a>
-        <button class="btn ghost ic" title="Edit" @click="openEdit(s)">✎</button>
-        <button class="btn ghost ic" :disabled="!!busy" :title="s.enabled ? 'Pause' : 'Resume'" @click="act(s.enabled ? 'disable' : 'enable', { id: s.id })">{{ s.enabled ? '❙❙' : '▶' }}</button>
-        <button class="btn ghost ic danger" :disabled="!!busy" :class="{ sure: armed === String(s.id) }" :title="armed === String(s.id) ? 'Delete search and hits' : 'Delete'" @click="remove(s)">{{ armed === String(s.id) ? 'Sure?' : '✕' }}</button>
+        <a v-if="s.url" class="btn ghost ic" :href="s.url" target="_blank" rel="noopener" title="Open on the portal" aria-label="Open on the portal"><Icon name="ext" :size="16"/></a>
+        <button class="btn ghost ic" title="Edit" aria-label="Edit" @click="openEdit(s)"><Icon name="pencil" :size="16"/></button>
+        <button class="btn ghost ic" :disabled="!!busy" :title="s.enabled ? 'Pause' : 'Resume'" @click="act(s.enabled ? 'disable' : 'enable', { id: s.id })"><Icon :name="s.enabled ? 'pause' : 'play'" :size="16"/></button>
+        <button class="btn ghost ic danger" :disabled="!!busy" :class="{ sure: armed === String(s.id) }" :title="armed === String(s.id) ? 'Delete search and hits' : 'Delete'" @click="remove(s)"><template v-if="armed === String(s.id)">Sure?</template><Icon v-else name="x" :size="16"/></button>
       </div>
     </div>
   </Panel>
