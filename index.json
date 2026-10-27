@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793125811,
+  "updated": 1793125879,
   "addons": [
     {
       "id": "ai",
@@ -107,7 +107,7 @@
       "id": "dev",
       "name": "Dev",
       "icon": "dev",
-      "version": "1.2.0",
+      "version": "1.2.1",
       "author": "MaxJC0",
       "desc": "Dev boxes as LXCs: projects, previews + public share links, git/GitHub, Claude Code and /ship lanes, web terminals.",
       "routes": [
