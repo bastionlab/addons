@@ -36,8 +36,8 @@ function clone(r: any) {
 <template>
   <Panel id="github" title="GitHub" fold="closed" :sub="gh?.user">
     <template #actions>
-      <a v-if="gh?.url" :href="gh.url" target="_blank" class="btn ghost small" title="open on GitHub">↗</a>
-      <button class="btn ghost small" title="refresh the repo list" @click="refresh">↻</button>
+      <a v-if="gh?.url" :href="gh.url" target="_blank" class="btn ghost small" title="open on GitHub" aria-label="open on GitHub"><Icon name="ext" :size="16"/></a>
+      <button class="btn ghost small" title="refresh the repo list" @click="refresh" aria-label="refresh"><Icon name="refresh" :size="16"/></button>
     </template>
 
     <div class="bar">
@@ -56,7 +56,7 @@ function clone(r: any) {
       <div v-for="r in repos" :key="r.full" class="repo">
         <div class="rh">
           <a :href="r.url" target="_blank" class="rname">{{ r.name }}</a>
-          <span v-if="r.private" class="faint small" title="private">🔒</span>
+          <span v-if="r.private" class="faint small" title="private"><Icon name="lock" :size="14"/></span>
           <span v-if="r.fork" class="pill">fork</span>
           <span v-if="r.lang" class="lang small faint">{{ r.lang }}</span>
         </div>

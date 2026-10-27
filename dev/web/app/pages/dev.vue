@@ -47,7 +47,7 @@ const tabs = computed(() => [
           <span v-if="count(box, p => p.cc?.running)" class="pill accent">{{ count(box, p => p.cc?.running) }} Claude</span>
           <span v-if="count(box, p => p.git?.dirty || p.git?.ahead)" class="pill warn">{{ count(box, p => p.git?.dirty || p.git?.ahead) }} unpushed</span>
           <button class="btn ghost small" :title="`ssh max@${box.name} — copy`" @click="copy(`ssh max@${box.name}`)">ssh</button>
-          <button class="btn ghost small" title="refresh" @click="refresh">↻</button>
+          <button class="btn ghost small" title="refresh" @click="refresh" aria-label="refresh"><Icon name="refresh" :size="16"/></button>
         </span>
       </h2>
       <div v-if="box.error" class="small bad">{{ box.error }}</div>

@@ -56,7 +56,7 @@ const left = (l: any) => l.expires ? `ends ${new Date(l.expires).toLocaleString(
       <span class="faint meta">:{{ l.project.port }} · {{ l.once ? 'one visit' : left(l) }} · {{ l.uses }} open{{ l.uses === 1 ? '' : 's' }}</span>
       <button v-if="l.status === 'active'" class="btn ghost sm" @click="copy(l.url, l.id)">{{ copied === l.id ? 'Copied' : 'Copy' }}</button>
       <button v-if="!l.revoked" class="btn ghost sm danger" @click="act('revoke', l.id)">Revoke</button>
-      <button v-else class="btn ghost sm" title="remove from the list" @click="act('delete', l.id)">✕</button>
+      <button v-else class="btn ghost sm" title="remove from the list" @click="act('delete', l.id)" aria-label="remove"><Icon name="x" :size="16"/></button>
     </div>
   </div>
 </template>
