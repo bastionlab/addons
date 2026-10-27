@@ -8,7 +8,7 @@ export default defineEventHandler(async (event) => {
   const got = await upstream<any>('agent', agentUrl, agentToken, `/marketplace/index${fresh ? '?fresh=1' : ''}`, 20_000).catch(() => null)
   const raw = got?.designs ?? (useRuntimeConfig().marketplaceLocal as any)?.designs ?? []
   const list = (Array.isArray(raw) ? raw : []).filter((d: any) => d?.slug && d?.name).map((d: any) => ({
-    slug: String(d.slug), name: String(d.name).slice(0, 40), author: String(d.author ?? ''), tokens: cleanTokens(d.tokens), updated: d.updated ?? null,
+    slug: String(d.slug), name: String(d.name).slice(0, 40), author: String(d.author ?? ''), tokens: cleanTokens(d.tokens), css: cleanCss(d.css).css, skin: cleanSkin(d.skin), updated: d.updated ?? null,
   }))
   if (got) cache = { at: Date.now(), list }
   return { designs: list }

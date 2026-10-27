@@ -45,7 +45,8 @@ def main():
     me = gh("/user")
     login = me["login"]
     slug = f"{slugify(login)}-{slugify(d['name'])}"[:60]
-    doc = {"slug": slug, "name": d["name"], "author": login, "tokens": d["tokens"]}
+    doc = {"slug": slug, "name": d["name"], "author": login, "tokens": d["tokens"],
+           **({"css": d["css"]} if d.get("css") else {}), **({"skin": d["skin"]} if d.get("skin") else {})}
 
     with tempfile.TemporaryDirectory() as t:
         src = Path(t) / "repo"
@@ -56,7 +57,7 @@ def main():
         old = json.loads(f.read_text()) if f.exists() else None
         if old and old.get("author") != login:
             sys.exit(f"{slug} in the catalogue belongs to {old.get('author')}; rename your design and publish again")
-        if old and {k: old.get(k) for k in ("name", "tokens")} == {k: doc[k] for k in ("name", "tokens")}:
+        if old and {k: old.get(k) for k in ("name", "tokens", "css", "skin")} == {k: doc.get(k) for k in ("name", "tokens", "css", "skin")}:
             say(f"nothing to publish: the catalogue has “{d['name']}” exactly like this")
             return
         if not (src / ".github/check/check_design.py").exists():
