@@ -35,7 +35,7 @@ export type Tokens = Record<string, string | number> & { radius: number, scheme:
 // the core's own look (main.css :root) and a few starting points; palettes, so hex is fine here
 const DEFAULT: Tokens = {
   'bg': '#0a0c10', 'panel': '#11141a', 'panel-2': '#171b23', 'line': '#1f242e', 'line-2': '#2b313d',
-  'text': '#e6e8ed', 'muted': '#8a92a2', 'faint': '#596070', 'accent': '#8ea6ff', 'ok': '#3ccf8e', 'warn': '#f0b440',
+  'text': '#e6e8ed', 'muted': '#8a92a2', 'faint': '#596070', 'accent': '#7c9cff', 'ok': '#3ccf8e', 'warn': '#f0b440',
   'bad': '#f26b6b', 'track': '#1d222b', 'claude': '#d97757', 'term-bg': '#07090c', 'term-fg': '#d0d4dc', 'radius': 12, 'scheme': 'dark',
 }
 export type Preset = { key: string, name: string, tokens: Tokens, css?: string, skin?: string }
