@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793126044,
+  "updated": 1793126117,
   "addons": [
     {
       "id": "ai",
@@ -144,17 +144,12 @@
       "id": "habits",
       "name": "Habits",
       "icon": "check",
-      "version": "1.1.2",
+      "version": "2.0.1",
       "author": "MaxJC0",
-      "desc": "Offline-first habit tracker with streaks, a calendar and a perfect-day celebration.",
+      "desc": "Habit tracker with daily, weekly and weekday schedules, streaks, a calendar and a perfect-day celebration.",
       "routes": [
         "/habits"
       ],
-      "needs": [
-        "own CT"
-      ],
-      "ct": "habits",
-      "backend": "https://github.com/bastionlab/habits",
       "license": "AGPL-3.0",
       "path": "habits"
     },
