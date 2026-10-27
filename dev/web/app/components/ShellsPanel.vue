@@ -50,7 +50,7 @@ function kill(b: any, s: any) {
             <span class="what mono">{{ /^(zsh|bash|sh)$/.test(s.command) ? s.cwd : s.command }}</span>
             <span class="faint small age">{{ ago(s.created) }}</span>
           </button>
-          <button class="x" :disabled="busy === `kill:${b.vmid}:${s.session}`" :class="{ sure: armed === `${b.vmid}:${s.session}` }" :title="armed === `${b.vmid}:${s.session}` ? `still running ${s.command} — tap again to end it` : 'end this shell'" @click="kill(b, s)">{{ armed === `${b.vmid}:${s.session}` ? 'Sure?' : '✕' }}</button>
+          <button class="x" :disabled="busy === `kill:${b.vmid}:${s.session}`" :class="{ sure: armed === `${b.vmid}:${s.session}` }" :title="armed === `${b.vmid}:${s.session}` ? `still running ${s.command} — tap again to end it` : 'end this shell'" @click="kill(b, s)">{{ armed === `${b.vmid}:${s.session}` ? 'Sure?' : 'End' }}</button>
         </div>
       </div>
       <div v-if="!boxes?.length" class="faint small">No running dev boxes.</div>

@@ -48,7 +48,7 @@ function create() {
         <input v-model="onGithub" type="checkbox" :disabled="!canGithub"> create on GitHub
       </label>
       <select v-if="onGithub" v-model="visibility">
-        <option value="private">🔒 private</option>
+        <option value="private">private</option>
         <option value="public">public</option>
       </select>
     </div>

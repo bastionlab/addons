@@ -148,7 +148,7 @@ const press = (seq: string) => { type(seq); term?.focus() }
       <div class="bar">
         <b class="mono">{{ title }}</b>
         <span v-if="status" class="small muted">{{ status }}</span>
-        <button class="btn sm closebtn" title="detach — the session keeps running" @click="close">✕ Close</button>
+        <button class="btn sm closebtn" title="detach — the session keeps running" @click="close"><Icon name="x" :size="16"/> Close</button>
       </div>
       <div ref="host" class="xt" @click="term?.focus()" />
       <div class="keys">

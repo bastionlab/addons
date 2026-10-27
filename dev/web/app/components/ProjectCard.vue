@@ -100,20 +100,20 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
       <div class="ph">
         <span class="dot" :class="p.running ? 'ok' : p.exited != null ? 'bad' : ''" :title="state" />
         <b class="pname" :title="p.path.replace('/home/max/', '~/')">{{ p.name }}</b>
-        <a v-if="g.url" :href="g.url" target="_blank" class="repo small" title="open on GitHub">{{ g.repo }} ↗</a>
+        <a v-if="g.url" :href="g.url" target="_blank" class="repo small" title="open on GitHub">{{ g.repo }} <Icon name="ext" :size="12"/></a>
         <span v-if="p.exited != null" class="pill bad">{{ state }}</span>
       </div>
 
       <div class="git small">
-        <span class="pill">⎇ {{ p.branch || 'no branch' }}</span>
+        <span class="pill"><Icon name="branch" :size="12"/> {{ p.branch || 'no branch' }}</span>
         <span v-if="g.dirty" class="pill warn">{{ g.dirty }} changed</span>
-        <span v-if="g.tracking && g.ahead" class="pill accent">↑{{ g.ahead }}</span>
-        <span v-if="g.tracking && g.behind" class="pill warn">↓{{ g.behind }}</span>
+        <span v-if="g.tracking && g.ahead" class="pill accent"><Icon name="chevron-up" :size="12"/>{{ g.ahead }}</span>
+        <span v-if="g.tracking && g.behind" class="pill warn"><Icon name="chevron-down" :size="12"/>{{ g.behind }}</span>
         <span v-if="!g.remote" class="pill">no remote</span>
         <span v-else-if="!g.tracking" class="pill">no upstream</span>
-        <span v-if="p.cc?.running" class="pill accent">✦ {{ p.cc.profile }}</span>
+        <span v-if="p.cc?.running" class="pill accent"><Icon name="spark" :size="12"/> {{ p.cc.profile }}</span>
         <span v-if="shipLive" class="pill" :class="ship.conductor ? 'accent' : 'warn'" :title="shipTitle">
-          ⚓ {{ ship.conductor ? 'conducting' : 'no conductor' }}{{ ship.lanes.length ? ` · ${ship.lanes.length} lane${ship.lanes.length > 1 ? 's' : ''}` : '' }}
+          {{ ship.conductor ? 'conducting' : 'no conductor' }}{{ ship.lanes.length ? ` · ${ship.lanes.length} lane${ship.lanes.length > 1 ? 's' : ''}` : '' }}
         </span>
       </div>
       <div v-if="g.last" class="small faint last" :title="`${g.last.hash} · ${new Date(g.last.at).toLocaleString()}`">
@@ -122,7 +122,7 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
 
       <div v-if="p.urls?.length" class="urls">
         <a v-for="u in p.urls" :key="u.port" :href="u.url" target="_blank" class="url" :class="{ pending: !u.url }">
-          <span class="mono">:{{ u.port }}</span> {{ u.url ? 'Open ↗' : 'sharing…' }}
+          <span class="mono">:{{ u.port }}</span> {{ u.url ? 'Open' : 'sharing…' }}
         </a>
       </div>
       <div v-else-if="p.running" class="small faint">waiting for a port…</div>
@@ -131,35 +131,35 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
 
       <div class="acts">
         <button v-if="!p.running" class="btn" :disabled="!p.command || !!busy" :title="p.command || 'no dev command found'" @click="call('preview', 'start')">
-          {{ busy === 'preview:start' ? '…' : '▶ Preview' }}
+          {{ busy === 'preview:start' ? '…' : 'Preview' }}
         </button>
-        <button v-else class="btn danger" :disabled="!!busy" @click="call('preview', 'stop')">■ Preview</button>
+        <button v-else class="btn danger" :disabled="!!busy" @click="call('preview', 'stop')">Stop Preview</button>
 
         <span v-if="!p.cc?.running" class="combo">
-          <button class="btn" :disabled="!!busy" @click="call('cc', 'start', { profile })">{{ busy.startsWith('cc:') ? '…' : '✦ Claude' }}</button>
+          <button class="btn" :disabled="!!busy" @click="call('cc', 'start', { profile })">{{ busy.startsWith('cc:') ? '…' : 'Claude' }}</button>
           <select v-model="profile" title="Claude Code profile">
             <option value="noven">noven</option>
             <option value="work">work</option>
           </select>
         </span>
-        <button v-else class="btn danger" :disabled="!!busy" @click="call('cc', 'stop')">■ Claude</button>
+        <button v-else class="btn danger" :disabled="!!busy" @click="call('cc', 'stop')">Stop Claude</button>
 
         <template v-if="g.remote">
-          <button class="btn ghost" title="git fetch --prune" @click="emit('action', 'git_fetch', { vmid: box.vmid, path: p.path })">↻</button>
-          <button class="btn" :class="canPush ? 'primary' : 'ghost'" title="push" @click="showPush = !showPush">↑</button>
+          <button class="btn ghost" title="git fetch --prune" @click="emit('action', 'git_fetch', { vmid: box.vmid, path: p.path })" aria-label="git fetch"><Icon name="refresh" :size="16"/></button>
+          <button class="btn" :class="canPush ? 'primary' : 'ghost'" title="push" @click="showPush = !showPush" aria-label="push"><Icon name="chevron-up" :size="16"/></button>
         </template>
         <!-- no remote yet: create the repo on GitHub and push it there -->
         <span v-else class="combo">
           <button class="btn" title="create the GitHub repo and push this project to it" @click="emit('action', 'github_publish', { vmid: box.vmid, path: p.path, visibility })">
-            ⇪ GitHub
+            GitHub
           </button>
           <select v-model="visibility" title="repo visibility">
-            <option value="private">🔒</option>
+            <option value="private">private</option>
             <option value="public">pub</option>
           </select>
         </span>
-        <button class="btn ghost" :class="{ on: showShare }" title="public link to the preview" @click="showShare = !showShare">⤴</button>
-        <button v-if="!anyLive" class="btn ghost" :class="{ on: opened }" title="show the tmux pane" @click="opened = !opened">▤</button>
+        <button class="btn ghost" :class="{ on: showShare }" title="public link to the preview" @click="showShare = !showShare" aria-label="share link"><Icon name="share-2" :size="16"/></button>
+        <button v-if="!anyLive" class="btn ghost" :class="{ on: opened }" title="show the tmux pane" @click="opened = !opened" aria-label="terminal pane"><Icon name="terminal" :size="16"/></button>
       </div>
 
       <div v-if="showPush" class="pushbox">
@@ -182,7 +182,7 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
           <span v-if="ship.lanes?.length" class="lanes">{{ ship.lanes.length }}</span>
         </button>
         <code class="faint small mono attach" :title="`copy: ${attach}`" @click="copy(attach)">⧉ {{ session }}</code>
-        <button v-if="live" class="btn ghost sm fs" title="open full screen and type into it" @click="full = true">⛶</button>
+        <button v-if="live" class="btn ghost sm fs" title="open full screen and type into it" @click="full = true" aria-label="full screen"><Icon name="maximize-2" :size="16"/></button>
       </div>
       <div v-if="tab === 'ship' && shipLive && ship.lanes.length" class="lanerow small">
         <span v-for="l in ship.lanes" :key="l" class="pill">{{ l }}</span>
