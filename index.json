@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793125741,
+  "updated": 1793125811,
   "addons": [
     {
       "id": "ai",
@@ -94,7 +94,7 @@
       "id": "designs",
       "name": "Designs",
       "icon": "palette",
-      "version": "0.3.0",
+      "version": "0.3.1",
       "author": "MaxJC0",
       "desc": "Make your own look for the dashboard: colours, a stylesheet and whole skins, or describe one and Claude designs it. Each person picks their own; share with everyone, as a code or on the marketplace.",
       "routes": [
