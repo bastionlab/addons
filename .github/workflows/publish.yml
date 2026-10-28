@@ -54,11 +54,9 @@ jobs:
           id="${HEAD_REF#publish/}"
           echo "id=$id" >> "$GITHUB_OUTPUT"
           git -C pr diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" > files.txt
-          perm=$(gh api "repos/${{ github.repository }}/collaborators/$AUTHOR/permission" --jq .permission || echo none)
-          admin=(); [ "$perm" = admin ] && admin=(--admin)
           set +e
           python3 base/.github/check/check.py --id "$id" --pr pr --base base --files files.txt \
-            --author "$AUTHOR" "${admin[@]}" --lint --report report.md
+            --author "$AUTHOR" --lint --report report.md
           rc=$?
           set -e
           cat report.md >> "$GITHUB_STEP_SUMMARY"
@@ -114,11 +112,9 @@ jobs:
           slug="${HEAD_REF#design/}"
           echo "slug=$slug" >> "$GITHUB_OUTPUT"
           git -C pr diff --name-only "${{ github.event.pull_request.base.sha }}...${{ github.event.pull_request.head.sha }}" > files.txt
-          perm=$(gh api "repos/${{ github.repository }}/collaborators/$AUTHOR/permission" --jq .permission || echo none)
-          admin=(); [ "$perm" = admin ] && admin=(--admin)
           set +e
           python3 base/.github/check/check_design.py --slug "$slug" --pr pr --base base --files files.txt \
-            --author "$AUTHOR" "${admin[@]}" --report report.md
+            --author "$AUTHOR" --report report.md
           rc=$?
           set -e
           cat report.md >> "$GITHUB_STEP_SUMMARY"
