@@ -1,0 +1,79 @@
+{
+  "widgets": {
+    "title": "Widgets",
+    "close": "Close",
+    "edit": "Edit widgets",
+    "empty": "No widgets yet.",
+    "emptyEdit": "No widgets yet. Use Edit widgets to add one.",
+    "tab": {
+      "mine": "Mine",
+      "library": "Library",
+      "create": "Create"
+    },
+    "nothingYet": "Nothing yet.",
+    "noPacks": "No widget packs installed.",
+    "onHome": "On Home",
+    "up": "Up",
+    "down": "Down",
+    "show": "Add to Home",
+    "hide": "Remove from Home",
+    "addHome": "Add to Home",
+    "editOne": "Edit",
+    "delete": "Delete",
+    "sure": "Sure?",
+    "save": "Save",
+    "cancel": "Cancel",
+    "saved": "Saved {name}",
+    "limit": "Too many widgets.",
+    "untitled": "Untitled",
+    "preview": "Preview",
+    "describe": "Describe the widget",
+    "describePh": "CPU load as a gauge, or: a button that runs my morning briefing",
+    "ask": "Ask Claude",
+    "asking": "Asking...",
+    "collecting": "Collecting values...",
+    "nothing": "Nothing.",
+    "packMissing": "Widget pack not installed.",
+    "pressed": "{name} sent",
+    "pressFailed": "Could not run it",
+    "look": {
+      "number": "Number",
+      "sparkline": "Sparkline",
+      "list": "List",
+      "gauge": "Gauge",
+      "text": "Text",
+      "button": "Button",
+      "component": "Custom"
+    },
+    "src": {
+      "api": "API endpoint",
+      "metric": "Metric",
+      "service": "Service health",
+      "task": "Task answer",
+      "note": "Note"
+    },
+    "act": {
+      "task": "Run a scheduled task",
+      "speedtest": "Run a speed test"
+    },
+    "f": {
+      "name": "Name",
+      "look": "Look",
+      "source": "Source",
+      "path": "API path (GET, starts with /api/)",
+      "pick": "Path into the answer (optional)",
+      "metric": "Metric path",
+      "service": "Service",
+      "task": "Task",
+      "note": "Note",
+      "action": "Action",
+      "label": "Button label",
+      "prefix": "Prefix",
+      "suffix": "Suffix",
+      "decimals": "Decimals",
+      "max": "Maximum",
+      "field": "Field of each item"
+    },
+    "count": "{n} on Home"
+  }
+}

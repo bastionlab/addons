@@ -1,0 +1,12 @@
+id: sample-widgets
+name: Sample widgets
+kind: widget
+icon: grid
+order: 96
+author: you
+license: MIT
+version: 0.1.0
+desc: "Two example Home widgets: CPU gauge and Jellyfin health."
+routes: []
+needs: []
+depends_on: [widgets]
