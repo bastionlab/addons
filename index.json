@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793143425,
+  "updated": 1793317827,
   "addons": [
     {
       "id": "ai",
@@ -16,36 +16,6 @@
       "ct": "ai",
       "license": "AGPL-3.0",
       "path": "ai"
-    },
-    {
-      "id": "aliases",
-      "name": "Aliases",
-      "icon": "shield",
-      "version": "0.1.0",
-      "author": "MaxJC0",
-      "desc": "Your DuckDuckGo @duck.com aliases in one list: make new ones with a label, switch them off, find which site has which.",
-      "routes": [
-        "/aliases"
-      ],
-      "needs": [
-        "DuckDuckGo Email Protection account"
-      ],
-      "license": "AGPL-3.0",
-      "warning": "Uses DuckDuckGo Email Protection's unofficial API (the one its browsers use); it may change without notice.",
-      "path": "aliases"
-    },
-    {
-      "id": "armenian",
-      "name": "Armenian",
-      "icon": "armenian",
-      "version": "1.2.0",
-      "author": "MaxJC0",
-      "desc": "Anki-style Eastern Armenian: the alphabet, then word packs, with write-it-back cards.",
-      "routes": [
-        "/armenian"
-      ],
-      "license": "AGPL-3.0",
-      "path": "armenian"
     },
     {
       "id": "chat",
