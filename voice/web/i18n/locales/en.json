@@ -1,0 +1,18 @@
+{
+  "voice": {
+    "start": "Voice",
+    "stop": "Stop",
+    "aria": "Hands-free voice conversation",
+    "listening": "Listening",
+    "transcribing": "Transcribing",
+    "sending": "Sending",
+    "waiting": "Thinking",
+    "speaking": "Speaking",
+    "toClaude": "Sending to Claude.",
+    "toLocal": "Sending to the local model.",
+    "hint": "Tap the dot to skip or interrupt.",
+    "failed": "Could not hear you: {msg}",
+    "review": "Review",
+    "sendNow": "Send now"
+  }
+}

@@ -1,0 +1,14 @@
+# one add-on: this file is what the Add-ons page and the marketplace show
+id: voice
+name: Voice
+label: Voice
+icon: mic
+order: 99
+author: MaxJC0
+license: AGPL-3.0
+version: 0.3.2
+desc: "Hands-free talking in the chat: it reads the answer aloud, listens, transcribes you and sends the next message."
+routes: []
+home: false
+needs: [Local AI (Whisper + Kokoro in the ai CT)]
+depends_on: [chat, ai]
