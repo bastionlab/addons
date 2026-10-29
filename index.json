@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793318154,
+  "updated": 1793318222,
   "addons": [
     {
       "id": "ai",
@@ -304,6 +304,23 @@
       "ct": "gameservers",
       "license": "AGPL-3.0",
       "path": "servers"
+    },
+    {
+      "id": "voice",
+      "name": "Voice",
+      "icon": "mic",
+      "version": "0.3.2",
+      "author": "MaxJC0",
+      "desc": "Hands-free talking in the chat: it reads the answer aloud, listens, transcribes you and sends the next message.",
+      "needs": [
+        "Local AI (Whisper + Kokoro in the ai CT)"
+      ],
+      "depends_on": [
+        "chat",
+        "ai"
+      ],
+      "license": "AGPL-3.0",
+      "path": "voice"
     },
     {
       "id": "widgets",
