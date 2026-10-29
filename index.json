@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793318086,
+  "updated": 1793318154,
   "addons": [
     {
       "id": "ai",
@@ -304,6 +304,25 @@
       "ct": "gameservers",
       "license": "AGPL-3.0",
       "path": "servers"
+    },
+    {
+      "id": "widgets",
+      "name": "Widgets",
+      "icon": "grid",
+      "version": "0.1.0",
+      "author": "MaxJC0",
+      "desc": "Build your own Home widgets from an API, metric, service, task or note, or describe one to Claude. Install widget packs from the marketplace.",
+      "routes": [
+        "/widgets"
+      ],
+      "needs": [
+        "Claude login"
+      ],
+      "depends_on": [
+        "designs"
+      ],
+      "license": "AGPL-3.0",
+      "path": "widgets"
     }
   ],
   "designs": []
