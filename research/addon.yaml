@@ -1,0 +1,15 @@
+# one add-on: this file is what the Add-ons page and the marketplace show
+id: research
+name: Research
+label: Research
+icon: flask-conical
+order: 52
+author: MaxJC0
+license: MIT
+version: 0.1.1
+desc: "Ask a question, pick a depth: your local model searches via SearXNG, reads the pages and writes a cited report in the background."
+routes: [/research]
+needs: [SearXNG (Local AI), Ollama]
+depends_on: [ai]
+palette:
+  - { label: Research, to: /research, icon: flask-conical, keywords: deep research report }
