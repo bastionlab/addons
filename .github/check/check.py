@@ -107,7 +107,7 @@ def texts(root: Path):
 def check_scope(rep, aid, files):
     for f in files:
         f = f.strip()
-        if f and not f.startswith(f"{aid}/"):
+        if f and (not f.startswith(f"{aid}/") or ".." in f.split("/") or "\\" in f):
             rep.add("scope", "block", f"outside {aid}/: a publish may only change its own folder", f)
 
 
@@ -252,7 +252,13 @@ def main():
     rep = Report()
     ran = []
     if not ID_RE.match(aid):
+        # stop here: a bad id (`../x`, `A/B`) must never be joined onto a path
         rep.add("scope", "block", f"bad add-on id {aid!r}")
+        md = rep.markdown(aid, "?", ["scope"])
+        if a.report:
+            a.report.write_text(md)
+        print(md)
+        sys.exit(1)
     d = a.pr / aid
     if not (d / "addon.yaml").exists():
         rep.add("manifest", "block", f"{aid}/addon.yaml is missing")
