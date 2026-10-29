@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793318222,
+  "updated": 1793318371,
   "addons": [
     {
       "id": "ai",
@@ -286,6 +286,26 @@
       ],
       "license": "AGPL-3.0",
       "path": "notes"
+    },
+    {
+      "id": "research",
+      "name": "Research",
+      "icon": "flask-conical",
+      "version": "0.1.1",
+      "author": "MaxJC0",
+      "desc": "Ask a question, pick a depth: your local model searches via SearXNG, reads the pages and writes a cited report in the background.",
+      "routes": [
+        "/research"
+      ],
+      "needs": [
+        "SearXNG (Local AI)",
+        "Ollama"
+      ],
+      "depends_on": [
+        "ai"
+      ],
+      "license": "MIT",
+      "path": "research"
     },
     {
       "id": "servers",
