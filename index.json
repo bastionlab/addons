@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793317988,
+  "updated": 1793318086,
   "addons": [
     {
       "id": "ai",
@@ -260,6 +260,16 @@
       "license": "AGPL-3.0",
       "warning": "Uses pytr, an unofficial Trade Republic API, and Enable Banking under its personal-use terms. Your bank data, your responsibility.",
       "path": "money"
+    },
+    {
+      "id": "navorder",
+      "name": "Sidebar order",
+      "icon": "grid",
+      "version": "0.1.1",
+      "author": "MaxJC0",
+      "desc": "Drag the sidebar and phone menu pages into your own order, saved separately for phone, tablet and desktop.",
+      "license": "AGPL-3.0",
+      "path": "navorder"
     },
     {
       "id": "notes",
