@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793317827,
+  "updated": 1793317988,
   "addons": [
     {
       "id": "ai",
@@ -16,6 +16,19 @@
       "ct": "ai",
       "license": "AGPL-3.0",
       "path": "ai"
+    },
+    {
+      "id": "armenian",
+      "name": "Armenian",
+      "icon": "armenian",
+      "version": "1.2.0",
+      "author": "MaxJC0",
+      "desc": "Anki-style Eastern Armenian: the alphabet, then word packs, with write-it-back cards.",
+      "routes": [
+        "/armenian"
+      ],
+      "license": "AGPL-3.0",
+      "path": "armenian"
     },
     {
       "id": "chat",
