@@ -1,0 +1,16 @@
+# one add-on: this file is what the Add-ons page (and later the marketplace index) shows
+id: retro
+name: Retro games
+label: Retro
+icon: gamepad
+order: 8
+author: MaxJC0
+license: AGPL-3.0
+version: 0.1.0
+desc: "Retro games up to the 3DS era in the browser (phone + PC, EmulatorJS) with saves synced across devices; 3DS streams from Azahar. Free homebrew catalogue + your own game files."
+routes: [/retro]
+ct: games
+needs: [games CT with a /games mount point]
+depends_on: []
+palette:
+  - { label: Retro games, to: /retro, keywords: [emulator, nes, snes, gba, nds, psx, 3ds] }
