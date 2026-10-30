@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793319550,
+  "updated": 1793319616,
   "addons": [
     {
       "id": "ai",
@@ -218,6 +218,19 @@
       ],
       "license": "AGPL-3.0",
       "path": "learn"
+    },
+    {
+      "id": "mail",
+      "name": "Mail",
+      "icon": "mail-open",
+      "version": "0.2.0",
+      "author": "MaxJC0",
+      "desc": "Read mail over IMAP and sort it into your own categories (rules first, then the local model, learning from your corrections), draft replies, send only on your confirmation.",
+      "routes": [
+        "/mail"
+      ],
+      "license": "AGPL-3.0",
+      "path": "mail"
     },
     {
       "id": "media",
