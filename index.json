@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793319298,
+  "updated": 1793319377,
   "addons": [
     {
       "id": "ai",
@@ -484,6 +484,19 @@
       ],
       "license": "AGPL-3.0",
       "path": "skin-tactical"
+    },
+    {
+      "id": "skin-terminal",
+      "name": "Hacker Terminal skin",
+      "icon": "palette",
+      "version": "0.1.1",
+      "author": "MaxJC0",
+      "desc": "A whole-app skin for Designs: green phosphor terminal with a typed prompt for navigation, box-drawn panels, matrix rain and CRT scanlines.",
+      "depends_on": [
+        "designs"
+      ],
+      "license": "AGPL-3.0",
+      "path": "skin-terminal"
     },
     {
       "id": "voice",
