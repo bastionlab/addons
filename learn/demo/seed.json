@@ -1,0 +1,78 @@
+[
+ {
+  "db": "learn.db",
+  "sql": "INSERT INTO lessons (day, topic, status, data, progress, done, secs, created, week, skills_state) VALUES (date('now','-6 day'), ?, 'ready', ?, '{\"read\":[0,1,2],\"tasks\":[0],\"quiz\":{\"0\":1,\"1\":0}}', CAST(strftime('%s','now') AS REAL) - 5*86400, 3400, CAST(strftime('%s','now') AS REAL) - 6*86400, date('now','-6 day'), 'done')",
+  "params": [
+   "How DNS resolution works",
+   "{\"title\": \"How DNS resolution works\", \"track\": \"networking\", \"level\": \"beginner\", \"summary\": \"What happens between typing a name and getting an address: stub resolvers, recursive resolvers, root and authoritative servers, and caching.\", \"why\": \"Almost every outage story has DNS in it. Knowing the path of a lookup turns \\\"it's always DNS\\\" into a short checklist.\", \"objectives\": [\"Trace a lookup from the stub resolver to an authoritative server\", \"Read the output of dig and know which part is cached\", \"Explain TTLs and why changes are not instant\"], \"sections\": [{\"title\": \"The cast of characters\", \"minutes\": 10, \"body\": \"A **stub resolver** on your machine asks a **recursive resolver** (your router, your ISP or a public one). The recursive resolver does the legwork: it asks a root server, then a TLD server, then the domain's **authoritative** server, and caches each answer.\"}, {\"title\": \"Caching and TTLs\", \"minutes\": 12, \"body\": \"Every record carries a time to live in seconds. Resolvers keep the answer until it runs out. Lower the TTL **before** a planned change, not after.\"}, {\"title\": \"Reading dig\", \"minutes\": 13, \"body\": \"Run `dig example.com` and look at the ANSWER section, the TTL column and the SERVER line. Run it twice: the TTL counts down because the second answer came from the cache.\"}], \"quiz\": [{\"q\": \"Which server finally knows the real address of a domain?\", \"options\": [\"The root server\", \"The authoritative server\", \"The stub resolver\", \"The TLD server\"], \"answer\": 1, \"why\": \"Root and TLD servers only point onward; the authoritative server holds the records.\"}, {\"q\": \"What does a TTL of 300 mean?\", \"options\": [\"Resolvers may cache the answer for 5 minutes\", \"The server answers in 300 ms\", \"The record expires in 300 days\", \"300 resolvers have it\"], \"answer\": 0, \"why\": \"TTL is in seconds.\"}], \"tasks\": [{\"title\": \"Trace a lookup\", \"minutes\": 10, \"body\": \"Run `dig +trace example.com` and write down every server it asks.\", \"solution\": \"You should see the root servers, then the .com servers, then the domain's own name servers.\"}], \"recap\": [\"Stub asks recursive, recursive walks the tree\", \"Answers are cached for their TTL\", \"Lower the TTL before a change\"], \"resources\": [{\"title\": \"How DNS works (comic)\", \"url\": \"https://howdns.works\"}], \"next\": [\"DNSSEC basics\", \"Running your own resolver\"]}"
+  ]
+ },
+ {
+  "method": "POST",
+  "path": "/api/learn/action",
+  "body": {
+   "action": "queue",
+   "topic": "How TLS 1.3 handshakes work"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/learn/action",
+  "body": {
+   "action": "queue",
+   "topic": "Docker networking: bridge, host and macvlan"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/learn/action",
+  "body": {
+   "action": "queue",
+   "topic": "SQLite internals: WAL and the page cache"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/learn/action",
+  "body": {
+   "action": "skill",
+   "name": "ZFS",
+   "area": "systems",
+   "level": 3,
+   "note": "runs two pools at home"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/learn/action",
+  "body": {
+   "action": "skill",
+   "name": "Python",
+   "area": "languages",
+   "level": 4,
+   "note": ""
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/learn/action",
+  "body": {
+   "action": "skill",
+   "name": "Docker",
+   "area": "devops",
+   "level": 3,
+   "note": "compose files for most services"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/learn/action",
+  "body": {
+   "action": "skill",
+   "name": "Tailscale",
+   "area": "networking",
+   "level": 3,
+   "note": ""
+  }
+ }
+]

@@ -1,0 +1,465 @@
+{
+ "GET /ai/catalogue": {
+  "source": "live",
+  "at": "$now",
+  "ctx": 8192,
+  "vram_gb": 12.0,
+  "reserve_gb": 1.0,
+  "usable_gb": 11.0,
+  "rows": [
+   {
+    "model": "llama3.2:3b",
+    "name": "llama3.2",
+    "tag": "3b",
+    "family": "llama",
+    "params": 3.2,
+    "size_gb": 2.0,
+    "kv_gb": 0.4,
+    "need_gb": 2.9,
+    "ctx_max": 0,
+    "year": 2025,
+    "verdict": "fits",
+    "gpu_pct": 100,
+    "caps": [
+     "tools"
+    ],
+    "order": 0
+   },
+   {
+    "model": "qwen3.5:4b",
+    "name": "qwen3.5",
+    "tag": "4b",
+    "family": "qwen",
+    "params": 4,
+    "size_gb": 2.6,
+    "kv_gb": 0.5,
+    "need_gb": 3.6,
+    "ctx_max": 0,
+    "year": 2026,
+    "verdict": "fits",
+    "gpu_pct": 100,
+    "caps": [
+     "tools",
+     "thinking"
+    ],
+    "order": 1
+   },
+   {
+    "model": "qwen3.5:9b",
+    "name": "qwen3.5",
+    "tag": "9b",
+    "family": "qwen",
+    "params": 9,
+    "size_gb": 5.4,
+    "kv_gb": 0.9,
+    "need_gb": 6.8,
+    "ctx_max": 0,
+    "year": 2026,
+    "verdict": "fits",
+    "gpu_pct": 100,
+    "caps": [
+     "tools",
+     "vision",
+     "thinking"
+    ],
+    "order": 2
+   },
+   {
+    "model": "gemma3:12b",
+    "name": "gemma3",
+    "tag": "12b",
+    "family": "gemma",
+    "params": 12,
+    "size_gb": 7.6,
+    "kv_gb": 1.2,
+    "need_gb": 9.3,
+    "ctx_max": 0,
+    "year": 2025,
+    "verdict": "fits",
+    "gpu_pct": 100,
+    "caps": [
+     "vision"
+    ],
+    "order": 3
+   },
+   {
+    "model": "mistral-small:24b",
+    "name": "mistral-small",
+    "tag": "24b",
+    "family": "mistral",
+    "params": 24,
+    "size_gb": 14.3,
+    "kv_gb": 1.8,
+    "need_gb": 16.6,
+    "ctx_max": 0,
+    "year": 2025,
+    "verdict": "partial",
+    "gpu_pct": 66,
+    "caps": [
+     "tools"
+    ],
+    "order": 4
+   },
+   {
+    "model": "qwen3.5:35b-a3b",
+    "name": "qwen3.5",
+    "tag": "35b-a3b",
+    "family": "qwen",
+    "params": 35,
+    "size_gb": 21.5,
+    "kv_gb": 1.6,
+    "need_gb": 23.6,
+    "ctx_max": 0,
+    "year": 2026,
+    "verdict": "partial",
+    "gpu_pct": 48,
+    "caps": [
+     "tools",
+     "thinking"
+    ],
+    "order": 5
+   },
+   {
+    "model": "llama3.3:70b",
+    "name": "llama3.3",
+    "tag": "70b",
+    "family": "llama",
+    "params": 70,
+    "size_gb": 42.0,
+    "kv_gb": 3.2,
+    "need_gb": 45.7,
+    "ctx_max": 0,
+    "year": 2025,
+    "verdict": "no",
+    "gpu_pct": 0,
+    "caps": [
+     "tools"
+    ],
+    "order": 6
+   }
+  ]
+ },
+ "GET /ai/vram": {
+  "total_mb": 12288,
+  "used_mb": 7463,
+  "free_mb": 4825,
+  "reserve_mb": 1024,
+  "users": [
+   {
+    "label": "Ollama",
+    "mb": 6658
+   },
+   {
+    "label": "Speech (Whisper)",
+    "mb": 805
+   }
+  ],
+  "loaded": [
+   {
+    "name": "qwen3.5:9b",
+    "size": 5763005151,
+    "vram": 5763005151,
+    "warm": true,
+    "ctx": 16384
+   }
+  ]
+ },
+ "GET /ai/disk": {
+  "models": [
+   {
+    "name": "qwen3.5:9b",
+    "size": 6600000000,
+    "uncensored": false,
+    "modified": "2026-10-01T10:00:00+02:00"
+   },
+   {
+    "name": "gemma3:12b",
+    "size": 8100000000,
+    "uncensored": false,
+    "modified": "2026-09-12T10:00:00+02:00"
+   },
+   {
+    "name": "nomic-embed-text:latest",
+    "size": 274000000,
+    "uncensored": false,
+    "modified": "2026-08-20T10:00:00+02:00"
+   }
+  ],
+  "models_bytes": 14974000000,
+  "disk": {
+   "total": 63090716672,
+   "used": 28000000000,
+   "free": 35090716672
+  }
+ },
+ "GET /ai/bench": {
+  "at": "$ago:86400",
+  "prompt_tokens": 160,
+  "results": [
+   {
+    "model": "qwen3.5:9b",
+    "ttft_ms": 1840,
+    "tps": 49.9,
+    "tokens": 160,
+    "load_ms": 1700
+   },
+   {
+    "model": "gemma3:12b",
+    "ttft_ms": 2650,
+    "tps": 36.1,
+    "tokens": 160,
+    "load_ms": 2480
+   }
+  ],
+  "running": false,
+  "current": "",
+  "error": ""
+ },
+ "POST /ai/bench/start": {
+  "ok": true
+ },
+ "GET /ai/compare": {
+  "fetched_at": "$now",
+  "source": "sample data",
+  "sources": [
+   {
+    "id": "llm-stats",
+    "name": "sample data",
+    "at": "$now",
+    "rows": 4
+   }
+  ],
+  "groups": {
+   "reasoning": [
+    "gpqa"
+   ],
+   "coding": [
+    "swe_bench_verified"
+   ],
+   "knowledge": [
+    "mmmlu"
+   ],
+   "agents": [
+    "tau_bench_retail"
+   ]
+  },
+  "rows": [
+   {
+    "id": "qwen3.5:9b",
+    "name": "Qwen 3.5 9B",
+    "org": "Example Lab",
+    "params_b": 9,
+    "context": 131072,
+    "release_date": "2026-09-01",
+    "license": "apache_2_0",
+    "open": true,
+    "is_moe": false,
+    "multimodal": false,
+    "price_in": null,
+    "price_out": null,
+    "indexes": {
+     "reasoning": {
+      "v": 0.62,
+      "n": 2
+     },
+     "coding": {
+      "v": 0.57,
+      "n": 2
+     },
+     "knowledge": {
+      "v": 0.64,
+      "n": 2
+     },
+     "agents": null
+    },
+    "bench": {
+     "gpqa": 0.55,
+     "swe_bench_verified": 0.42
+    },
+    "score": 0.62,
+    "arena": {
+     "elo": 1362,
+     "rank": 40,
+     "votes": 2000,
+     "category": "overall"
+    },
+    "arena_coding": null,
+    "caps": {
+     "tools": true,
+     "vision": false,
+     "reasoning": true
+    },
+    "sources": [
+     "llm-stats"
+    ],
+    "fit": "yes",
+    "installed": true,
+    "ollama": "qwen3.5:9b",
+    "tokens_per_s": 49.9,
+    "ttft_ms": 1840
+   },
+   {
+    "id": "gemma3:12b",
+    "name": "Gemma 3 12B",
+    "org": "Example Lab",
+    "params_b": 12,
+    "context": 131072,
+    "release_date": "2026-09-01",
+    "license": "apache_2_0",
+    "open": true,
+    "is_moe": false,
+    "multimodal": false,
+    "price_in": null,
+    "price_out": null,
+    "indexes": {
+     "reasoning": {
+      "v": 0.58,
+      "n": 2
+     },
+     "coding": {
+      "v": 0.5299999999999999,
+      "n": 2
+     },
+     "knowledge": {
+      "v": 0.6,
+      "n": 2
+     },
+     "agents": null
+    },
+    "bench": {
+     "gpqa": 0.5,
+     "swe_bench_verified": 0.35
+    },
+    "score": 0.58,
+    "arena": {
+     "elo": 1357,
+     "rank": 40,
+     "votes": 2000,
+     "category": "overall"
+    },
+    "arena_coding": null,
+    "caps": {
+     "tools": true,
+     "vision": false,
+     "reasoning": true
+    },
+    "sources": [
+     "llm-stats"
+    ],
+    "fit": "yes",
+    "installed": true,
+    "ollama": "gemma3:12b",
+    "tokens_per_s": 49.9,
+    "ttft_ms": 1840
+   },
+   {
+    "id": "mistral-small:24b",
+    "name": "Mistral Small 24B",
+    "org": "Example Lab",
+    "params_b": 24,
+    "context": 131072,
+    "release_date": "2026-09-01",
+    "license": "apache_2_0",
+    "open": true,
+    "is_moe": false,
+    "multimodal": false,
+    "price_in": null,
+    "price_out": null,
+    "indexes": {
+     "reasoning": {
+      "v": 0.66,
+      "n": 2
+     },
+     "coding": {
+      "v": 0.61,
+      "n": 2
+     },
+     "knowledge": {
+      "v": 0.68,
+      "n": 2
+     },
+     "agents": null
+    },
+    "bench": {
+     "gpqa": 0.58,
+     "swe_bench_verified": 0.46
+    },
+    "score": 0.66,
+    "arena": {
+     "elo": 1366,
+     "rank": 40,
+     "votes": 2000,
+     "category": "overall"
+    },
+    "arena_coding": null,
+    "caps": {
+     "tools": true,
+     "vision": false,
+     "reasoning": true
+    },
+    "sources": [
+     "llm-stats"
+    ],
+    "fit": "partial",
+    "installed": false,
+    "ollama": null,
+    "tokens_per_s": null,
+    "ttft_ms": null
+   },
+   {
+    "id": "big-model-400b",
+    "name": "Big Model 400B",
+    "org": "Example Lab",
+    "params_b": 400,
+    "context": 1048576,
+    "release_date": "2026-09-01",
+    "license": "apache_2_0",
+    "open": true,
+    "is_moe": false,
+    "multimodal": false,
+    "price_in": 0.8,
+    "price_out": 0.8,
+    "indexes": {
+     "reasoning": {
+      "v": 0.8,
+      "n": 2
+     },
+     "coding": {
+      "v": 0.75,
+      "n": 2
+     },
+     "knowledge": {
+      "v": 0.8200000000000001,
+      "n": 2
+     },
+     "agents": null
+    },
+    "bench": {
+     "gpqa": 0.82,
+     "swe_bench_verified": 0.7
+    },
+    "score": 0.8,
+    "arena": {
+     "elo": 1380,
+     "rank": 40,
+     "votes": 2000,
+     "category": "overall"
+    },
+    "arena_coding": null,
+    "caps": {
+     "tools": true,
+     "vision": false,
+     "reasoning": true
+    },
+    "sources": [
+     "llm-stats"
+    ],
+    "fit": "no",
+    "installed": false,
+    "ollama": null,
+    "tokens_per_s": null,
+    "ttft_ms": null
+   }
+  ]
+ }
+}

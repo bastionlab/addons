@@ -1,0 +1,547 @@
+{
+ "GET /jobs/status": {
+  "searches": 1,
+  "enabled": 1,
+  "last_poll": "$ago:900",
+  "errors": [],
+  "per_source": {
+   "ba": 120,
+   "stepstone": 210,
+   "xing": 160,
+   "linkedin": 140,
+   "remotive": 22,
+   "himalayas": 48
+  },
+  "seen_24h": 31,
+  "pending": 0,
+  "sources": [
+   {
+    "id": "stepstone",
+    "label": "StepStone"
+   },
+   {
+    "id": "xing",
+    "label": "XING"
+   },
+   {
+    "id": "ba",
+    "label": "Arbeitsagentur"
+   },
+   {
+    "id": "linkedin",
+    "label": "LinkedIn"
+   },
+   {
+    "id": "remotive",
+    "label": "Remotive"
+   },
+   {
+    "id": "himalayas",
+    "label": "Himalayas"
+   }
+  ],
+  "cv": true
+ },
+ "GET /jobs/searches": [
+  {
+   "id": 1,
+   "name": "Backend and platform",
+   "enabled": 1,
+   "spec": {
+    "wish": "Backend- oder Platform-Engineering in Berlin oder remote, Python oder TypeScript, gern mit Linux und Cloud.",
+    "keywords": [
+     "Backend Engineer",
+     "Platform Engineer",
+     "Full Stack Developer"
+    ],
+    "modes": [
+     "onsite",
+     "hybrid",
+     "remote"
+    ],
+    "place": "Berlin",
+    "lat": 52.5174,
+    "lon": 13.3951,
+    "radius_km": 25.0,
+    "employment": [],
+    "permanent_only": false,
+    "levels": [
+     "mid",
+     "junior"
+    ],
+    "min_salary": 45000.0,
+    "langs": [
+     "en",
+     "de"
+    ],
+    "no_agency": true,
+    "exclude": [
+     "IT-Support"
+    ],
+    "exclude_companies": [],
+    "max_age_days": 30,
+    "min_fit": 60,
+    "sources": []
+   },
+   "last_polled_at": "$ago:900",
+   "last_error": null,
+   "created_at": "$ago:1209600"
+  }
+ ],
+ "GET /jobs/feed": [
+  {
+   "source": "stepstone",
+   "source_label": "StepStone",
+   "source_id": "300001",
+   "url": "https://example.com/jobs/300001",
+   "title": "Backend Engineer (Python)",
+   "company": "Nordlicht Software GmbH",
+   "location": "Berlin",
+   "mode": "hybrid",
+   "level": "mid",
+   "employment": [
+    "vollzeit"
+   ],
+   "german": "gut",
+   "agency": false,
+   "fit": 91,
+   "pros": [
+    "Python und PostgreSQL im Stack",
+    "Hybrid in Berlin"
+   ],
+   "gaps": [],
+   "reason": "Passt gut zu Profil und Wunsch.",
+   "posted_at": "$ago:10800",
+   "first_seen_at": "$ago:10600",
+   "passed": 1,
+   "verdict": null,
+   "applied_at": null,
+   "distance_km": 6.0,
+   "remote_region": null,
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300001/apply",
+    "label": "StepStone"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false,
+   "salary_min": 65000,
+   "salary_max": 78000
+  },
+  {
+   "source": "xing",
+   "source_label": "XING",
+   "source_id": "300002",
+   "url": "https://example.com/jobs/300002",
+   "title": "Platform Engineer (Kubernetes)",
+   "company": "Kranich Cloud AG",
+   "location": "Berlin",
+   "mode": "hybrid",
+   "level": "mid",
+   "employment": [
+    "vollzeit"
+   ],
+   "german": "gut",
+   "agency": false,
+   "fit": 86,
+   "pros": [
+    "Homelab-Erfahrung passt",
+    "Terraform und Linux"
+   ],
+   "gaps": [
+    "Kubernetes in Produktion"
+   ],
+   "reason": "Passt gut zu Profil und Wunsch.",
+   "posted_at": "$ago:28800",
+   "first_seen_at": "$ago:28600",
+   "passed": 1,
+   "verdict": "up",
+   "applied_at": null,
+   "distance_km": 6.0,
+   "remote_region": null,
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300002/apply",
+    "label": "XING"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false,
+   "salary_min": 70000,
+   "salary_max": 85000
+  },
+  {
+   "source": "ba",
+   "source_label": "Arbeitsagentur",
+   "source_id": "300003",
+   "url": "https://example.com/jobs/300003",
+   "title": "Full Stack Developer (Vue/Node)",
+   "company": "Tannenbaum Digital",
+   "location": "Berlin",
+   "mode": "onsite",
+   "level": "mid",
+   "employment": [
+    "vollzeit"
+   ],
+   "german": "gut",
+   "agency": false,
+   "fit": 82,
+   "pros": [
+    "TypeScript, Vue und Node"
+   ],
+   "gaps": [],
+   "reason": "Passt gut zu Profil und Wunsch.",
+   "posted_at": "$ago:72000",
+   "first_seen_at": "$ago:71800",
+   "passed": 1,
+   "verdict": null,
+   "applied_at": null,
+   "distance_km": 6.0,
+   "remote_region": null,
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300003/apply",
+    "label": "Arbeitsagentur"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false,
+   "salary_min": 55000,
+   "salary_max": 68000
+  },
+  {
+   "source": "linkedin",
+   "source_label": "LinkedIn",
+   "source_id": "300004",
+   "url": "https://example.com/jobs/300004",
+   "title": "Senior DevOps Engineer",
+   "company": "Brandung Systems",
+   "location": "Remote",
+   "mode": "remote",
+   "level": "senior",
+   "employment": [
+    "vollzeit"
+   ],
+   "german": "keins",
+   "agency": false,
+   "fit": 74,
+   "pros": [],
+   "gaps": [
+    "Senior-Erfahrung gefordert"
+   ],
+   "reason": "Passt gut zu Profil und Wunsch.",
+   "posted_at": "$ago:108000",
+   "first_seen_at": "$ago:107800",
+   "passed": 1,
+   "verdict": null,
+   "applied_at": null,
+   "distance_km": null,
+   "remote_region": "EU",
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300004/apply",
+    "label": "LinkedIn"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false,
+   "salary_min": 80000,
+   "salary_max": 95000
+  },
+  {
+   "source": "himalayas",
+   "source_label": "Himalayas",
+   "source_id": "300005",
+   "url": "https://example.com/jobs/300005",
+   "title": "Machine Learning Engineer",
+   "company": "Lerchenfeld Analytics",
+   "location": "Berlin",
+   "mode": "hybrid",
+   "level": "mid",
+   "employment": [
+    "vollzeit"
+   ],
+   "german": "keins",
+   "agency": false,
+   "fit": 79,
+   "pros": [
+    "Python, lokale LLMs"
+   ],
+   "gaps": [],
+   "reason": "Passt gut zu Profil und Wunsch.",
+   "posted_at": "$ago:180000",
+   "first_seen_at": "$ago:179800",
+   "passed": 1,
+   "verdict": null,
+   "applied_at": "$ago:86400",
+   "distance_km": 6.0,
+   "remote_region": null,
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300005/apply",
+    "label": "Himalayas"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false
+  },
+  {
+   "source": "stepstone",
+   "source_label": "StepStone",
+   "source_id": "300006",
+   "url": "https://example.com/jobs/300006",
+   "title": "Werkstudent Softwareentwicklung",
+   "company": "Wiesenbach Labs",
+   "location": "Berlin",
+   "mode": "onsite",
+   "level": "junior",
+   "employment": [
+    "werkstudent"
+   ],
+   "german": "gut",
+   "agency": false,
+   "fit": 88,
+   "pros": [
+    "Passt zum Studium"
+   ],
+   "gaps": [],
+   "reason": "Passt gut zu Profil und Wunsch.",
+   "posted_at": "$ago:43200",
+   "first_seen_at": "$ago:43000",
+   "passed": 1,
+   "verdict": null,
+   "applied_at": null,
+   "distance_km": 6.0,
+   "remote_region": null,
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300006/apply",
+    "label": "StepStone"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false,
+   "salary_min": 20000,
+   "salary_max": 24000
+  },
+  {
+   "source": "remotive",
+   "source_label": "Remotive",
+   "source_id": "300007",
+   "url": "https://example.com/jobs/300007",
+   "title": "Site Reliability Engineer",
+   "company": "Fjord Networks",
+   "location": "Remote",
+   "mode": "remote",
+   "level": "mid",
+   "employment": [
+    "vollzeit"
+   ],
+   "german": "keins",
+   "agency": false,
+   "fit": 70,
+   "pros": [],
+   "gaps": [],
+   "reason": "Passt gut zu Profil und Wunsch.",
+   "posted_at": "$ago:252000",
+   "first_seen_at": "$ago:251800",
+   "passed": 1,
+   "verdict": null,
+   "applied_at": null,
+   "distance_km": null,
+   "remote_region": "Europe",
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300007/apply",
+    "label": "Remotive"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false,
+   "salary_min": 60000,
+   "salary_max": 75000
+  }
+ ],
+ "GET /jobs/feed?show=rejected": [
+  {
+   "source": "ba",
+   "source_label": "Arbeitsagentur",
+   "source_id": "300008",
+   "url": "https://example.com/jobs/300008",
+   "title": "IT-Support Mitarbeiter (m/w/d)",
+   "company": "Sonnenhof Dienstleistungen",
+   "location": "Berlin",
+   "mode": "onsite",
+   "level": "junior",
+   "employment": [
+    "vollzeit"
+   ],
+   "german": "gut",
+   "agency": false,
+   "fit": 22,
+   "pros": [],
+   "gaps": [],
+   "reason": "Support statt Entwicklung: ausgeschlossen.",
+   "posted_at": "$ago:144000",
+   "first_seen_at": "$ago:143800",
+   "passed": 0,
+   "verdict": null,
+   "applied_at": null,
+   "distance_km": 6.0,
+   "remote_region": null,
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300008/apply",
+    "label": "Arbeitsagentur"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false
+  },
+  {
+   "source": "xing",
+   "source_label": "XING",
+   "source_id": "300009",
+   "url": "https://example.com/jobs/300009",
+   "title": "PHP Entwickler (Agentur)",
+   "company": "Pixelwerk Agentur",
+   "location": "Berlin",
+   "mode": "onsite",
+   "level": "mid",
+   "employment": [
+    "vollzeit"
+   ],
+   "german": "gut",
+   "agency": false,
+   "fit": 31,
+   "pros": [],
+   "gaps": [],
+   "reason": "Agentur, PHP: passt nicht.",
+   "posted_at": "$ago:198000",
+   "first_seen_at": "$ago:197800",
+   "passed": 0,
+   "verdict": null,
+   "applied_at": null,
+   "distance_km": 6.0,
+   "remote_region": null,
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300009/apply",
+    "label": "XING"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false
+  }
+ ],
+ "GET /jobs/feed?show=applied": [
+  {
+   "source": "himalayas",
+   "source_label": "Himalayas",
+   "source_id": "300005",
+   "url": "https://example.com/jobs/300005",
+   "title": "Machine Learning Engineer",
+   "company": "Lerchenfeld Analytics",
+   "location": "Berlin",
+   "mode": "hybrid",
+   "level": "mid",
+   "employment": [
+    "vollzeit"
+   ],
+   "german": "keins",
+   "agency": false,
+   "fit": 79,
+   "pros": [
+    "Python, lokale LLMs"
+   ],
+   "gaps": [],
+   "reason": "Passt gut zu Profil und Wunsch.",
+   "posted_at": "$ago:180000",
+   "first_seen_at": "$ago:179800",
+   "passed": 1,
+   "verdict": null,
+   "applied_at": "$ago:86400",
+   "distance_km": 6.0,
+   "remote_region": null,
+   "apply": {
+    "channel": "portal",
+    "url": "https://example.com/jobs/300005/apply",
+    "label": "Himalayas"
+   },
+   "also": [],
+   "how": null,
+   "search_name": "Backend and platform",
+   "off": false
+  }
+ ],
+ "GET /jobs/feed?show=pending": [],
+ "GET /jobs/counts": {
+  "per_search": {
+   "1": 7
+  },
+  "total": 7,
+  "passed": 7,
+  "rejected": 2,
+  "pending": 0,
+  "applied": 1
+ },
+ "GET /jobs/cv": {
+  "present": true,
+  "own": null,
+  "shared": true,
+  "filename": "Alex_Example_CV.pdf",
+  "uploaded_at": "$ago:864000",
+  "chars": 5200,
+  "profile": {
+   "name": "Alex Example",
+   "headline": "Full Stack Developer and Platform Engineer",
+   "location": "Berlin, Germany",
+   "education": "M.Sc. Computer Science",
+   "summary": "Alex arbeitet als Full Stack Developer mit Schwerpunkt TypeScript und Python und betreibt ein eigenes Homelab mit Proxmox und lokalen KI-Modellen.",
+   "roles": [
+    "Full Stack Developer",
+    "Platform Engineer"
+   ],
+   "skills": [
+    "TypeScript",
+    "Vue",
+    "Node.js",
+    "Python",
+    "PostgreSQL",
+    "Docker",
+    "Linux",
+    "Terraform",
+    "ZFS"
+   ],
+   "languages": [
+    "Deutsch (Muttersprache)",
+    "Englisch (fliessend)"
+   ],
+   "level": "mid",
+   "years": 3
+  }
+ },
+ "POST /jobs/suggest": {
+  "keywords": [
+   "Backend Engineer",
+   "Platform Engineer"
+  ],
+  "modes": [
+   "hybrid",
+   "remote"
+  ],
+  "levels": [
+   "mid"
+  ]
+ }
+}

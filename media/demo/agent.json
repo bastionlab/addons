@@ -1,0 +1,276 @@
+{
+ "GET /media": {
+  "time": "$now",
+  "vpn": {
+   "up": true,
+   "health": "healthy",
+   "since": "$iso_now",
+   "killSwitch": true,
+   "ip": "203.0.113.7",
+   "homeIp": "198.51.100.23",
+   "leaking": false,
+   "country": "SE",
+   "city": "Stockholm",
+   "org": "AS64500 Example VPN",
+   "forwardedPort": 42774,
+   "listenPort": 42774,
+   "portOk": true,
+   "speed": {
+    "down": 2100000,
+    "up": 0,
+    "downTotal": 63245848322,
+    "upTotal": 926831145,
+    "status": "connected"
+   }
+  },
+  "library": {
+   "movies": {
+    "total": 48,
+    "have": 46,
+    "size": 190000000000,
+    "monitored": 48
+   },
+   "series": {
+    "total": 12,
+    "episodes": 310,
+    "missing": 4,
+    "size": 420000000000
+   },
+   "books": {
+    "total": 44,
+    "have": 40,
+    "wanted": 2
+   },
+   "anime": {
+    "total": 6,
+    "episodes": 140,
+    "missing": 0,
+    "size": 150000000000
+   }
+  },
+  "sizes": {
+   "dirs": {
+    "movies": 190000000000,
+    "series": 420000000000,
+    "anime": 150000000000,
+    "audiobooks": 5000000000,
+    "downloads": 60000000000
+   },
+   "apparent": 825000000000,
+   "used": 900000000000,
+   "avail": 4100000000000
+  },
+  "queues": {
+   "movies": [
+    {
+     "kind": "movie",
+     "id": 11,
+     "title": "Night of the Living Dead",
+     "sub": "1968",
+     "release": "Night.of.the.Living.Dead.1968.1080p",
+     "hash": "0000000000000000000000000000000000015445",
+     "status": "ok",
+     "state": "downloading",
+     "client": "qBittorrent",
+     "size": 4200000000,
+     "left": 1512000000,
+     "progress": 0.64,
+     "eta": 487,
+     "speed": 3100000,
+     "seeds": 22,
+     "idleHours": 0,
+     "ratio": 0,
+     "torrentState": "downloading",
+     "messages": [],
+     "error": null
+    },
+    {
+     "kind": "movie",
+     "id": 12,
+     "title": "Metropolis",
+     "sub": "1927",
+     "release": "Metropolis.1927.Restored.1080p",
+     "hash": "0000000000000000000000000000000000017334",
+     "status": "ok",
+     "state": "downloading",
+     "client": "qBittorrent",
+     "size": 6800000000,
+     "left": 5576000000,
+     "progress": 0.18,
+     "eta": 2323,
+     "speed": 2400000,
+     "seeds": 9,
+     "idleHours": 0,
+     "ratio": 0,
+     "torrentState": "downloading",
+     "messages": [],
+     "error": null
+    }
+   ],
+   "series": [
+    {
+     "kind": "series",
+     "id": 21,
+     "title": "Big Buck Bunny Shorts",
+     "sub": "S01E03 \u00b7 The Rabbit Returns",
+     "release": "Big.Buck.Bunny.Shorts.S01E03.720p",
+     "hash": "000000000000000000000000000000000002899b",
+     "status": "ok",
+     "state": "downloading",
+     "client": "qBittorrent",
+     "size": 900000000,
+     "left": 80999999,
+     "progress": 0.91,
+     "eta": 44,
+     "speed": 1800000,
+     "seeds": 14,
+     "idleHours": 0,
+     "ratio": 0,
+     "torrentState": "downloading",
+     "messages": [],
+     "error": null
+    }
+   ],
+   "books": []
+  },
+  "watchdog": {
+   "acted": [],
+   "ai": {
+    "error": null,
+    "model": "qwen3.5:9b",
+    "used": true
+   },
+   "alerts": [],
+   "ok": true,
+   "summary": "Nothing to repair: all downloads are moving.",
+   "ts": "$ago:300",
+   "watching": [],
+   "age": 300
+  },
+  "torrents": {
+   "error": null,
+   "total": 96,
+   "downloading": 3,
+   "seeding": 70,
+   "errored": []
+  }
+ },
+ "GET /media/items": [
+  {
+   "kind": "movie",
+   "id": 1,
+   "title": "Night of the Living Dead",
+   "year": 1968,
+   "group": "movie",
+   "path": "/data/movies/Night of the Living Dead (1968)",
+   "size": 2900000000,
+   "files": 1
+  },
+  {
+   "kind": "movie",
+   "id": 2,
+   "title": "Metropolis",
+   "year": 1927,
+   "group": "movie",
+   "path": "/data/movies/Metropolis (1927)",
+   "size": 3400000000,
+   "files": 1
+  },
+  {
+   "kind": "movie",
+   "id": 3,
+   "title": "Nosferatu",
+   "year": 1922,
+   "group": "movie",
+   "path": "/data/movies/Nosferatu (1922)",
+   "size": 2100000000,
+   "files": 1
+  },
+  {
+   "kind": "movie",
+   "id": 4,
+   "title": "A Trip to the Moon",
+   "year": 1902,
+   "group": "movie",
+   "path": "/data/movies/A Trip to the Moon (1902)",
+   "size": 900000000,
+   "files": 1
+  },
+  {
+   "kind": "movie",
+   "id": 5,
+   "title": "Sintel",
+   "year": 2010,
+   "group": "movie",
+   "path": "/data/movies/Sintel (2010)",
+   "size": 1800000000,
+   "files": 1
+  },
+  {
+   "kind": "movie",
+   "id": 6,
+   "title": "Tears of Steel",
+   "year": 2012,
+   "group": "movie",
+   "path": "/data/movies/Tears of Steel (2012)",
+   "size": 2200000000,
+   "files": 1
+  },
+  {
+   "kind": "movie",
+   "id": 7,
+   "title": "Charade",
+   "year": 1963,
+   "group": "movie",
+   "path": "/data/movies/Charade (1963)",
+   "size": 3100000000,
+   "files": 1
+  },
+  {
+   "kind": "series",
+   "id": 101,
+   "title": "Big Buck Bunny Shorts",
+   "year": 2008,
+   "group": "series",
+   "path": "/data/series/Big Buck Bunny Shorts",
+   "size": 9000000000,
+   "files": 24,
+   "seasons": 2
+  },
+  {
+   "kind": "series",
+   "id": 102,
+   "title": "Example Anime Series",
+   "year": 2019,
+   "group": "anime",
+   "path": "/data/anime/Example Anime Series",
+   "size": 32000000000,
+   "files": 48,
+   "seasons": 4
+  }
+ ],
+ "GET /media/plan": {
+  "kind": "movie",
+  "id": 1,
+  "app": "radarr",
+  "group": "movie",
+  "title": "Night of the Living Dead",
+  "year": 1968,
+  "path": "/data/movies/Night of the Living Dead (1968)",
+  "size": 2900000000,
+  "files": 1,
+  "seasons": null,
+  "torrents": [
+   {
+    "hash": "0000000000000000000000000000000000000000",
+    "name": "Night.of.the.Living.Dead.1968.1080p",
+    "size": 2900000000
+   }
+  ],
+  "torrentSize": 2900000000,
+  "shared": []
+ },
+ "POST /media/remove": {
+  "ok": true
+ }
+}

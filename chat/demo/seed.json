@@ -1,0 +1,57 @@
+[
+ {
+  "method": "POST",
+  "path": "/api/chats",
+  "body": {
+   "put": [
+    {
+     "id": "demo-chat-1",
+     "title": "Which disks are the oldest?",
+     "at": "$ago_ms:5400",
+     "engine": "local",
+     "model": "qwen3.5:9b",
+     "upd": "$ago_ms:5400",
+     "turns": [
+      {
+       "q": "Which of my disks has the most power-on hours?",
+       "a": "In this demo setup the two 6 TB hard disks (sda and sdb) have the most hours, about 14,800 each. The NVMe system disk has around 6,000 hours and 5 percent wear. All three pass SMART, so nothing needs replacing yet.",
+       "r": "",
+       "model": "qwen3.5:9b",
+       "at": "$ago_ms:5400",
+       "fin": true,
+       "tps": 42.5
+      },
+      {
+       "q": "Should I scrub the pools soon?",
+       "a": "Both pools were scrubbed about 17 days ago with no errors. A monthly scrub is a good rhythm, so the next one is due in roughly two weeks.",
+       "r": "",
+       "model": "qwen3.5:9b",
+       "at": "$ago_ms:5400",
+       "fin": true,
+       "tps": 42.5
+      }
+     ]
+    },
+    {
+     "id": "demo-chat-2",
+     "title": "Plan for the weekend",
+     "at": "$ago_ms:120000",
+     "engine": "local",
+     "model": "qwen3.5:9b",
+     "upd": "$ago_ms:120000",
+     "turns": [
+      {
+       "q": "Give me a short checklist for a homelab maintenance weekend.",
+       "a": "1. Check backups ran and restore one file as a test.\n2. Apply pending updates to the host and the containers, one at a time.\n3. Look at disk temperatures and SMART.\n4. Run a ZFS scrub if the last one is older than a month.\n5. Write down what you changed.",
+       "r": "",
+       "model": "qwen3.5:9b",
+       "at": "$ago_ms:120000",
+       "fin": true,
+       "tps": 42.5
+      }
+     ]
+    }
+   ]
+  }
+ }
+]

@@ -1,0 +1,226 @@
+[
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "日",
+   "rating": 2,
+   "secs": 7
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "一",
+   "rating": 3,
+   "secs": 11
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "国",
+   "rating": 3,
+   "secs": 10
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "人",
+   "rating": 3,
+   "secs": 3
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "年",
+   "rating": 3,
+   "secs": 4
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "大",
+   "rating": 3,
+   "secs": 10
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "十",
+   "rating": 3,
+   "secs": 9
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "二",
+   "rating": 2,
+   "secs": 4
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "本",
+   "rating": 2,
+   "secs": 6
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "中",
+   "rating": 3,
+   "secs": 6
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "長",
+   "rating": 4,
+   "secs": 7
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "出",
+   "rating": 3,
+   "secs": 9
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "三",
+   "rating": 3,
+   "secs": 4
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "時",
+   "rating": 3,
+   "secs": 12
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "行",
+   "rating": 2,
+   "secs": 10
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "見",
+   "rating": 3,
+   "secs": 5
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "日",
+   "rating": 3,
+   "secs": 4
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "一",
+   "rating": 3,
+   "secs": 4
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "国",
+   "rating": 3,
+   "secs": 4
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "人",
+   "rating": 3,
+   "secs": 4
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "年",
+   "rating": 3,
+   "secs": 4
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/kanji/action",
+  "body": {
+   "action": "answer",
+   "k": "二",
+   "rating": 1,
+   "secs": 9
+  }
+ },
+ {
+  "db": "kanji.db",
+  "sql": "UPDATE reviews SET ts = ts - ((id % 14) + 1) * 86400, day = date(ts - ((id % 14) + 1) * 86400, 'unixepoch') WHERE id <= 16"
+ }
+]

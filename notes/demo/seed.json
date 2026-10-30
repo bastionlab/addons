@@ -1,0 +1,251 @@
+[
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "add",
+   "text": "Homelab: weekend plan\nReplace the failing fan in the NAS case, then run a ZFS scrub on tank and check the SMART report.\nAlso order a spare 6 TB disk before the next sale ends.",
+   "ai": false
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "add",
+   "text": "Shopping list\n- [ ] oat milk\n- [ ] coffee beans\n- [x] batteries (AA)\n- [ ] birthday card for Sam\n- [ ] printer paper",
+   "ai": false
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "add",
+   "text": "Idea: nightly photo digest\nSend a small Discord message each morning with 3 random photos from \"on this day\". Needs the Immich API key and a webhook. Keep it opt-in per person.",
+   "ai": false
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "add",
+   "text": "Router notes\nDHCP range is 192.168.1.100-200. Static leases for the server (.50) and the printer (.40). Guest Wi-Fi is isolated from the LAN. Firmware updates: check first Sunday of the month.",
+   "ai": false
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "add",
+   "text": "Reading list\nThe Pragmatic Programmer, Designing Data-Intensive Applications (chapters 5-7), and that article on ZFS special vdevs Alex sent.",
+   "ai": false
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "add",
+   "text": "Trip to the coast, Sept\nGood: the small bakery near the harbour, the evening ferry. Skip: the aquarium (crowded). Next time: book the cabin 3 months ahead.",
+   "ai": false
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "add",
+   "text": "Backup rules I follow\n1. Three copies, two kinds of media, one off-site.\n2. Test a restore every quarter.\n3. Never trust a backup that was never restored.",
+   "ai": false
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "add",
+   "text": "Dashboard: things to try\n- switch the design to Liquid Glass\n- add a habit\n- ask the Ask bar what the GPU is doing\n- pin Notes to the phone tab bar",
+   "ai": false
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "edit",
+   "id": 1,
+   "title": "Homelab: weekend plan",
+   "body": "Replace the failing fan in the NAS case, then run a ZFS scrub on tank and check the SMART report.\nAlso order a spare 6 TB disk before the next sale ends.",
+   "kind": "todo",
+   "topic": "homelab"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "edit",
+   "id": 2,
+   "title": "Shopping list",
+   "body": "- [ ] oat milk\n- [ ] coffee beans\n- [x] batteries (AA)\n- [ ] birthday card for Sam\n- [ ] printer paper",
+   "kind": "todo",
+   "topic": "personal"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "edit",
+   "id": 3,
+   "title": "Idea: nightly photo digest",
+   "body": "Send a small Discord message each morning with 3 random photos from \"on this day\". Needs the Immich API key and a webhook. Keep it opt-in per person.",
+   "kind": "idea",
+   "topic": "projects"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "edit",
+   "id": 4,
+   "title": "Router notes",
+   "body": "DHCP range is 192.168.1.100-200. Static leases for the server (.50) and the printer (.40). Guest Wi-Fi is isolated from the LAN. Firmware updates: check first Sunday of the month.",
+   "kind": "note",
+   "topic": "homelab"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "edit",
+   "id": 5,
+   "title": "Reading list",
+   "body": "The Pragmatic Programmer, Designing Data-Intensive Applications (chapters 5-7), and that article on ZFS special vdevs Alex sent.",
+   "kind": "note",
+   "topic": "reading"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "edit",
+   "id": 6,
+   "title": "Trip to the coast, Sept",
+   "body": "Good: the small bakery near the harbour, the evening ferry. Skip: the aquarium (crowded). Next time: book the cabin 3 months ahead.",
+   "kind": "journal",
+   "topic": "personal"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "edit",
+   "id": 7,
+   "title": "Backup rules I follow",
+   "body": "1. Three copies, two kinds of media, one off-site.\n2. Test a restore every quarter.\n3. Never trust a backup that was never restored.",
+   "kind": "note",
+   "topic": "homelab"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "edit",
+   "id": 8,
+   "title": "Dashboard: things to try",
+   "body": "- switch the design to Liquid Glass\n- add a habit\n- ask the Ask bar what the GPU is doing\n- pin Notes to the phone tab bar",
+   "kind": "todo",
+   "topic": "projects"
+  }
+ },
+ {
+  "method": "POST",
+  "path": "/api/notes/action",
+  "body": {
+   "action": "edit",
+   "id": 1,
+   "pinned": true
+  }
+ },
+ {
+  "db": "notes.db",
+  "sql": "UPDATE notes SET created = CAST(strftime('%s','now') AS REAL) - ?, updated = CAST(strftime('%s','now') AS REAL) - ? WHERE id = ?",
+  "params": [
+   89500,
+   7200,
+   1
+  ]
+ },
+ {
+  "db": "notes.db",
+  "sql": "UPDATE notes SET created = CAST(strftime('%s','now') AS REAL) - ?, updated = CAST(strftime('%s','now') AS REAL) - ? WHERE id = ?",
+  "params": [
+   179000,
+   171000,
+   2
+  ]
+ },
+ {
+  "db": "notes.db",
+  "sql": "UPDATE notes SET created = CAST(strftime('%s','now') AS REAL) - ?, updated = CAST(strftime('%s','now') AS REAL) - ? WHERE id = ?",
+  "params": [
+   268500,
+   256500,
+   3
+  ]
+ },
+ {
+  "db": "notes.db",
+  "sql": "UPDATE notes SET created = CAST(strftime('%s','now') AS REAL) - ?, updated = CAST(strftime('%s','now') AS REAL) - ? WHERE id = ?",
+  "params": [
+   444400,
+   428400,
+   4
+  ]
+ },
+ {
+  "db": "notes.db",
+  "sql": "UPDATE notes SET created = CAST(strftime('%s','now') AS REAL) - ?, updated = CAST(strftime('%s','now') AS REAL) - ? WHERE id = ?",
+  "params": [
+   706700,
+   686700,
+   5
+  ]
+ },
+ {
+  "db": "notes.db",
+  "sql": "UPDATE notes SET created = CAST(strftime('%s','now') AS REAL) - ?, updated = CAST(strftime('%s','now') AS REAL) - ? WHERE id = ?",
+  "params": [
+   969000,
+   945000,
+   6
+  ]
+ },
+ {
+  "db": "notes.db",
+  "sql": "UPDATE notes SET created = CAST(strftime('%s','now') AS REAL) - ?, updated = CAST(strftime('%s','now') AS REAL) - ? WHERE id = ?",
+  "params": [
+   1317700,
+   1289700,
+   7
+  ]
+ },
+ {
+  "db": "notes.db",
+  "sql": "UPDATE notes SET created = CAST(strftime('%s','now') AS REAL) - ?, updated = CAST(strftime('%s','now') AS REAL) - ? WHERE id = ?",
+  "params": [
+   1752800,
+   1720800,
+   8
+  ]
+ }
+]
