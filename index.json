@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793318645,
+  "updated": 1793318721,
   "addons": [
     {
       "id": "ai",
@@ -367,6 +367,19 @@
       ],
       "license": "AGPL-3.0",
       "path": "skin-broadsheet"
+    },
+    {
+      "id": "skin-comic",
+      "name": "Comic Book skin",
+      "icon": "palette",
+      "version": "0.1.1",
+      "author": "MaxJC0",
+      "desc": "A whole-app skin for Designs: every page a comic page with caption boxes, inked panels, halftone and sunburst art, and POW! bursts on every button.",
+      "depends_on": [
+        "designs"
+      ],
+      "license": "AGPL-3.0",
+      "path": "skin-comic"
     },
     {
       "id": "voice",
