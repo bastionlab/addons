@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793318721,
+  "updated": 1793318793,
   "addons": [
     {
       "id": "ai",
@@ -380,6 +380,19 @@
       ],
       "license": "AGPL-3.0",
       "path": "skin-comic"
+    },
+    {
+      "id": "skin-disco",
+      "name": "Disco skin",
+      "icon": "palette",
+      "version": "0.1.1",
+      "author": "MaxJC0",
+      "desc": "A party skin for Designs that stays readable: a glowing dance floor and a mirror ball, a jukebox page selector, a spinning vinyl tab bar, rainbow card borders and confetti buttons.",
+      "depends_on": [
+        "designs"
+      ],
+      "license": "AGPL-3.0",
+      "path": "skin-disco"
     },
     {
       "id": "voice",
