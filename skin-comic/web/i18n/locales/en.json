@@ -1,0 +1,37 @@
+{
+  "skinComic": {
+    "meanwhile": "Meanwhile, at {page}…",
+    "continued": "To be continued…",
+    "pow": "POW!",
+    "zap": "ZAP!",
+    "bam": "BAM!",
+    "wham": "WHAM!",
+    "search": "Search",
+    "pages": "Pages",
+    "close": "Close",
+    "fold": "Fold",
+    "unfold": "Unfold",
+    "places": {
+      "home": "Meanwhile, back at HQ…",
+      "metrics": "Meanwhile, in the engine room…",
+      "settings": "Meanwhile, in the control room…",
+      "addons": "Meanwhile, at the gadget workshop…",
+      "designs": "Meanwhile, in wardrobe…",
+      "media": "Meanwhile, at the cinema…",
+      "dev": "Meanwhile, in the secret lab…",
+      "deals": "Meanwhile, at the bazaar…",
+      "wohnungen": "Meanwhile, house hunting…",
+      "jobs": "Meanwhile, at the hiring hall…",
+      "money": "Meanwhile, at the vault…",
+      "notes": "Meanwhile, in the archives…",
+      "learn": "Meanwhile, at the academy…",
+      "kanji": "Meanwhile, at the dojo…",
+      "habits": "Meanwhile, at the training grounds…",
+      "servers": "Meanwhile, in the arena…"
+    },
+    "more": "More",
+    "editTabs": "Edit tabs",
+    "done": "Done",
+    "pinCount": "Pinned {n}/{max}"
+  }
+}
