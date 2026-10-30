@@ -1,0 +1,13 @@
+# a skin: no tab of its own; it brings replacement components (Skin<Name><Piece>) and a built-in look on /designs
+id: skin-terminal
+name: Hacker Terminal skin
+icon: palette
+order: 64
+author: MaxJC0
+license: AGPL-3.0
+version: 0.1.1
+desc: "A whole-app skin for Designs: green phosphor terminal with a typed prompt for navigation, box-drawn panels, matrix rain and CRT scanlines."
+routes: []
+needs: []
+depends_on: [designs]
+roles: { view: viewer, use: viewer }
