@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793318371,
+  "updated": 1793318447,
   "addons": [
     {
       "id": "ai",
@@ -306,6 +306,23 @@
       ],
       "license": "MIT",
       "path": "research"
+    },
+    {
+      "id": "retro",
+      "name": "Retro games",
+      "icon": "gamepad",
+      "version": "0.1.0",
+      "author": "MaxJC0",
+      "desc": "Retro games up to the 3DS era in the browser (phone + PC, EmulatorJS) with saves synced across devices; 3DS streams from Azahar. Free homebrew catalogue + your own game files.",
+      "routes": [
+        "/retro"
+      ],
+      "needs": [
+        "games CT with a /games mount point"
+      ],
+      "ct": "games",
+      "license": "AGPL-3.0",
+      "path": "retro"
     },
     {
       "id": "servers",
