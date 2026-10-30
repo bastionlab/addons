@@ -1,0 +1,32 @@
+{
+  "skinTactical": {
+    "loadout": "Loadout",
+    "search": "Search",
+    "more": "More",
+    "close": "Close",
+    "objective": "Objective: {page}",
+    "fold": "Collapse",
+    "unfold": "Expand",
+    "objectives": {
+      "home": "Await orders",
+      "metrics": "Hold the server",
+      "settings": "Configure loadout",
+      "addons": "Requisition gear",
+      "designs": "Pick your camo",
+      "media": "Guard the stash",
+      "dev": "Ship the build",
+      "deals": "Acquire the loot",
+      "wohnungen": "Find a safehouse",
+      "jobs": "Recruitment",
+      "money": "Secure the funds",
+      "notes": "Gather intel",
+      "learn": "Training",
+      "kanji": "Decode the glyphs",
+      "habits": "Daily drills",
+      "servers": "Defend the base"
+    },
+    "editTabs": "Edit tabs",
+    "done": "Done",
+    "pinCount": "Pinned {n} / {max}"
+  }
+}
