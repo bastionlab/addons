@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793318859,
+  "updated": 1793318934,
   "addons": [
     {
       "id": "ai",
@@ -406,6 +406,19 @@
       ],
       "license": "AGPL-3.0",
       "path": "skin-glass"
+    },
+    {
+      "id": "skin-grimoire",
+      "name": "Grimoire skin",
+      "icon": "palette",
+      "version": "0.3.0",
+      "author": "MaxJC0",
+      "desc": "A quiet old-book skin for Designs: dark leather and gold rules, serif ink, a ribbon bookmark on the open page, pages as parchment leaves.",
+      "depends_on": [
+        "designs"
+      ],
+      "license": "AGPL-3.0",
+      "path": "skin-grimoire"
     },
     {
       "id": "voice",
