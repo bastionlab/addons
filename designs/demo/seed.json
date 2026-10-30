@@ -1,9 +1,1 @@
-[
- {
-  "method": "POST",
-  "path": "/api/designs/pick",
-  "body": {
-   "pick": "p:glass"
-  }
- }
-]
+[]
