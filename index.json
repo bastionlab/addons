@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793318934,
+  "updated": 1793319012,
   "addons": [
     {
       "id": "ai",
@@ -419,6 +419,19 @@
       ],
       "license": "AGPL-3.0",
       "path": "skin-grimoire"
+    },
+    {
+      "id": "skin-kawaii",
+      "name": "Kawaii skin",
+      "icon": "palette",
+      "version": "0.1.1",
+      "author": "MaxJC0",
+      "desc": "A whole-app skin for Designs: pastel sky, a sticker-sheet nav, washi-taped bubble cards and a little cat that cheers you on.",
+      "depends_on": [
+        "designs"
+      ],
+      "license": "AGPL-3.0",
+      "path": "skin-kawaii"
     },
     {
       "id": "voice",
