@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793318447,
+  "updated": 1793318579,
   "addons": [
     {
       "id": "ai",
@@ -341,6 +341,19 @@
       "ct": "gameservers",
       "license": "AGPL-3.0",
       "path": "servers"
+    },
+    {
+      "id": "skin-blocky",
+      "name": "Blocky skin",
+      "icon": "palette",
+      "version": "0.1.1",
+      "author": "MaxJC0",
+      "desc": "A whole-app skin for Designs: a voxel sandbox look with a block landscape, an item hotbar, an inventory grid and achievement toasts.",
+      "depends_on": [
+        "designs"
+      ],
+      "license": "AGPL-3.0",
+      "path": "skin-blocky"
     },
     {
       "id": "voice",
