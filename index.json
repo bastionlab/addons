@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793319239,
+  "updated": 1793319298,
   "addons": [
     {
       "id": "ai",
@@ -471,6 +471,19 @@
       ],
       "license": "AGPL-3.0",
       "path": "skin-synthwave"
+    },
+    {
+      "id": "skin-tactical",
+      "name": "Tactical HUD skin",
+      "icon": "palette",
+      "version": "0.3.1",
+      "author": "MaxJC0",
+      "desc": "A whole-app skin for Designs: a calm tactical HUD: condensed uppercase type, amber on olive-black, square edges, a numbered loadout column and a weapon-slot tab bar on the phone.",
+      "depends_on": [
+        "designs"
+      ],
+      "license": "AGPL-3.0",
+      "path": "skin-tactical"
     },
     {
       "id": "voice",
