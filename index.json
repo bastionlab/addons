@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793319012,
+  "updated": 1793319080,
   "addons": [
     {
       "id": "ai",
@@ -432,6 +432,19 @@
       ],
       "license": "AGPL-3.0",
       "path": "skin-kawaii"
+    },
+    {
+      "id": "skin-material",
+      "name": "Material You skin",
+      "icon": "palette",
+      "version": "0.1.3",
+      "author": "MaxJC0",
+      "desc": "A whole-app skin for Designs in the style of Android Material 3: top app bar with a navigation drawer, bottom navigation and a navigation rail, tonal cards, ripples and shared-axis page transitions.",
+      "depends_on": [
+        "designs"
+      ],
+      "license": "AGPL-3.0",
+      "path": "skin-material"
     },
     {
       "id": "voice",
