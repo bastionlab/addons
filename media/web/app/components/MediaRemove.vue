@@ -111,7 +111,7 @@ onBeforeUnmount(() => clearTimeout(armTimer))
 <template>
   <Panel id="remove" title="Remove" fold="closed">
     <template #actions>
-      <button class="btn ghost small" :disabled="loading" title="reload the list from Sonarr and Radarr" @click="reload()">↻</button>
+      <button class="btn ghost small" :disabled="loading" title="reload the list from Sonarr and Radarr" @click="reload()" aria-label="reload"><Icon name="refresh" :size="16"/></button>
     </template>
 
     <JobList :jobs="jobs" @dismiss="dismiss" />

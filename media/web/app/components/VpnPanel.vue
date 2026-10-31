@@ -30,7 +30,7 @@ const where = computed(() => [v.value.city, v.value.country].filter(Boolean).joi
     </div>
 
     <div class="checks">
-      <span v-for="c in checks" :key="c.label" class="pill" :class="c.ok ? 'ok' : 'bad'" :title="c.detail">{{ c.ok ? '✓' : '✕' }} {{ c.label }}</span>
+      <span v-for="c in checks" :key="c.label" class="pill" :class="c.ok ? 'ok' : 'bad'" :title="c.detail"><Icon :name="c.ok ? 'check' : 'x'" :size="12"/> {{ c.label }}</span>
     </div>
     <div v-for="c in bad" :key="c.label" class="small bad">{{ c.detail }}</div>
 
