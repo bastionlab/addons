@@ -221,11 +221,11 @@ export const LESSON_SCHEMA = {
 
 function prompt(topic: string) {
   const all = listLessons().filter((l: any) => l.lesson)
-  const past = all.slice(0, 150).map((l: any) => `- ${l.lesson.title} [${l.lesson.track}, ${l.lesson.level}]${l.done ? ' ✓ finished' : ''}${quizLine(l)}`)
+  const past = all.slice(0, 150).map((l: any) => `- ${l.lesson.title} [${l.lesson.track}, ${l.lesson.level}]${l.done ? ' (finished)' : ''}${quizLine(l)}`)
   const recent = all.slice(0, 3).map((l: any) => l.lesson.track)
   const wishes = (db.prepare('SELECT topic FROM lessons WHERE status = \'queued\' ORDER BY id').all() as any[]).map(r => r.topic)
   const skills = listSkills().map(k => `${k.name} ${k.level}`).join(', ')
-  return `You write this week's lesson for a personal weekly tech course. It must fill about one focused hour: ~35 minutes of reading, a quiz, then ~20 minutes of hands-on tasks.
+  return `You write this week's lesson for a personal weekly tech course. It must fill about one focused hour: ~35 minutes of reading, a quiz, then ~20 minutes of hands-on tasks. Never use emoji, emoji in headings or decorative symbols anywhere in the lesson.
 
 THE LEARNER: a computer science master's student (TU Berlin) and working-student full-stack / AI engineer who runs a Proxmox homelab: LXC containers, ZFS, Docker, Tailscale, systemd, a local LLM on an RTX 3060. They want breadth across all of tech: programming languages, CS concepts, cloud, DevOps, systems, networking, security, data, web, AI. Assume they know the basics of programming; explain everything else properly. They read on a phone.
 Their skillset (1 aware … 5 expert): ${skills}

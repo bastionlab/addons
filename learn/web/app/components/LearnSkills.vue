@@ -34,7 +34,7 @@ async function copy() {
 <template>
   <Panel title="Your skills" id="learn-skills" fold="phone" :sub="`${skills.length} skills · avg ${avg}${updating ? ' · updating from your last lesson…' : ''}`">
     <template #actions>
-      <button type="button" class="btn ghost" @click="copy">{{ copied ? '✓ copied' : 'Copy' }}</button>
+      <button type="button" class="btn ghost" @click="copy">{{ copied ? 'copied' : 'Copy' }}</button>
       <button type="button" class="btn ghost" @click="adding = !adding">+ Add</button>
     </template>
     <form v-if="adding" class="add" @submit.prevent="add">
@@ -47,11 +47,11 @@ async function copy() {
       <div v-for="[a, list] in groups" :key="a" class="group">
         <div class="area faint small">{{ trackIcon(a) }} {{ a }}</div>
         <div v-for="s in list" :key="s.name" class="skill" :title="s.note">
-          <span class="name">{{ s.name }}<span v-if="recent(s)" class="new" title="moved by a lesson recently">●</span></span>
+          <span class="name">{{ s.name }}<span v-if="recent(s)" class="new" title="moved by a lesson recently">new</span></span>
           <span class="dots" :title="`${SKILL_LEVELS[s.level]} · 1 aware · 2 basics · 3 working · 4 strong · 5 expert · lessons move it at most +1, your taps always win`">
             <button v-for="l in 5" :key="l" type="button" class="d" :class="{ on: l <= s.level }" :aria-label="`level ${l}`" @click="setLevel(s, l)" />
           </span>
-          <button type="button" class="btn ghost x" :class="{ sure: armed === s.name }" @click="del(s)">{{ armed === s.name ? 'Sure?' : '✕' }}</button>
+          <button type="button" class="btn ghost x" :class="{ sure: armed === s.name }" @click="del(s)">{{ armed === s.name ? 'Sure?' : 'Remove' }}</button>
           <span v-if="s.note" class="note faint">{{ s.note }}</span>
         </div>
       </div>

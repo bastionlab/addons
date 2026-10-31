@@ -66,7 +66,7 @@ const label = computed(() => {
 })
 const nextLabel = computed(() => {
   const s = step.value, after = steps.value[stepAt.value + 1]
-  if (s.kind === 'read' && !read(s.i)) return '✓ Got it'
+  if (s.kind === 'read' && !read(s.i)) return 'Got it'
   if (s.kind === 'quiz' && !answered(s.i)) return 'Skip'
   if (s.kind === 'intro') return 'Start reading'
   return after?.kind === 'quiz' && s.kind !== 'quiz' ? 'To the quiz' : after?.kind === 'task' && s.kind !== 'task' ? 'To the tasks' : after?.kind === 'recap' ? 'To the recap' : 'Next'
@@ -94,7 +94,7 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
       <!-- slim, always visible: close, where am I, tap a segment to jump -->
       <header>
         <div class="top">
-          <button type="button" class="btn ghost x" title="close (Esc)" @click="emit('close')">✕</button>
+          <button type="button" class="btn ghost x" title="close (Esc)" @click="emit('close')" aria-label="close"><Icon name="x" :size="16"/></button>
           <div class="where">
             <b>{{ x.title }}</b>
             <span class="faint small">{{ label }}</span>
@@ -124,23 +124,23 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
           <h4>The plan</h4>
           <ol class="plan">
             <li v-for="(s, i) in x.sections" :key="i" :class="{ ok: read(i) }" @click="go(1 + i)">
-              <span>{{ s.title }}</span><span class="faint">{{ read(i) ? '✓' : `${s.minutes} min` }}</span>
+              <span>{{ s.title }}</span><span class="faint">{{ read(i) ? 'read' : `${s.minutes} min` }}</span>
             </li>
-            <li @click="go(1 + x.sections.length)"><span>❓ Quiz · {{ x.quiz.length }} questions</span><span class="faint">{{ score.answered ? `${score.right}/${score.total}` : '' }}</span></li>
-            <li @click="go(1 + x.sections.length + x.quiz.length)"><span>🛠 {{ x.tasks.length }} hands-on tasks</span><span class="faint">{{ (p.tasks ?? []).length ? `${p.tasks.length} done` : '' }}</span></li>
+            <li @click="go(1 + x.sections.length)"><span>Quiz · {{ x.quiz.length }} questions</span><span class="faint">{{ score.answered ? `${score.right}/${score.total}` : '' }}</span></li>
+            <li @click="go(1 + x.sections.length + x.quiz.length)"><span>{{ x.tasks.length }} hands-on tasks</span><span class="faint">{{ (p.tasks ?? []).length ? `${p.tasks.length} done` : '' }}</span></li>
           </ol>
         </template>
 
         <!-- one reading section -->
         <template v-else-if="step.kind === 'read'">
-          <div class="kicker faint small">📖 {{ x.sections[step.i].minutes }} min read</div>
+          <div class="kicker faint small">{{ x.sections[step.i].minutes }} min read</div>
           <h2>{{ x.sections[step.i].title }}</h2>
           <div class="md body" v-html="md(x.sections[step.i].body)" />
         </template>
 
         <!-- one question -->
         <template v-else-if="step.kind === 'quiz'">
-          <div class="kicker faint small">❓ {{ score.right }} right so far</div>
+          <div class="kicker faint small">{{ score.right }} right so far</div>
           <div class="md q" v-html="md(x.quiz[step.i].q)" />
           <div class="opts">
             <button
@@ -152,14 +152,14 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
             </button>
           </div>
           <div v-if="answered(step.i)" class="explain" :class="p.quiz[step.i] === x.quiz[step.i].answer ? 'ok' : 'bad'">
-            <b>{{ p.quiz[step.i] === x.quiz[step.i].answer ? '✓ Right.' : '✕ Not quite.' }}</b>
+            <b>{{ p.quiz[step.i] === x.quiz[step.i].answer ? 'Right.' : 'Not quite.' }}</b>
             <div class="md" v-html="md(x.quiz[step.i].why)" />
           </div>
         </template>
 
         <!-- one task -->
         <template v-else-if="step.kind === 'task'">
-          <div class="kicker faint small">🛠 {{ x.tasks[step.i].minutes }} min hands-on</div>
+          <div class="kicker faint small">{{ x.tasks[step.i].minutes }} min hands-on</div>
           <h2>{{ x.tasks[step.i].title }}</h2>
           <div class="md body" v-html="md(x.tasks[step.i].body)" />
           <button type="button" class="btn wide" :class="{ on: solution }" @click="solution = !solution">{{ solution ? 'Hide' : 'Show' }} the solution</button>
@@ -184,22 +184,22 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
             <h4>Learn next? Tap to queue</h4>
             <div class="chips">
               <button v-for="t in x.next" :key="t" type="button" class="chip" :disabled="queued.includes(t)" @click="queue(t)">
-                {{ queued.includes(t) ? '✓' : '+' }} {{ t }}
+                {{ queued.includes(t) ? 'queued:' : '+' }} {{ t }}
               </button>
             </div>
           </template>
           <div class="minor">
-            <button v-if="score.answered" type="button" class="btn ghost" @click="retake">↺ Retake the quiz</button>
+            <button v-if="score.answered" type="button" class="btn ghost" @click="retake"><Icon name="rotate-ccw" :size="16"/> Retake the quiz</button>
             <button type="button" class="btn ghost danger" :class="{ sure: armed === 'del' }" @click="del">{{ armed === 'del' ? 'Sure?' : 'Delete lesson' }}</button>
           </div>
         </template>
       </div>
 
       <footer>
-        <button type="button" class="btn back" :disabled="stepAt === 0" aria-label="back" @click="go(stepAt - 1)">←</button>
+        <button type="button" class="btn back" :disabled="stepAt === 0" aria-label="back" @click="go(stepAt - 1)"><Icon name="chevron-left" :size="16"/></button>
         <button v-if="step.kind !== 'recap'" type="button" class="btn go" :class="{ primary: !(step.kind === 'quiz' && !answered(step.i)) }" @click="next">{{ nextLabel }} →</button>
-        <button v-else-if="!l.done" type="button" class="btn primary go" @click="finish">🎓 Finish lesson</button>
-        <button v-else type="button" class="btn go" @click="emit('post', { action: 'done', id: l.id, done: false })">✓ Finished · undo</button>
+        <button v-else-if="!l.done" type="button" class="btn primary go" @click="finish">Finish lesson</button>
+        <button v-else type="button" class="btn go" @click="emit('post', { action: 'done', id: l.id, done: false })">Finished · undo</button>
       </footer>
     </article>
   </div>

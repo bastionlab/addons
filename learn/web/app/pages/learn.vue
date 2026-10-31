@@ -81,6 +81,17 @@ const library = computed(() => {
     && words.every(w => `${l.lesson.title} ${l.lesson.summary} ${l.lesson.track} ${l.topic}`.toLowerCase().includes(w)))
 })
 
+// sections as tabs (?s=…) under today's lesson; Failed only shows up while something failed
+const { t } = useI18n()
+const tab = usePageTab('library')
+const tabs = computed(() => [
+  { key: 'library', label: t('learn.tabs.library') },
+  { key: 'ask', label: t('learn.tabs.ask'), badge: upNext.value.length || undefined, tone: 'ok' as const },
+  { key: 'skills', label: t('learn.tabs.skills') },
+  ...(failed.value.length ? [{ key: 'failed', label: t('learn.tabs.failed'), badge: failed.value.length, tone: 'bad' as const }] : []),
+])
+watch(() => loaded.value && tab.value === 'failed' && !failed.value.length, gone => { if (gone) tab.value = 'library' }, { immediate: true })
+
 const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.created) / 60))
 </script>
 
@@ -97,7 +108,7 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
           <div class="pills">
             <span class="pill accent">{{ trackIcon(hero.lesson.track) }} {{ hero.lesson.track }}</span>
             <span class="pill">{{ hero.lesson.level }}</span>
-            <span v-if="hero.done" class="pill ok">✓ finished</span>
+            <span v-if="hero.done" class="pill ok">finished</span>
           </div>
           <h1>{{ hero.lesson.title }}</h1>
           <p class="muted">{{ hero.lesson.summary }}</p>
@@ -128,13 +139,15 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
     </section>
 
     <div class="stats">
-      <div><b>{{ stats.streak }}</b><span>🔥 weeks</span></div>
+      <div><b>{{ stats.streak }}</b><span>weeks</span></div>
       <div><b>{{ stats.done }}<small>/{{ stats.total }}</small></b><span>finished</span></div>
       <div><b>{{ stats.quiz == null ? '–' : `${stats.quiz}%` }}</b><span>quiz right</span></div>
     </div>
 
+    <PageTabs v-model="tab" :tabs="tabs" />
+
     <!-- topics the owner wants -->
-    <Panel title="Want to learn something?" id="learn-ask" :sub="upNext.length ? `${upNext.length} up next` : ''">
+    <Panel v-if="tab === 'ask'" title="Want to learn something?" id="learn-ask" :sub="upNext.length ? `${upNext.length} up next` : ''">
       <form class="ask" @submit.prevent="ask(false)">
         <input v-model="topic" type="text" placeholder="e.g. Rust ownership, BGP, Kubernetes operators…" enterkeyhint="done" maxlength="300">
         <div class="btns">
@@ -147,16 +160,16 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
         <li v-for="(l, i) in upNext" :key="l.id">
           <span class="faint small">#{{ i + 1 }}</span> {{ l.topic }}
           <span class="sp" />
-          <button type="button" class="btn ghost" title="write it now" @click="post({ action: 'write', id: l.id })">▶</button>
-          <button type="button" class="btn ghost" title="remove" @click="post({ action: 'delete', id: l.id })">✕</button>
+          <button type="button" class="btn ghost" title="write it now" aria-label="write it now" @click="post({ action: 'write', id: l.id })"><Icon name="play" :size="16"/></button>
+          <button type="button" class="btn ghost" title="remove" aria-label="remove" @click="post({ action: 'delete', id: l.id })"><Icon name="x" :size="16"/></button>
         </li>
       </ul>
     </Panel>
 
-    <LearnSkills :skills="skills" :updating="lessons.some(l => l.skills === 'writing' || l.skills === 'pending')" @post="post" />
+    <LearnSkills v-else-if="tab === 'skills'" :skills="skills" :updating="lessons.some(l => l.skills === 'writing' || l.skills === 'pending')" @post="post" />
 
     <!-- the library -->
-    <h2 class="sec">Library <span class="muted small">{{ ready.length }} lessons</span></h2>
+    <template v-else-if="tab === 'library'">
     <div v-if="ready.length" class="filters">
       <input v-model="q" class="search" type="search" placeholder="Search" enterkeyhint="search">
       <select v-model="show">
@@ -181,21 +194,22 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
             <template v-if="quizScore(l).answered"> · quiz {{ quizScore(l).right }}/{{ quizScore(l).total }}</template>
           </span>
         </span>
-        <span v-if="l.done" class="ok done">✓</span>
+        <span v-if="l.done" class="ok done"><Icon name="circle-check" :size="16"/></span>
         <span v-else-if="lessonProgress(l).done" class="faint small">{{ lessonProgress(l).pct }}%</span>
       </button>
       <p v-if="loaded && !ready.length" class="faint small">Nothing yet.</p>
       <p v-else-if="ready.length && !library.length" class="faint small">Nothing matches.</p>
     </div>
+    <p v-if="ready.length" class="faint small">{{ ready.length }} lessons</p>
+    </template>
 
-    <template v-if="failed.length">
-      <h2 class="sec">Failed <span class="muted small">{{ failed.length }}</span></h2>
+    <template v-else-if="tab === 'failed'">
       <ul class="queue">
         <li v-for="l in failed" :key="l.id">
-          <span class="bad small">✕</span> {{ l.topic || 'Claude’s pick' }} <span class="faint small err">{{ l.error }}</span>
+          <span class="bad small"><Icon name="circle-x" :size="14"/></span> {{ l.topic || 'Claude’s pick' }} <span class="faint small err">{{ l.error }}</span>
           <span class="sp" />
           <button type="button" class="btn ghost" @click="post({ action: 'write', id: l.id })">Retry</button>
-          <button type="button" class="btn ghost" @click="post({ action: 'delete', id: l.id })">✕</button>
+          <button type="button" class="btn ghost" aria-label="remove" @click="post({ action: 'delete', id: l.id })"><Icon name="x" :size="16"/></button>
         </li>
       </ul>
     </template>
