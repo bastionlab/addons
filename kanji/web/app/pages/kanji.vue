@@ -49,6 +49,15 @@ const shown = computed(() => {
 })
 const st = (k: string) => o.value?.status?.[k] ?? 0
 
+// sections as tabs (?s=…); the study hero above them stays one tap away
+const { t } = useI18n()
+const tab = usePageTab('progress')
+const tabs = computed(() => [
+  { key: 'progress', label: t('kanji.tabs.progress') },
+  { key: 'browse', label: t('kanji.tabs.browse') },
+  { key: 'settings', label: t('kanji.tabs.settings') },
+])
+
 // --- settings ---
 async function settings(body: Record<string, any>) {
   try { await $fetch('/api/kanji/action', { method: 'POST', body: { action: 'settings', ...body } }); load() } catch (e: any) { error.value = e?.data?.statusMessage || e?.message }
@@ -72,16 +81,19 @@ function toggleLevel(n: number) {
           <div><b class="c-rev">{{ o.next.review }}</b><span>to review</span></div>
         </div>
         <button v-if="due" type="button" class="btn primary go" @click="go({ study: '1' })">Study now</button>
-        <div v-else class="muted small doneline">🎉 Done for today<template v-if="nextUp"> · {{ nextUp }} due tomorrow</template></div>
+        <div v-else class="muted small doneline">Done for today<template v-if="nextUp"> · {{ nextUp }} due tomorrow</template></div>
       </section>
 
       <div class="stats">
-        <div><b>{{ o.streak }}</b><span>🔥 days</span></div>
+        <div><b>{{ o.streak }}</b><span>days</span></div>
         <div><b>{{ o.today.reviews }}</b><span>today{{ o.today.mins ? ` · ${o.today.mins} min` : '' }}</span></div>
         <div><b>{{ o.retention == null ? '–' : `${o.retention}%` }}</b><span>retention</span></div>
-        <div><b>{{ o.total.seen }}</b><span>{{ o.total.mature }} mature · ✍️ {{ o.total.written }}</span></div>
+        <div><b>{{ o.total.seen }}</b><span>{{ o.total.mature }} mature · {{  o.total.written }}</span></div>
       </div>
 
+      <PageTabs v-model="tab" :tabs="tabs" />
+
+      <template v-if="tab === 'progress'">
       <Panel title="JLPT progress" id="kanji-levels">
         <div class="levels">
           <div v-for="l in o.levels" :key="l.n" class="lv">
@@ -115,8 +127,9 @@ function toggleLevel(n: number) {
           <div class="faint small">today → in 2 weeks</div>
         </Panel>
       </div>
+      </template>
 
-      <h2 class="sec">Browse <span class="muted small">{{ deck ? deck.length : '…' }} kanji</span></h2>
+      <template v-else-if="tab === 'browse'">
       <div class="filters">
         <input v-model="q" class="search" type="search" placeholder="Kanji, meaning or reading" enterkeyhint="search">
       </div>
@@ -129,8 +142,10 @@ function toggleLevel(n: number) {
       <Skeleton v-else kind="lines" :n="4" />
       <p v-if="deck && !shown.length" class="faint small">Nothing matches.</p>
       <div class="legend faint small"><i class="sw s0" /> new <i class="sw s1" /> learning <i class="sw s2" /> young <i class="sw s3" /> mature</div>
+      <p class="faint small">{{ deck ? deck.length : '…' }} kanji</p>
+      </template>
 
-      <Panel title="Settings" id="kanji-settings" fold="closed">
+      <Panel v-else-if="tab === 'settings'" title="Settings" id="kanji-settings">
         <div class="set">
           <span class="muted small">New cards a day</span>
           <div class="seg">
