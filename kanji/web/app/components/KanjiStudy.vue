@@ -11,6 +11,7 @@ const q = ref<any>(props.start)
 const shown = ref(false)
 const busy = ref(false)
 const error = ref('')
+const savedOffline = ref(false)
 const strokes = ref(false)
 const tracing = ref(false)
 const reviewed = ref(0)
@@ -30,7 +31,16 @@ function take(r: any) {
 async function post(body: Record<string, any>) {
   if (busy.value) return
   busy.value = true
-  try { take(await $fetch<any>('/api/kanji/action', { method: 'POST', body })); emit('changed'); return true }
+  try {
+    const r = await $fetch<any>('/api/kanji/action', { method: 'POST', body })
+    if (r?.queued) { // offline: the worker keeps the answer and sends it later
+      if (body.action === 'undo') { error.value = 'Undo needs a connection'; return }
+      // the next card comes from the cached queue, so it may repeat the one just answered
+      take(await $fetch<any>('/api/kanji').then(x => x.next).catch(() => q.value))
+      savedOffline.value = true
+    } else { take(r); savedOffline.value = false }
+    emit('changed'); return true
+  }
   catch (e: any) { error.value = e?.data?.statusMessage || e?.message }
   finally { busy.value = false }
 }
@@ -91,7 +101,7 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.docum
 <template>
   <div class="study">
     <header>
-      <button type="button" class="btn ghost icon" aria-label="close" @click="emit('close')">✕</button>
+      <button type="button" class="btn ghost icon" aria-label="close" @click="emit('close')"><Icon name="x" :size="16"/></button>
       <div class="counts">
         <span class="c-new" :class="{ on: from === 'new' }">{{ q.new }}</span>
         <span class="c-learn" :class="{ on: from === 'learn' }">{{ q.learn }}</span>
@@ -101,12 +111,13 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.docum
     </header>
 
     <p v-if="error" class="errbox">{{ error }}</p>
+    <p v-if="savedOffline" class="small"><span class="pill warn">Saved offline, syncs when online</span></p>
 
     <!-- write card: prompt + pad, then the answer -->
     <main v-if="card && writing" :key="card.id + card.reps">
       <div class="meta">
         <span class="pill">N{{ card.n }}</span>
-        <span class="pill accent">✍️ {{ word ? 'write the word' : 'write' }}</span>
+        <span class="pill accent">{{ word ? 'write the word' : 'write' }}</span>
         <span v-if="card.state === 'new'" class="pill accent">new</span>
       </div>
       <div v-if="word" class="prompt">
@@ -132,12 +143,13 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.docum
     <main v-else-if="card" :key="card.id + card.reps" @click="shown = true">
       <div class="meta"><span class="pill">N{{ card.n }}</span><span v-if="card.state === 'new'" class="pill accent">new</span><span v-if="card.lapses >= 4" class="pill warn">leech</span></div>
       <div lang="ja" class="kanji">{{ card.k }}</div>
+      <KanjiSpeak v-if="!shown && kjMain(card)" class="spk" :text="kjMain(card)" :size="18" />
       <template v-if="shown">
         <KanjiFace :c="card" />
         <div class="more" @click.stop>
           <KanjiTrace v-if="tracing || card.state === 'new'" :k="card.k" guide />
           <div class="links">
-            <button v-if="!tracing && card.state !== 'new'" type="button" class="lnk small" @click="tracing = true">✍️ Trace it</button>
+            <button v-if="!tracing && card.state !== 'new'" type="button" class="lnk small" @click="tracing = true">Trace it</button>
             <button v-if="!strokes" type="button" class="lnk small" @click="strokes = true">Stroke order · {{ card.s }}</button>
           </div>
           <KanjiStrokes v-if="strokes" :k="card.k" />
@@ -147,11 +159,11 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.docum
 
     <main v-else class="done">
       <template v-if="q.wait">
-        <div class="big">⏳</div>
+        <div class="big"><Icon name="clock" :size="40"/></div>
         <b>Next learning card in {{ mmss(left) }}</b>
       </template>
       <template v-else>
-        <div class="big">🎉</div>
+        <div class="big"><Icon name="circle-check" :size="40"/></div>
         <b>Done for today</b>
         <span class="muted small">{{ reviewed }} reviewed this session</span>
       </template>
@@ -185,6 +197,7 @@ main { flex: 1; overflow-y: auto; padding: 18px 16px 24px; display: flex; flex-d
 .meta { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }
 .kanji { font-size: 128px; line-height: 1.1; text-align: center; font-weight: 400; font-family: 'Noto Sans JP', 'Noto Sans CJK JP', 'Hiragino Sans', 'Yu Gothic', sans-serif; user-select: none; }
 .kanji.sm { font-size: 64px; }
+.spk { align-self: center; min-width: 44px; min-height: 44px; }
 .prompt { text-align: center; display: flex; flex-direction: column; gap: 2px; }
 .prompt .mean { font-size: 20px; font-weight: 600; }
 .prompt .jp { font-size: 16px; }

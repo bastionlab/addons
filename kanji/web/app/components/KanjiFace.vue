@@ -8,16 +8,17 @@ defineProps<{ c: KanjiCard }>()
   <div class="face">
     <div class="mean">{{ c.m.join(', ') }}</div>
     <div class="reads">
-      <div v-if="c.on.length"><span class="lab faint small">On</span><span lang="ja" class="jp">{{ c.on.map(kata).join('、') }}</span></div>
+      <div v-if="c.on.length"><span class="lab faint small">On</span><span lang="ja" class="jp">{{ c.on.map(kata).join('、') }}</span><KanjiSpeak :text="kjMain(c)" /></div>
       <div v-if="c.kun.length">
         <span class="lab faint small">Kun</span>
         <span lang="ja" class="jp"><template v-for="(r, i) in c.kun" :key="r">{{ i ? '、' : '' }}{{ kun(r).stem }}<span v-if="kun(r).oku" class="faint">{{ kun(r).oku }}</span></template></span>
+        <KanjiSpeak v-if="!c.on.length" :text="kjMain(c)" />
       </div>
     </div>
     <ul v-if="c.w.length" class="words">
       <li v-for="[w, r, g] in c.w" :key="w">
         <span lang="ja" class="w">{{ w }}</span>
-        <span lang="ja" class="r muted">{{ r }}</span>
+        <span class="r"><span lang="ja" class="muted">{{ r }}</span><KanjiSpeak :text="r" :size="14" /></span>
         <span class="g">{{ g }}</span>
       </li>
     </ul>
@@ -34,7 +35,7 @@ defineProps<{ c: KanjiCard }>()
 .words { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; border-top: 1px solid var(--line); }
 .words li { display: grid; grid-template-columns: auto auto 1fr; gap: 4px 10px; align-items: baseline; padding: 7px 2px; border-bottom: 1px solid var(--line); }
 .w { font-size: 18px; }
-.r { font-size: 13px; }
+.r { font-size: 13px; display: inline-flex; align-items: center; gap: 2px; }
 .g { font-size: 13px; color: var(--muted); min-width: 0; overflow-wrap: anywhere; }
 @media (max-width: 640px) {
   .words li { grid-template-columns: auto 1fr; }

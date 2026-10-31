@@ -24,16 +24,16 @@ const practice = ref(0)
 <template>
   <div class="scrim" @click.self="emit('close')">
     <div class="sheet">
-      <button type="button" class="btn ghost icon x" aria-label="close" @click="emit('close')">✕</button>
+      <button type="button" class="btn ghost icon x" aria-label="close" @click="emit('close')"><Icon name="x" :size="16"/></button>
       <p v-if="error" class="errbox">{{ error }}</p>
       <template v-if="x">
         <div class="top">
-          <div lang="ja" class="kanji">{{ x.k }}</div>
+          <div class="kj"><div lang="ja" class="kanji">{{ x.k }}</div><KanjiSpeak v-if="kjMain(x)" :text="kjMain(x)" :size="18" /></div>
           <KanjiStrokes v-if="!practice" :k="x.k" />
           <KanjiTrace v-else :key="practice" :k="x.k" guide />
         </div>
         <div class="practice">
-          <button type="button" class="btn sm" @click="practice++">✍️ {{ practice ? 'Again' : 'Practice writing' }}</button>
+          <button type="button" class="btn sm" @click="practice++">{{ practice ? 'Again' : 'Practice writing' }}</button>
           <button v-if="practice" type="button" class="lnk small" @click="practice = 0">Stroke order</button>
         </div>
         <div class="pills">
@@ -50,14 +50,14 @@ const practice = ref(0)
           <span>{{ x.card.reps }} reviews · {{ x.card.lapses }} lapses</span>
         </div>
         <div v-if="x.write" class="card small muted">
-          <span>✍️ Writing: {{ x.write.state === 'review' ? `every ${ivl(x.write.ivl)}` : STATE[x.write.state] }}</span>
+          <span>Writing: {{ x.write.state === 'review' ? `every ${ivl(x.write.ivl)}` : STATE[x.write.state] }}</span>
           <span>{{ x.write.reps }} written · {{ x.write.lapses }} lapses</span>
         </div>
         <div v-if="x.history.length" class="hist faint small">
-          <span v-for="(h, i) in x.history" :key="i" :class="{ bad: h.rating === 1 }" :title="fmt(h.ts)">{{ h.w ? '✍️' : '' }}{{ RATE[h.rating] }}</span>
+          <span v-for="(h, i) in x.history" :key="i" :class="{ bad: h.rating === 1 }" :title="fmt(h.ts)">{{ h.w ? 'w ' : '' }}{{ RATE[h.rating] }}</span>
         </div>
         <div class="foot">
-          <a class="lnk small" :href="`https://jisho.org/search/${encodeURIComponent(x.k)}%20%23kanji`" target="_blank" rel="noopener">Jisho ↗</a>
+          <a class="lnk small" :href="`https://jisho.org/search/${encodeURIComponent(x.k)}%20%23kanji`" target="_blank" rel="noopener">Jisho</a>
           <button v-if="x.card" type="button" class="btn sm" :class="{ sure: armed === 'forget' }" @click="forget">{{ armed === 'forget' ? 'Sure?' : 'Reset to new' }}</button>
         </div>
       </template>
@@ -71,6 +71,7 @@ const practice = ref(0)
 .sheet { position: relative; width: 100%; max-width: 560px; background: var(--panel); border: 1px solid var(--line-2); border-radius: 16px; padding: 18px 20px 14px; display: flex; flex-direction: column; gap: 12px; }
 .x { position: absolute; top: 8px; right: 8px; }
 .top { display: flex; align-items: center; justify-content: center; gap: 24px; flex-wrap: wrap; }
+.kj { display: flex; align-items: center; gap: 4px; }
 .kanji { font-size: 100px; line-height: 1.1; font-family: 'Noto Sans JP', 'Noto Sans CJK JP', 'Hiragino Sans', 'Yu Gothic', sans-serif; }
 .practice { display: flex; gap: 14px; align-items: center; justify-content: center; }
 .pills { display: flex; gap: 6px; justify-content: center; flex-wrap: wrap; }

@@ -39,3 +39,26 @@ export function loadStrokes(k: string): Promise<Strokes> {
 }
 /** warm the cache for every kanji in a word (the pad moves on without a Loading… between them) */
 export const prefetchStrokes = (s: string) => { for (const c of new Set(s)) if (/[一-鿿]/.test(c)) loadStrokes(c).catch(() => {}) }
+
+/** the card's main reading as kana to read out: first on-yomi, else first kun-yomi, without the . and - */
+export const kjMain = (c: Pick<KanjiCard, 'on' | 'kun'>) => (c.on[0] ?? c.kun[0] ?? '').replace(/[.-]/g, '')
+
+// read-out audio: Google TTS cached on disk server-side (/api/kanji/speak); one clip at a time
+type KjState = 'idle' | 'load' | 'play' | 'err'
+const kjSpk = reactive({ key: '', st: 'idle' as KjState })
+let kjClip: HTMLAudioElement | null = null
+export const kjSpeakState = (text: string): KjState => (kjSpk.key === text ? kjSpk.st : 'idle')
+export function kjSpeak(text: string) {
+  if (!import.meta.client || !text) return
+  const was = kjSpk.key === text && (kjSpk.st === 'play' || kjSpk.st === 'load')
+  if (kjClip) { kjClip.onended = kjClip.onerror = kjClip.onplaying = null; kjClip.pause(); kjClip = null }
+  kjSpk.key = ''; kjSpk.st = 'idle'
+  if (was) return
+  const a = kjClip = new Audio(`/api/kanji/speak?q=${encodeURIComponent(text)}`)
+  kjSpk.key = text; kjSpk.st = 'load'
+  const fail = () => { if (kjClip === a) { kjSpk.st = 'err'; kjClip = null } }
+  a.onplaying = () => { if (kjClip === a) kjSpk.st = 'play' }
+  a.onended = () => { if (kjClip === a) { kjSpk.key = ''; kjSpk.st = 'idle'; kjClip = null } }
+  a.onerror = fail
+  a.play().catch(fail)
+}
