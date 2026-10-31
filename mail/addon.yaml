@@ -5,7 +5,7 @@ icon: mail-open
 order: 6
 author: MaxJC0
 license: AGPL-3.0
-version: 0.2.0
+version: 0.2.1
 desc: "Read mail over IMAP and sort it into your own categories (rules first, then the local model, learning from your corrections), draft replies, send only on your confirmation."
 routes: [/mail]
 home: false
