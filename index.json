@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793493868,
+  "updated": 1793493938,
   "addons": [
     {
       "id": "ai",
@@ -515,7 +515,7 @@
       "id": "skin-win11",
       "name": "Windows 11 skin",
       "icon": "palette",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: a centred taskbar with a Start menu, Mica windows with title buttons, an Explorer breadcrumb bar and a blue bloom wallpaper.",
       "depends_on": [
