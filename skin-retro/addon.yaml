@@ -5,7 +5,7 @@ icon: palette
 order: 61
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.0
+version: 0.1.1
 desc: "A whole-app skin for Designs: windows with title bars, bevelled buttons and a Start-menu taskbar instead of the sidebar."
 routes: []
 needs: []
