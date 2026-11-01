@@ -6,7 +6,7 @@ icon: gamepad
 order: 8
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.0
+version: 0.1.1
 desc: "Retro games up to the 3DS era in the browser (phone + PC, EmulatorJS) with saves synced across devices; 3DS streams from Azahar. Free homebrew catalogue + your own game files."
 routes: [/retro]
 ct: games
