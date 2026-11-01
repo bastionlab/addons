@@ -69,10 +69,10 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
     <div class="sheet" role="dialog" :aria-label="n.title">
       <header>
         <select class="kind" :value="n.kind" title="kind" @change="emit('patch', { kind: ($event.target as HTMLSelectElement).value })">
-          <option v-for="k in NOTE_KINDS" :key="k.id" :value="k.id">{{ k.icon }} {{ k.label.replace(/s$/, '') }}</option>
+          <option v-for="k in NOTE_KINDS" :key="k.id" :value="k.id">{{ k.label.replace(/s$/, '') }}</option>
         </select>
         <textarea ref="titleBox" v-model="title" class="title" rows="1" placeholder="Title" @input="growTitle" @blur="saveTitle" @keydown.enter.prevent="($event.target as HTMLTextAreaElement).blur()" />
-        <button type="button" class="btn ghost x" title="close (Esc)" @click="emit('close')">✕</button>
+        <button type="button" class="btn ghost x" title="close (Esc)" @click="emit('close')" aria-label="close"><Icon name="x" :size="16"/></button>
       </header>
 
       <div class="meta small">
@@ -81,7 +81,7 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
         <span class="faint when">{{ new Date(n.created * 1000).toLocaleDateString('en-GB') }} · edited {{ ago(n.updated) }}</span>
       </div>
 
-      <div v-if="n.job" class="banner accent small">✨ The AI is {{ n.job === 'expand' ? 'working out next steps' : n.job === 'merge' ? 'merging your new thoughts in' : 'tidying this note' }}…</div>
+      <div v-if="n.job" class="banner accent small">The AI is {{ n.job === 'expand' ? 'working out next steps' : n.job === 'merge' ? 'merging your new thoughts in' : 'tidying this note' }}…</div>
       <div v-else-if="n.aiError" class="banner bad small">
         AI failed: {{ n.aiError }} <button type="button" class="btn ghost" @click="emit('act', 'rewrite')">Retry</button>
       </div>
@@ -102,16 +102,16 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
       <div v-if="n.images.length" class="imgs">
         <div v-for="img in n.images" :key="img" class="img">
           <a :href="noteImg(img)" target="_blank" rel="noopener"><img :src="noteImg(img)" alt="" loading="lazy"></a>
-          <button v-if="editing" type="button" title="remove image" @click="emit('patch', { images: n.images.filter((x: string) => x !== img) })">✕</button>
+          <button v-if="editing" type="button" title="remove image" @click="emit('patch', { images: n.images.filter((x: string) => x !== img) })" aria-label="remove image"><Icon name="x" :size="14"/></button>
         </div>
       </div>
 
       <div class="tools">
-        <button type="button" class="btn" :disabled="editing" @click="edit">✏️ Edit</button>
-        <button type="button" class="btn" :class="{ on: original }" :disabled="editing" title="what you originally typed" @click="original = !original">📄 Original</button>
-        <button type="button" class="btn" :disabled="!!n.job" title="let the AI tidy the current text again" @click="emit('act', 'rewrite')">✨ Rewrite</button>
-        <button type="button" class="btn" :disabled="!!n.job" title="the AI adds next steps and open questions" @click="emit('act', 'expand')">🧭 Next steps</button>
-        <button v-if="n.undo && !n.job" type="button" class="btn" title="go back to the text before the last AI change" @click="emit('act', 'undo')">↶ Undo AI</button>
+        <button type="button" class="btn" :disabled="editing" @click="edit"><Icon name="pencil" :size="16"/> Edit</button>
+        <button type="button" class="btn" :class="{ on: original }" :disabled="editing" title="what you originally typed" @click="original = !original"><Icon name="file-text" :size="16"/> Original</button>
+        <button type="button" class="btn" :disabled="!!n.job" title="let the AI tidy the current text again" @click="emit('act', 'rewrite')"><Icon name="sparkles" :size="16"/> Rewrite</button>
+        <button type="button" class="btn" :disabled="!!n.job" title="the AI adds next steps and open questions" @click="emit('act', 'expand')"><Icon name="list-checks" :size="16"/> Next steps</button>
+        <button v-if="n.undo && !n.job" type="button" class="btn" title="go back to the text before the last AI change" @click="emit('act', 'undo')"><Icon name="rotate-ccw" :size="16"/> Undo AI</button>
       </div>
 
       <div class="add">
@@ -120,16 +120,16 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
 
       <div v-if="related.length" class="related small">
         <span class="faint">Related</span>
-        <button v-for="r in related" :key="r.id" type="button" class="rel" @click="emit('open', r.id)">{{ kindIcon(r.kind) }} {{ r.title || 'Untitled' }}</button>
+        <button v-for="r in related" :key="r.id" type="button" class="rel" @click="emit('open', r.id)"><Icon :name="kindIcon(r.kind)" :size="13" /> {{ r.title || 'Untitled' }}</button>
       </div>
 
       <footer>
         <button type="button" class="btn ghost" :class="{ on: n.pinned }" @click="emit('patch', { pinned: !n.pinned })"><Icon name="pin" :size="14" /><span>{{ n.pinned ? 'Pinned' : 'Pin' }}</span></button>
-        <button type="button" class="btn ghost" @click="emit('patch', { state: n.state === 'done' ? 'active' : 'done' })"><span class="ic">✓</span><span>{{ n.state === 'done' ? 'Reopen' : 'Done' }}</span></button>
-        <button type="button" class="btn ghost" @click="emit('patch', { state: n.state === 'archived' ? 'active' : 'archived' })"><span class="ic">🗄️</span><span>{{ n.state === 'archived' ? 'Unarchive' : 'Archive' }}</span></button>
-        <button type="button" class="btn ghost" @click="copy"><span class="ic">📋</span><span>{{ copied ? 'Copied' : 'Copy' }}</span></button>
+        <button type="button" class="btn ghost" @click="emit('patch', { state: n.state === 'done' ? 'active' : 'done' })"><span class="ic"><Icon name="circle-check" :size="16"/></span><span>{{ n.state === 'done' ? 'Reopen' : 'Done' }}</span></button>
+        <button type="button" class="btn ghost" @click="emit('patch', { state: n.state === 'archived' ? 'active' : 'archived' })"><span class="ic"><Icon name="archive" :size="16"/></span><span>{{ n.state === 'archived' ? 'Unarchive' : 'Archive' }}</span></button>
+        <button type="button" class="btn ghost" @click="copy"><span class="ic"><Icon name="copy" :size="16"/></span><span>{{ copied ? 'Copied' : 'Copy' }}</span></button>
         <span class="sp" />
-        <button type="button" class="btn danger" :class="{ sure: armed }" @click="del"><span class="ic">🗑️</span><span>{{ armed ? 'Sure?' : 'Delete' }}</span></button>
+        <button type="button" class="btn danger" :class="{ sure: armed }" @click="del"><span class="ic"><Icon name="trash-2" :size="16"/></span><span>{{ armed ? 'Sure?' : 'Delete' }}</span></button>
       </footer>
     </div>
   </div>
@@ -173,7 +173,7 @@ footer .btn.ghost.on { color: var(--accent); background: transparent; }
   .scrim { padding: 0; }
   .sheet { min-height: 100dvh; border-radius: 0; border: 0; padding: 12px 14px calc(16px + env(safe-area-inset-bottom)); }
   .sheet { gap: 14px; }
-  /* kind + ✕ on top, the title gets the full width below */
+  /* kind + close on top, the title gets the full width below */
   header { flex-wrap: wrap; align-items: center; }
   .x { margin-left: auto; }
   .title { order: 3; flex-basis: 100%; font-size: 21px !important; padding: 0 2px; }
@@ -181,7 +181,7 @@ footer .btn.ghost.on { color: var(--accent); background: transparent; }
   .tools { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .tools .btn { justify-content: center; padding: 8px 10px; font-size: 13.5px; }
   .rel { max-width: 100%; }
-  /* ✕ floats so it stays reachable on a long note */
+  /* close floats so it stays reachable on a long note */
   .x { position: fixed; top: calc(10px + env(safe-area-inset-top)); right: 10px; z-index: 3; width: 38px; height: 38px; padding: 0; border-radius: 50%; background: var(--panel-2); border: 1px solid var(--line-2); }
   header { padding-right: 44px; }
   /* phones zoom into inputs under 16px */

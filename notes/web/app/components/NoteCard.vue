@@ -22,19 +22,19 @@ function onClick(e: MouseEvent) {
     <img v-if="n.images.length" class="cover" :src="noteImg(n.images[0])" alt="" loading="lazy">
     <div class="in">
       <div class="head">
-        <span class="kind" :title="n.kind">{{ kindIcon(n.kind) }}</span>
+        <span class="kind" :title="n.kind"><Icon :name="kindIcon(n.kind)" :size="16" /></span>
         <h3>{{ n.title || (n.job ? 'New note' : 'Untitled') }}</h3>
         <span class="tools" @click.stop>
           <button type="button" class="b" :class="{ on: n.pinned }" :title="n.pinned ? 'unpin' : 'pin to the top'" @click="emit('patch', { pinned: !n.pinned })"><Icon name="pin" :size="14" /></button>
-          <button type="button" class="b" :title="n.state === 'done' ? 'reopen' : 'mark done'" @click="emit('patch', { state: n.state === 'done' ? 'active' : 'done' })">✓</button>
+          <button type="button" class="b" :title="n.state === 'done' ? 'reopen' : 'mark done'" @click="emit('patch', { state: n.state === 'done' ? 'active' : 'done' })"><Icon name="check" :size="16"/></button>
         </span>
       </div>
       <div class="body md" v-html="html" />
       <div class="foot small">
-        <span v-if="n.job" class="pill accent working">✨ {{ n.job === 'expand' ? 'planning' : 'tidying' }}…</span>
+        <span v-if="n.job" class="pill accent working">{{ n.job === 'expand' ? 'planning' : 'tidying' }}…</span>
         <span v-else-if="n.aiError" class="pill bad" :title="n.aiError">AI failed</span>
         <span v-if="tasks.total" class="pill" :class="{ ok: tasks.done === tasks.total }">{{ tasks.done }}/{{ tasks.total }}</span>
-        <span v-if="n.images.length > 1" class="faint">🖼️ {{ n.images.length }}</span>
+        <span v-if="n.images.length > 1" class="faint"><Icon name="image" :size="14"/> {{ n.images.length }}</span>
         <button v-if="n.topic" type="button" class="tag" @click.stop="emit('tag', n.topic)">{{ n.topic }}</button>
         <span class="faint when" :title="new Date(n.updated * 1000).toLocaleString()">{{ ago(n.created) }}</span>
       </div>
@@ -51,7 +51,7 @@ function onClick(e: MouseEvent) {
 .cover { display: block; width: 100%; max-height: 200px; object-fit: cover; border-bottom: 1px solid var(--line); }
 .in { padding: 12px 14px 10px; }
 .head { display: flex; align-items: flex-start; gap: 8px; }
-.kind { font-size: 14px; line-height: 20px; }
+.kind { display: flex; align-items: center; height: 20px; color: var(--muted); }
 h3 { flex: 1; margin: 0; font-size: 14.5px; font-weight: 600; line-height: 20px; min-width: 0; overflow-wrap: anywhere; }
 .tools { display: flex; gap: 2px; opacity: 0; transition: opacity .15s; margin: -3px -6px 0 0; }
 .card:hover .tools, .card:focus-within .tools { opacity: 1; }
