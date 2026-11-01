@@ -94,7 +94,7 @@ const pickVer = ref('')
     </header>
 
     <div class="facts small">
-      <span v-if="s.players" class="pill" :class="s.players.online ? 'ok' : ''" :title="s.players.names.join(', ')">👥 {{ s.players.online }}/{{ s.players.max }}<template v-if="s.players.names.length"> · {{ s.players.names.join(', ') }}</template></span>
+      <span v-if="s.players" class="pill" :class="s.players.online ? 'ok' : ''" :title="s.players.names.join(', ')"><Icon name="users" :size="14"/> {{ s.players.online }}/{{ s.players.max }}<template v-if="s.players.names.length"> · {{ s.players.names.join(', ') }}</template></span>
       <span v-if="running" class="pill">RAM {{ gb(s.mem) }} / {{ gb(s.memLimit) }} GB</span>
       <span v-if="running" class="pill">CPU {{ s.cpu.toFixed(0) }}%</span>
       <button type="button" class="pill addr" :title="'how to connect'" @click="tab = tab === 'connect' ? '' : 'connect'">
@@ -103,13 +103,13 @@ const pickVer = ref('')
       <span v-if="outdated" class="pill warn">pack {{ latest }} available</span>
     </div>
 
-    <div v-if="s.op?.error" class="errbox small">⚠ {{ s.op.op }} failed: {{ s.op.error }}</div>
-    <div v-if="err" class="errbox small">⚠ {{ err }}</div>
+    <div v-if="s.op?.error" class="errbox small">{{ s.op.op }} failed: {{ s.op.error }}</div>
+    <div v-if="err" class="errbox small">{{ err }}</div>
 
     <div class="row">
-      <button v-if="!running" class="btn primary" :disabled="!!busy || opBusy" @click="act('start')">{{ busy === 'start' ? 'Starting…' : '▶ Start' }}</button>
-      <button v-else class="btn" :disabled="!!busy || opBusy" @click="act('stop')">{{ busy === 'stop' ? 'Stopping…' : '■ Stop' }}</button>
-      <button v-if="running" class="btn" :disabled="!!busy || opBusy" @click="act('restart')">{{ busy === 'restart' ? 'Restarting…' : '↻ Restart' }}</button>
+      <button v-if="!running" class="btn primary" :disabled="!!busy || opBusy" @click="act('start')">{{ busy === 'start' ? 'Starting…' : 'Start' }}</button>
+      <button v-else class="btn" :disabled="!!busy || opBusy" @click="act('stop')">{{ busy === 'stop' ? 'Stopping…' : 'Stop' }}</button>
+      <button v-if="running" class="btn" :disabled="!!busy || opBusy" @click="act('restart')">{{ busy === 'restart' ? 'Restarting…' : 'Restart' }}</button>
       <span class="seg tabs">
         <button v-for="t in (['console', 'settings', 'backups', 'connect'] as const)" :key="t" type="button" :class="{ on: tab === t }" @click="tab = tab === t ? '' : t">{{ t[0].toUpperCase() + t.slice(1) }}</button>
       </span>
@@ -163,7 +163,7 @@ const pickVer = ref('')
 
     <div v-if="tab === 'backups'" class="pane">
       <div class="row">
-        <button class="btn" :disabled="!!busy || opBusy" :title="`world only · last 10 kept · /srv/games/_backups/${s.id}`" @click="act('backup')">{{ s.op?.op === 'backup' && opBusy ? 'Backing up…' : '⤓ Back up now' }}</button>
+        <button class="btn" :disabled="!!busy || opBusy" :title="`world only · last 10 kept · /srv/games/_backups/${s.id}`" @click="act('backup')">{{ s.op?.op === 'backup' && opBusy ? 'Backing up…' : 'Back up now' }}</button>
       </div>
       <div v-if="!s.backups?.length" class="small faint">No backups yet.</div>
       <div v-for="b in s.backups" :key="b.file" class="bk small">

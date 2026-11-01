@@ -7,6 +7,18 @@ usePoll(refresh, 5000)
 const tplById = computed(() => Object.fromEntries((g.value?.templates ?? []).map((t: any) => [t.id, t])))
 const gb = (b: number) => (b / 2 ** 30).toFixed(0)
 
+// one tab per server (a dot when it runs) + "New server"; no servers yet = straight to New
+const { t } = useI18n()
+const tab = usePageTab('')
+const cur = computed(() => {
+  const ids = (g.value?.servers ?? []).map((s: any) => s.id)
+  return tab.value === 'new' || ids.includes(tab.value) ? tab.value : ids[0] ?? 'new'
+})
+const tabs = computed(() => [
+  ...(g.value?.servers ?? []).map((s: any) => ({ key: s.id, label: `${tplById.value[s.template]?.icon ?? ''} ${s.name}`.trim(), badge: s.status === 'running' ? '●' : undefined, tone: 'ok' as const })),
+  { key: 'new', label: t('servers.tabs.new'), icon: 'spark' },
+])
+
 // --- new server ---
 const pick = ref('')
 const nf = reactive<Record<string, any>>({})
@@ -29,7 +41,7 @@ async function create() {
   for (const f of tplById.value[pick.value]?.fields ?? []) if (f.default === '@gen' && !settings[f.key]) delete settings[f.key]
   try {
     await $fetch('/api/games/create', { method: 'POST', body: { template: pick.value, id: nid.value, name: nname.value, settings } })
-    pick.value = ''; refresh()
+    pick.value = ''; await refresh(); tab.value = nid.value
   } catch (e: any) { cerr.value = e?.data?.statusMessage || e?.message || 'failed' }
   finally { creating.value = false }
 }
@@ -66,18 +78,17 @@ const ctStart = async () => { await $fetch('/api/games/ct-start', { method: 'POS
         <span v-if="p?.claimed" class="pill ok">playit tunnel {{ p.phase }}</span>
         <template v-else>
           <span class="pill warn">playit not linked</span>
-          <a v-if="claimUrl || p?.claimUrl" class="btn primary" :href="claimUrl || p.claimUrl" target="_blank" rel="noopener">Link playit.gg ↗</a>
+          <a v-if="claimUrl || p?.claimUrl" class="btn primary" :href="claimUrl || p.claimUrl" target="_blank" rel="noopener">Link playit.gg <Icon name="ext" :size="12"/></a>
           <button v-else class="btn" :disabled="claiming" @click="claim">{{ claiming ? '…' : 'Set up friends access (playit.gg)' }}</button>
         </template>
       </div>
       <div v-if="!p?.claimed && (claimUrl || p?.claimUrl)" class="small faint hint">Open the link and approve the agent, then add a tunnel per server under Connect.</div>
 
-      <div class="servers">
-        <GameServer v-for="s in g.servers" :key="s.id" :s="s" :tpl="tplById[s.template]" :latest="g.atm10sky?.latest" :versions="g.atm10sky?.versions" @changed="refresh" />
+      <PageTabs :model-value="cur" :tabs="tabs" @update:model-value="tab = $event" />
+      <div v-if="cur !== 'new'" class="servers">
+        <GameServer v-for="s in g.servers.filter((x: any) => x.id === cur)" :key="s.id" :s="s" :tpl="tplById[s.template]" :latest="g.atm10sky?.latest" :versions="g.atm10sky?.versions" @changed="refresh" />
       </div>
-      <div v-if="!g.servers.length" class="small faint">No servers yet — pick a game below.</div>
-
-      <Panel title="New server" id="games-new" :fold="g.servers.length ? 'closed' : 'open'">
+      <Panel v-else title="New server" id="games-new">
         <div class="tpls">
           <button v-for="t in g.templates" :key="t.id" type="button" class="tpl" :class="{ on: pick === t.id }" @click="choose(t)">
             <span class="ico">{{ t.icon }}</span>
@@ -109,7 +120,7 @@ const ctStart = async () => { await $fetch('/api/games/ct-start', { method: 'POS
 .pad { padding: 60px 0; text-align: center; }
 .strip { display: flex; flex-wrap: wrap; gap: 6px; align-items: center; margin-bottom: 8px; }
 .hint { margin: 0 0 12px; }
-.servers { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(460px, 100%), 1fr)); gap: 14px; margin: 12px 0 16px; align-items: start; }
+.servers { margin: 0 0 16px; }
 .tpls { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(260px, 100%), 1fr)); gap: 10px; }
 .tpl { display: flex; gap: 10px; text-align: left; padding: 12px; border-radius: var(--radius); border: 1px solid var(--line-2); background: var(--panel-2); color: var(--text); font: inherit; cursor: pointer; }
 .tpl.on { border-color: var(--accent); background: var(--accent-soft); }
