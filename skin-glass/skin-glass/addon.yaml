@@ -1,0 +1,13 @@
+# a skin: no tab of its own; it brings replacement components (Skin<Name><Piece>) and a built-in look on /designs
+id: skin-glass
+name: Liquid Glass skin
+icon: palette
+order: 62
+author: MaxJC0
+license: AGPL-3.0
+version: 0.1.1
+desc: "A whole-app skin for Designs: drifting aurora behind frosted glass cards, a magnifying dock, a capsule tab bar and iOS-style large titles."
+routes: []
+needs: []
+depends_on: [designs]
+roles: { view: viewer, use: viewer }
