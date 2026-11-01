@@ -3,16 +3,17 @@
 defineProps<{ n: any }>()
 const emit = defineEmits<{ changed: [] }>()
 const msg = ref('')
+const good = ref(false)
 const busy = ref(false)
 const preview = ref('')
 const lastMonth = (() => { const d = new Date(); d.setDate(0); return isoMonth(d) })()
 async function call(action: string, body: any = {}) {
-  busy.value = true; msg.value = ''
+  busy.value = true; msg.value = ''; good.value = false
   try { return await $fetch<any>('/api/money/action', { method: 'POST', body: { action, ...body } }) }
   catch (e: any) { msg.value = e?.data?.statusMessage || e?.message } finally { busy.value = false; emit('changed') }
 }
-async function test() { const r = await call('notifyTest'); if (r) msg.value = r.sent ? '✓ Test message sent to #money' : !r.money ? 'Set the #money webhook under Metrics → Discord first' : 'Sending failed' }
-async function send() { const r = await call('reportSend', { month: lastMonth }); if (r) msg.value = r.sent ? `✓ Report ${monthTitle(lastMonth)} sent` : 'Sending failed' }
+async function test() { const r = await call('notifyTest'); if (r) good.value = !!r.sent; if (r) msg.value = r.sent ? 'Test message sent to #money' : !r.money ? 'Set the #money webhook under Metrics → Discord first' : 'Sending failed' }
+async function send() { const r = await call('reportSend', { month: lastMonth }); if (r) good.value = !!r.sent; if (r) msg.value = r.sent ? `Report ${monthTitle(lastMonth)} sent` : 'Sending failed' }
 async function show() {
   if (preview.value) { preview.value = ''; return }
   try { preview.value = (await $fetch<any>('/api/money/report', { query: { month: lastMonth } })).text } catch (e: any) { msg.value = e?.data?.statusMessage || e?.message }
@@ -28,7 +29,7 @@ const html = computed(() => preview.value.replace(/&/g, '&amp;').replace(/</g, '
       <button class="btn" :disabled="busy" @click="show">{{ preview ? 'Close preview' : `View ${monthTitle(lastMonth).split(' ')[0]} report` }}</button>
       <button class="btn" :disabled="busy" @click="send">Send now</button>
     </div>
-    <p v-if="msg" class="small" :class="msg.startsWith('✓') ? 'ok' : 'bad'">{{ msg }}</p>
+    <p v-if="msg" class="small" :class="good ? 'ok' : 'bad'">{{ msg }}</p>
     <div v-if="preview" class="pv small" v-html="html" />
   </Panel>
 </template>

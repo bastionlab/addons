@@ -10,9 +10,10 @@ const period = ref('')
 const name = ref('')
 const busy = ref(false)
 const msg = ref('')
+const good = ref(false)
 
 async function load() {
-  p.value = null; err.value = ''; msg.value = ''
+  p.value = null; err.value = ''; msg.value = ''; good.value = false
   try {
     p.value = await $fetch('/api/money/payee', { query: { name: props.tx.payee } })
     // preselect the bookings that look like the same subscription / regular income: same payee and direction,
@@ -39,7 +40,8 @@ function applyCat(scope: 'one' | 'payee') {
   emit('category', props.tx, c, scope)
   if (scope === 'payee' && p.value) {
     for (const t of p.value.transactions) if ((t.amount > 0) === (props.tx.amount > 0) && !['Umbuchung', 'Investments'].includes(t.category)) t.category = c
-    msg.value = `✓ ${samePayee.value} bookings with ${shown.value} → ${c}, future ones too`
+    good.value = true
+    msg.value = `${samePayee.value} bookings with ${shown.value} → ${c}, future ones too`
   }
 }
 
@@ -70,20 +72,22 @@ const abos = computed(() => props.subs ?? [])
 const pickedIn = computed(() => (p.value?.transactions ?? []).some((t: any) => picked.value.has(t.journal_id) && t.amount > 0))
 async function saveShare(key: string) {
   if (!key) return
-  busy.value = true; msg.value = ''
+  busy.value = true; msg.value = ''; good.value = false
   try {
     await $fetch('/api/money/action', { method: 'POST', body: { action: 'subShare', key, journalIds: [...picked.value] } })
-    msg.value = `✓ Netted as share of ${subName(abos.value.find(s => s.key === key) ?? {})}`
+    good.value = true
+    msg.value = `Netted as share of ${subName(abos.value.find(s => s.key === key) ?? {})}`
     emit('changed')
     await load()
   } catch (e: any) { msg.value = e?.data?.statusMessage || e?.message } finally { busy.value = false }
 }
 const pickedSum = computed(() => (p.value?.transactions ?? []).filter((t: any) => picked.value.has(t.journal_id)).reduce((a: number, t: any) => a + t.amount, 0))
 async function saveSub() {
-  busy.value = true; msg.value = ''
+  busy.value = true; msg.value = ''; good.value = false
   try {
     const r: any = await $fetch('/api/money/action', { method: 'POST', body: { action: 'subAdd', journalIds: [...picked.value], period: period.value || null, name: name.value || null } })
-    msg.value = `✓ Saved as ${r.kind === 'in' ? 'income' : 'sub'} (${PERIODS[r.period]?.label ?? r.period})`
+    good.value = true
+    msg.value = `Saved as ${r.kind === 'in' ? 'income' : 'sub'} (${PERIODS[r.period]?.label ?? r.period})`
     emit('changed')
     await load()
   } catch (e: any) { msg.value = e?.data?.statusMessage || e?.message } finally { busy.value = false }
@@ -101,7 +105,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKey))
     <div class="sheet">
       <header>
         <div class="tt">
-          <span v-if="!renaming" class="py">{{ shown }} <button class="lnk small" title="Change display name" @click="startRename">✎</button></span>
+          <span v-if="!renaming" class="py">{{ shown }} <button class="lnk small" title="Change display name" @click="startRename" aria-label="Change display name"><Icon name="pencil" :size="14"/></button></span>
           <span v-else class="ren">
             <input ref="renBox" v-model="alias" :placeholder="tx.payee" maxlength="60" @keydown.enter="saveRename" @keydown.esc="renaming = false">
             <button class="btn primary sm" @click="saveRename">OK</button>
@@ -110,7 +114,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKey))
           <span class="faint small">{{ tx.date ? dayTitle(tx.date) : '' }}{{ tx.account ? ` · ${tx.account}` : '' }}</span>
         </div>
         <span class="num big" :class="tx.amount > 0 ? 'ok' : ''">{{ fmtEur(tx.amount) }}</span>
-        <button class="btn ghost x" title="Close" @click="emit('close')">✕</button>
+        <button class="btn ghost x" title="Close" @click="emit('close')" aria-label="Close"><Icon name="x" :size="16"/></button>
       </header>
       <p v-if="tx.description && tx.description !== tx.payee" class="small muted desc">{{ tx.description }}</p>
       <label v-if="!String(tx.journal_id).startsWith('sub:')" class="row small"><span class="muted">Category</span>
@@ -163,7 +167,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKey))
             <option v-for="s in abos" :key="s.key" :value="s.key">{{ subName(s) }}</option>
           </select>
         </div>
-        <p v-if="msg" class="small" :class="msg.startsWith('✓') ? 'ok' : 'bad'">{{ msg }}</p>
+        <p v-if="msg" class="small" :class="good ? 'ok' : 'bad'">{{ msg }}</p>
       </template>
     </div>
   </div>

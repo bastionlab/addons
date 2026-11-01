@@ -75,7 +75,7 @@ const showHidden = ref(false)
             <span>{{ sh.payee }}</span>
             <span class="faint">{{ sh.last_date ? `last ${dayTitle(sh.last_date)}` : 'nothing yet' }}{{ sh.active ? '' : ' · stopped paying?' }}</span>
             <span class="num ok">{{ fmtEur(sh.amount) }}</span>
-            <button class="lnk" title="Stop netting" @click="emit('act', 'subShare', { key: s.key, remove: sh.pkey })">✕</button>
+            <button class="lnk" title="Stop netting" @click="emit('act', 'subShare', { key: s.key, remove: sh.pkey })" aria-label="Stop netting"><Icon name="x" :size="14"/></button>
           </div>
         </div>
         <div v-if="open === s.key" class="edit">
