@@ -1,0 +1,12 @@
+# one add-on: this file is what the Add-ons page and the marketplace show
+id: navorder
+name: Sidebar order
+icon: grid
+order: 0    # no tab of its own; 0 puts its card first in Settings → Add-ons
+author: MaxJC0
+license: AGPL-3.0
+version: 0.1.1
+desc: "Drag the sidebar and phone menu pages into your own order, saved separately for phone, tablet and desktop."
+needs: []
+depends_on: []
+settings_ui: true    # brings web/app/components/SettingsNavorder.global.vue (the drag list) for /settings
