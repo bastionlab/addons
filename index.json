@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793491764,
+  "updated": 1793491837,
   "addons": [
     {
       "id": "ai",
@@ -324,7 +324,7 @@
       "id": "retro",
       "name": "Retro games",
       "icon": "gamepad",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": "MaxJC0",
       "desc": "Retro games up to the 3DS era in the browser (phone + PC, EmulatorJS) with saves synced across devices; 3DS streams from Azahar. Free homebrew catalogue + your own game files.",
       "routes": [
