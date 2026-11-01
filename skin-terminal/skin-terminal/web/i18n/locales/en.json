@@ -1,0 +1,32 @@
+{
+  "skinTerminal": {
+    "placeholder": "type a page or 'help'",
+    "pages": "Pages",
+    "search": "Search",
+    "openPrompt": "Open the prompt",
+    "hint": "Tab completes · Enter opens · Esc closes",
+    "helpHead": "directories:",
+    "helpCmds": "commands: cd DIR, ls, pin/unpin DIR, pwd, whoami, find, clear, exit · press / anywhere to jump here",
+    "notFound": "{cmd}: command not found. Try 'help'.",
+    "noDir": "cd: {dir}: No such file or directory",
+    "sudo1": "nice try.",
+    "sudo2": "{user} is not in the sudoers file. This incident will be reported.",
+    "sudo3": "Permission denied. Have you tried asking nicely?",
+    "rm": "rm: refusing to delete the server you are standing on.",
+    "logout": "logout. Saving session… returning to ~",
+    "status": "bastion.service: {state} · {up}",
+    "agentOk": "active (running)",
+    "fold": "Collapse",
+    "unfold": "Expand",
+    "lastLogin": "Last login: {date} on tty1",
+    "boot1": "BIOS v6.02 · memory test … 640K ought to be enough",
+    "boot2": "Loading kernel bastion-6.6.6 …",
+    "boot3": "Mounted /dev/coffee",
+    "boot4": "Started Snack Supply Daemon",
+    "boot5": "Reticulating splines",
+    "boot6": "Reached target Graphical Interface (just kidding)",
+    "boot7": "bastion login: welcome back",
+    "pinned": "pinned ({n}/{max}): {list}",
+    "pinFull": "pin: all {max} slots taken, unpin one first"
+  }
+}
