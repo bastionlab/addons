@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793491693,
+  "updated": 1793491764,
   "addons": [
     {
       "id": "ai",
@@ -304,7 +304,7 @@
       "id": "research",
       "name": "Research",
       "icon": "flask-conical",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": "MaxJC0",
       "desc": "Ask a question, pick a depth: your local model searches via SearXNG, reads the pages and writes a cited report in the background.",
       "routes": [
