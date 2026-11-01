@@ -1,0 +1,18 @@
+{
+  "skinDisco": {
+    "search": "Search",
+    "fold": "Fold",
+    "unfold": "Unfold",
+    "jukebox": "Jukebox",
+    "playing": "Now playing",
+    "tonight": "Tonight on the floor",
+    "party": "🕺 Party mode!",
+    "coin": "Insert coin",
+    "pages": "Pages",
+    "tracks": "{n} tracks",
+    "more": "More",
+    "editTabs": "Edit tabs",
+    "done": "Done",
+    "pinCount": "Pinned {n}/{max}"
+  }
+}

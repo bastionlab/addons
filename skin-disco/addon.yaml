@@ -5,7 +5,7 @@ icon: palette
 order: 64
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.1
+version: 0.1.2
 desc: "A party skin for Designs that stays readable: a glowing dance floor and a mirror ball, a jukebox page selector, a spinning vinyl tab bar, rainbow card borders and confetti buttons."
 routes: []
 needs: []
