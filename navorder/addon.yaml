@@ -5,7 +5,7 @@ icon: grid
 order: 0    # no tab of its own; 0 puts its card first in Settings → Add-ons
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.1
+version: 0.1.2
 desc: "Drag the sidebar and phone menu pages into your own order, saved separately for phone, tablet and desktop."
 needs: []
 depends_on: []
