@@ -5,7 +5,7 @@ icon: palette
 order: 63
 author: MaxJC0
 license: AGPL-3.0
-version: 0.3.0
+version: 0.3.1
 desc: "A quiet old-book skin for Designs: dark leather and gold rules, serif ink, a ribbon bookmark on the open page, pages as parchment leaves."
 routes: []
 needs: []
