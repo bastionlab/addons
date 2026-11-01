@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793491981,
+  "updated": 1793492061,
   "addons": [
     {
       "id": "ai",
@@ -372,7 +372,7 @@
       "id": "skin-broadsheet",
       "name": "The Bastion Times skin",
       "icon": "palette",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: the dashboard as a newspaper, with a masthead, weather ear, section index and article panels.",
       "depends_on": [
