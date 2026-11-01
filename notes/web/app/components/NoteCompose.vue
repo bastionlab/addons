@@ -1,5 +1,5 @@
 <script setup lang="ts">
-/** a text box that also takes pasted, dropped or picked images; ⌘/Ctrl+Enter saves. Used for new notes and for "add to this note". */
+/** a text box that also takes pasted, dropped or picked images; Cmd/Ctrl+Enter saves. Used for new notes and for "add to this note". */
 const props = defineProps<{
   placeholder: string
   save: (text: string, images: string[], ai: boolean) => Promise<any>
@@ -80,30 +80,30 @@ defineExpose({ focus: () => box.value?.focus() })
     <div v-if="images.length || uploading" class="thumbs">
       <div v-for="(img, i) in images" :key="img" class="thumb">
         <img :src="noteImg(img)" alt="">
-        <button type="button" title="remove" @click="images.splice(i, 1)">✕</button>
+        <button type="button" title="remove" aria-label="remove" @click="images.splice(i, 1)"><Icon name="x" :size="14"/></button>
       </div>
       <div v-for="n in uploading" :key="'u' + n" class="thumb loading" />
     </div>
     <div class="bar">
-      <button type="button" class="btn ghost" title="add images (or paste / drop them)" @click="file?.click()">🖼️<span class="hide-s">Image</span></button>
+      <button type="button" class="btn ghost" title="add images (or paste / drop them)" @click="file?.click()"><Icon name="image" :size="16"/><span class="hide-s">Image</span></button>
       <input ref="file" type="file" accept="image/*" multiple hidden @change="onPick">
       <label v-if="aiToggle" class="toggle small" title="the local model tidies the text up, adds a title and a topic — your original text is always kept">
-        <input v-model="ai" type="checkbox"> ✨ tidy up
+        <input v-model="ai" type="checkbox"> tidy up
       </label>
       <span v-if="err" class="bad small err">{{ err }}</span>
       <span class="sp" />
-      <span class="faint small hide-s">{{ mac ? '⌘' : 'Ctrl' }} ↵</span>
+      <span class="faint small hide-s">{{ mac ? 'Cmd' : 'Ctrl' }} + Enter</span>
       <button type="button" class="btn primary" :disabled="!ready" @click="submit">{{ busy ? 'Saving…' : label ?? 'Save' }}</button>
     </div>
   </div>
 </template>
 
 <style scoped>
-.compose { border: 1px solid var(--line-2); border-radius: var(--radius); background: var(--panel-2); transition: border-color .15s; }
+.compose { overflow: hidden; border: 1px solid var(--line-2); border-radius: var(--radius); background: var(--panel-2); transition: border-color .15s; }
 .compose:focus-within, .compose.drag { border-color: var(--accent); }
 .compose.drag { background: var(--accent-soft); }
-textarea { display: block; width: 100%; border: 0; background: transparent; resize: none; padding: 12px 14px 4px; font-size: 15px; line-height: 1.5; min-height: 52px; }
-textarea:focus-visible { border: 0; }
+textarea { display: block; width: 100%; border: 0; border-radius: 0; box-shadow: none; outline: none; -webkit-appearance: none; appearance: none; background: transparent; resize: none; padding: 12px 14px 4px; font-size: 15px; line-height: 1.5; min-height: 52px; }
+textarea:focus, textarea:focus-visible { border: 0; box-shadow: none; outline: none; }
 .thumbs { display: flex; flex-wrap: wrap; gap: 8px; padding: 6px 14px; }
 .thumb { position: relative; width: 72px; height: 72px; border-radius: var(--radius-sm); overflow: hidden; background: var(--panel); border: 1px solid var(--line); }
 .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }

@@ -22,9 +22,19 @@ async function post(body: Record<string, any>) {
   return r
 }
 
-const add = (text: string, images: string[], ai: boolean) => post({ action: 'add', text, images, ai })
+const add = async (text: string, images: string[], ai: boolean) => {
+  const r = await $fetch<any>('/api/notes/action', { method: 'POST', body: { action: 'add', text, images, ai } })
+  if (r?.queued) { // offline: show it until the sync brings the real note
+    const now = Date.now() / 1000
+    notes.value.unshift({ id: 'tmp-' + Date.now(), title: text.split('\n')[0]!.slice(0, 60), body: text, topic: '', kind: 'note', images, pinned: false, state: 'active', created: now, updated: now, undo: false, job: null, aiError: null, raw: text, pending: true })
+    return r
+  }
+  if (r?.id) put(r)
+  return r
+}
 
 async function patch(n: any, fields: Record<string, any>) {
+  if (String(n.id).startsWith('tmp-')) return useToast().toast('Syncs first', { tone: 'warn' })
   const before = { ...n }
   Object.assign(n, fields) // instant; the server's answer replaces it
   try { await post({ action: 'edit', id: n.id, ...fields }) } catch (e: any) {
@@ -33,6 +43,7 @@ async function patch(n: any, fields: Record<string, any>) {
   }
 }
 async function act(n: any, action: string, extra: any = {}) {
+  if (String(n.id).startsWith('tmp-')) return useToast().toast('Syncs first', { tone: 'warn' })
   const { ok, no, ...rest } = extra
   try {
     if (action === 'delete') {
@@ -135,14 +146,14 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 
     <div class="chips">
       <button v-for="k in NOTE_KINDS.filter(k => kindCounts[k.id])" :key="k.id" type="button" class="chip" :class="{ on: kind === k.id }" @click="kind = kind === k.id ? '' : k.id">
-        {{ k.icon }} {{ k.label }} <span class="n">{{ kindCounts[k.id] }}</span>
+        <Icon :name="k.icon" :size="14" /> {{ k.label }} <span class="n">{{ kindCounts[k.id] }}</span>
       </button>
       <span v-if="tags.length" class="div" />
       <button v-for="[t, c] in (allTags ? tags : tags.slice(0, 12))" :key="t" type="button" class="chip tag" :class="{ on: tag === t }" @click="pickTag(t)">
         {{ t }} <span class="n">{{ c }}</span>
       </button>
       <button v-if="tags.length > 12" type="button" class="chip more" @click="allTags = !allTags">{{ allTags ? 'less' : `+${tags.length - 12}` }}</button>
-      <button v-if="filtered" type="button" class="chip clear" @click="reset">✕ clear</button>
+      <button v-if="filtered" type="button" class="chip clear" @click="reset"><Icon name="x" :size="14"/> clear</button>
     </div>
 
     <div v-if="error" class="bad pad">Notes could not load: {{ error }}</div>
