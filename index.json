@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793493938,
+  "updated": 1793494016,
   "addons": [
     {
       "id": "ai",
@@ -528,7 +528,7 @@
       "id": "trending-repos",
       "name": "Trending repos",
       "icon": "flame",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": "MaxJC0",
       "desc": "A few fresh GitHub trending repos a day, summed up by your local model and picked against your interests: save to a To-try list, star, or ask about one right on its card.",
       "routes": [
