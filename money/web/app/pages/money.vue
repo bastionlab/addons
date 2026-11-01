@@ -56,7 +56,7 @@ onMounted(async () => {
   linkMsg.value = 'Connecting…'
   try {
     const r: any = await $fetch('/api/money/action', { method: 'POST', body: { action: 'ebFinish', code, state } })
-    linkMsg.value = `✓ ${r.aspsp} connected: ${r.accounts.join(', ') || 'no accounts shared'} – first import running.`
+    linkMsg.value = `${r.aspsp} connected: ${r.accounts.join(', ') || 'no accounts shared'} – first import running.`
   } catch (x: any) { linkMsg.value = `Connecting failed: ${x?.data?.statusMessage || x?.message}` }
   load()
 })
@@ -225,8 +225,8 @@ const attention = computed(() => {
         <span class="dot" :class="d.syncing ? 'warn' : run ? (run.ok && !runErrors.length ? 'ok' : 'bad') : ''" />
         <span class="muted">{{ d.syncing ? 'syncing…' : run ? `Synced ${ago(run.finished)}` : 'not synced yet' }}</span>
         <span v-for="[k, v] in runErrors" :key="k" class="bad">{{ k }}: {{ v }}</span>
-        <a class="faint" :href="`http://${ip('money')}:8080`" target="_blank" rel="noopener">Firefly ↗</a>
-        <button class="btn ghost ref" :disabled="d.syncing" title="Sync now" @click="act('sync')">{{ d.syncing ? '…' : '↻ Sync' }}</button>
+        <a class="faint" :href="`http://${ip('money')}:8080`" target="_blank" rel="noopener">Firefly <Icon name="ext" :size="12"/></a>
+        <button class="btn ghost ref" :disabled="d.syncing" title="Sync now" @click="act('sync')">{{ d.syncing ? '…' : 'Sync' }}</button>
       </div>
       <p v-if="linkMsg" class="small note">{{ linkMsg }}</p>
 
@@ -245,9 +245,7 @@ const attention = computed(() => {
           <span class="small faint">{{ activeSubs.length }} active{{ nextDue ? ` · ${nextDue} this week` : '' }}</span></button>
       </div>
 
-      <nav class="tabs">
-        <button v-for="[k, l] in TABS" :key="k" class="tab" :class="{ on: tab === k }" @click="goTab(k)">{{ l }}</button>
-      </nav>
+      <PageTabs :model-value="tab" :tabs="TABS.map(([key, label]) => ({ key, label }))" @update:model-value="goTab" />
 
       <div v-if="tab === 'monat' || (tab === 'buchungen' && !found)" class="mbar">
         <button class="btn ghost mn" title="Previous month" @click="shift(-1)">‹</button>
@@ -345,7 +343,7 @@ const attention = computed(() => {
             <option value="">All accounts</option>
             <option v-for="a in accounts" :key="a" :value="a">{{ a }}</option>
           </select>
-          <button v-if="day && !found" class="chip on" @click="setQ({ d: undefined })">{{ dayTitle(day) }} ✕</button>
+          <button v-if="day && !found" class="chip on" @click="setQ({ d: undefined })">{{ dayTitle(day) }} <Icon name="x" :size="12"/></button>
         </div>
         <p class="small faint count">
           <template v-if="searching">searching…</template>
@@ -358,7 +356,7 @@ const attention = computed(() => {
           <section v-for="g in groups" :key="g.day" class="dg">
             <header class="dh small"><span>{{ dayTitle(g.day) }}</span><span class="num faint">{{ g.sum ? fmtEur(g.sum) : '' }}</span></header>
             <button v-for="tx in g.txs" :key="tx.journal_id" class="tx" :class="{ picked: sel.has(tx.journal_id) }" @click="tapTx(tx)">
-              <span v-if="selecting" class="ck">{{ sel.has(tx.journal_id) ? '✓' : '' }}</span>
+              <span v-if="selecting" class="ck"><Icon v-if="sel.has(tx.journal_id)" name="check" :size="12"/></span>
               <span class="tp">
                 <span class="py">{{ tx.alias || tx.payee }}</span>
                 <span class="faint small ds">{{ tx.description !== tx.payee ? tx.description : '' }}</span>
@@ -393,7 +391,7 @@ const attention = computed(() => {
       <template v-if="tab === 'konten'">
         <Panel title="Accounts" :sub="`${fmtEur(d.cash, 0)} total`" id="money-accounts">
           <template #actions>
-            <button class="btn sm" :disabled="d.syncing" @click="act('sync')">{{ d.syncing ? 'syncing…' : '↻ Sync now' }}</button>
+            <button class="btn sm" :disabled="d.syncing" @click="act('sync')">{{ d.syncing ? 'syncing…' : 'Sync now' }}</button>
           </template>
           <div v-if="!d.accounts.length" class="faint small">No accounts connected yet.</div>
           <div v-for="a in d.accounts" :key="a.key" class="acc">
@@ -432,10 +430,6 @@ const attention = computed(() => {
 .big { font-size: 22px; font-weight: 600; }
 @media (max-width: 760px) { .tiles { grid-template-columns: 1fr 1fr; gap: 8px; } .big { font-size: 19px; } }
 
-.tabs { position: sticky; top: 0; z-index: 5; display: flex; gap: 2px; overflow-x: auto; scrollbar-width: none; background: var(--bg); padding: 6px 0; margin-bottom: 8px; border-bottom: 1px solid var(--line); }
-.tab { flex: 1 0 auto; padding: 7px 14px; border: 0; border-radius: var(--radius-sm); background: none; color: var(--muted); font: inherit; font-size: 13.5px; cursor: pointer; }
-.tab:hover { color: var(--text); }
-.tab.on { background: var(--accent-soft); color: var(--accent); font-weight: 600; }
 
 .mbar { display: flex; align-items: center; gap: 4px; margin: 8px 0 12px; }
 .mn { padding: 2px 10px; font-size: 18px; }
@@ -523,8 +517,6 @@ const attention = computed(() => {
   .tile { padding: 9px 11px; }
   .big { font-size: 17px; }
   .tile .small { font-size: 11px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .tabs { gap: 0; }
-  .tab { padding: 7px 8px; font-size: 13px; white-space: nowrap; }
   .mt { min-width: 0; font-size: 15px; }
   .sums { gap: 6px 16px; }
   .sums b { font-size: 15px; }

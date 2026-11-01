@@ -6,7 +6,7 @@ order: 11
 author: MaxJC0
 license: AGPL-3.0
 warning: "Uses pytr, an unofficial Trade Republic API, and Enable Banking under its personal-use terms. Your bank data, your responsibility."
-version: 1.2.3
+version: 1.2.4
 desc: "Firefly III with bank sync: categories, subscriptions, depot, net worth, forecast and a monthly report."
 routes: [/money]
 ct: money
