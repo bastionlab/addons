@@ -6,7 +6,7 @@ icon: flame            # a name from web/app/components/Icon.vue in the core
 order: 13              # where its tab sits among the add-on tabs
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.1
+version: 0.1.2
 desc: "A few fresh GitHub trending repos a day, summed up by your local model and picked against your interests: save to a To-try list, star, or ask about one right on its card."
 routes: [/trending-repos]
 home: true             # web/app/components/HomeTrendingRepos.global.vue = its card in Home's Sections
