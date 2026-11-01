@@ -1,0 +1,51 @@
+{
+  "retro": {
+    "tabs": { "library": "Library", "get": "Get games", "add": "Add files" },
+    "search": "Search by name…",
+    "recent": "Recent",
+    "all": "All",
+    "empty": "No games yet.",
+    "noMatch": "Nothing matches.",
+    "saved": "saved",
+    "sure": "Sure?",
+    "close": "Close",
+    "retry": "Retry",
+    "play": "Play",
+    "add": "Add",
+    "adding": "Adding…",
+    "added": "{title} added to the library",
+    "info": "Info",
+    "noInfo": "No description.",
+    "more": "Show more ({n})",
+    "free": "{n} free on the games disk · saves sync to every device",
+    "stream": {
+      "title": "3DS streams from the server",
+      "off": "CT {ct} (games) is off",
+      "start": "Start it",
+      "s1": "Open Moonlight (phone: Play Store, PC: moonlight-stream.org).",
+      "s2": "Add host {host} (or \"games\" on the tailnet) and pair once.",
+      "s3": "Pick Azahar (3DS): every 3DS game here is in its list, saves are shared."
+    },
+    "get": {
+      "lead": "Free homebrew games, shared by their makers (Homebrew Hub, Retrobrews). One tap adds a game to the library.",
+      "search": "Search {n} games…"
+    },
+    "up": {
+      "title": "Upload game files",
+      "console": "Console…",
+      "game": "Game",
+      "biosBtn": "BIOS",
+      "types": "Takes {exts}. A picture with the same name becomes its cover.",
+      "bios": "Only Sega CD and Saturn need one; PlayStation and DS run better with one. Replaces the current BIOS. {has}",
+      "biosHas": "(one is set)",
+      "pick": "Choose files",
+      "busy": "Uploading…",
+      "done": "done"
+    },
+    "share": {
+      "title": "Or copy them over the network",
+      "body": "Drop files into the folder for their console on the games share (Samba, user max)."
+    },
+    "legal": "Commercial games: use dumps of cartridges and discs you own."
+  }
+}
