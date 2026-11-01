@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793491401,
+  "updated": 1793491546,
   "addons": [
     {
       "id": "ai",
@@ -278,7 +278,7 @@
       "id": "navorder",
       "name": "Sidebar order",
       "icon": "grid",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": "MaxJC0",
       "desc": "Drag the sidebar and phone menu pages into your own order, saved separately for phone, tablet and desktop.",
       "license": "AGPL-3.0",
