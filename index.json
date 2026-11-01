@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793492061,
+  "updated": 1793492123,
   "addons": [
     {
       "id": "ai",
@@ -385,7 +385,7 @@
       "id": "skin-comic",
       "name": "Comic Book skin",
       "icon": "palette",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: every page a comic page with caption boxes, inked panels, halftone and sunburst art, and POW! bursts on every button.",
       "depends_on": [
