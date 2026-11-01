@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793493593,
+  "updated": 1793493663,
   "addons": [
     {
       "id": "ai",
@@ -463,7 +463,7 @@
       "id": "skin-retro",
       "name": "Retro 95 skin",
       "icon": "palette",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: windows with title bars, bevelled buttons and a Start-menu taskbar instead of the sidebar.",
       "depends_on": [
