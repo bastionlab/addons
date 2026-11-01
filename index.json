@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793494016,
+  "updated": 1793494195,
   "addons": [
     {
       "id": "ai",
@@ -549,7 +549,7 @@
       "id": "voice",
       "name": "Voice",
       "icon": "mic",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "author": "MaxJC0",
       "desc": "Hands-free talking in the chat: it reads the answer aloud, listens, transcribes you and sends the next message.",
       "needs": [
