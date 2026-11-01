@@ -6,7 +6,7 @@ icon: mic
 order: 99
 author: MaxJC0
 license: AGPL-3.0
-version: 0.3.2
+version: 0.3.3
 desc: "Hands-free talking in the chat: it reads the answer aloud, listens, transcribes you and sends the next message."
 routes: []
 home: false
