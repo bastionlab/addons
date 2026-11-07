@@ -49,14 +49,15 @@ const bursts = ref<Burst[]>([])
 const COLOURS = ['#ff3fb4', '#3fd8ff', '#ffc93f', '#b44bff', '#3ff2a0', '#ffffff']
 let seq = 0
 let reduced = false
+let phone = false
 const timers = new Set<ReturnType<typeof setTimeout>>()
 function onDown(e: PointerEvent) {
   if (reduced) return
   const el = (e.target as Element | null)?.closest?.('.btn')
   if (!el || (el as HTMLButtonElement).disabled) return
   const id = ++seq
-  const bits: Bit[] = Array.from({ length: 14 }, (_, k) => {
-    const a = (k / 14) * Math.PI * 2 + Math.random() * 0.4
+  const bits: Bit[] = Array.from({ length: phone ? 8 : 14 }, (_, k) => {
+    const a = (k / (phone ? 8 : 14)) * Math.PI * 2 + Math.random() * 0.4
     const d = 34 + Math.random() * 38
     return {
       k, dx: Math.cos(a) * d, dy: Math.sin(a) * d - 18, r: Math.round(Math.random() * 540 - 270),
@@ -64,11 +65,12 @@ function onDown(e: PointerEvent) {
     }
   })
   bursts.value = [...bursts.value.slice(-3), { id, x: e.clientX, y: e.clientY, bits }]
-  const tm = setTimeout(() => { bursts.value = bursts.value.filter(b => b.id !== id); timers.delete(tm) }, 900)
+  const tm = setTimeout(() => { bursts.value = bursts.value.filter(b => b.id !== id); timers.delete(tm) }, phone ? 320 : 900)
   timers.add(tm)
 }
 onMounted(() => {
   reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  phone = window.matchMedia('(max-width: 640px), (pointer: coarse)').matches
   document.addEventListener('pointerdown', onDown, true)
   window.addEventListener('keydown', onKey)
   nextTick(centre)
@@ -147,7 +149,9 @@ onUnmounted(() => {
       </span>
     </header>
 
-    <nav ref="bar" class="vbar" :aria-label="$t('skinDisco.pages')">
+    <!-- the neon line on the bar's top edge: its own piece (a fixed ::before inside the scrolling bar would be clipped once the bar slides) -->
+    <i class="vline" data-skin-bar aria-hidden="true" />
+    <nav ref="bar" class="vbar" data-skin-bar :aria-label="$t('skinDisco.pages')">
       <NuxtLink v-for="n in [...pins.pinned.value, ...(offTab ? [offTab] : [])]" :key="n.to" :to="n.to" class="vt" :class="{ on: n.to === path && !sheet }">
         <span class="disc" aria-hidden="true"><i /></span>
         <span class="vi"><Icon :name="n.icon" :size="22" /></span>
@@ -214,9 +218,7 @@ onUnmounted(() => {
 }
 .arch { position: relative; margin: 0 -15px; flex: none; }
 .arch svg { display: block; width: 100%; height: auto; }
-.tube { filter: drop-shadow(0 0 4px rgba(255, 255, 255, .5)); animation: tube 3s ease-in-out infinite; }
-.t2 { animation-delay: .5s; } .t3 { animation-delay: 1s; }
-@keyframes tube { 0%, 100% { opacity: 1; } 50% { opacity: .55; } }
+.tube { filter: drop-shadow(0 0 4px rgba(255, 255, 255, .5)); }
 .bub { animation: bubble 4s linear infinite; }
 .b2 { animation-delay: 1.3s; } .b3 { animation-delay: 2.6s; }
 @keyframes bubble { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-40px); opacity: 0; } }
@@ -310,7 +312,7 @@ onUnmounted(() => {
 }
 
 /* ---------- phone ---------- */
-.pt-top, .vbar { display: none; }
+.pt-top, .vbar, .vline { display: none; }
 .pt-top {
   position: relative; z-index: 5; align-items: center; justify-content: space-between; gap: 10px;
   height: 56px; padding: calc(env(safe-area-inset-top, 0px) + 6px) 12px 0;
@@ -328,8 +330,8 @@ onUnmounted(() => {
   background: linear-gradient(180deg, rgba(30, 14, 52, .96), rgba(12, 5, 24, .98));
   box-shadow: 0 -10px 30px rgba(0, 0, 0, .45);
 }
-.vbar::before {
-  content: ''; position: fixed; left: 0; right: 0; bottom: calc(70px + env(safe-area-inset-bottom)); height: 3px;
+.vline {
+  position: fixed; z-index: 60; left: 0; right: 0; bottom: calc(70px + env(safe-area-inset-bottom)); height: 3px; pointer-events: none;
   background: linear-gradient(90deg, rgba(255, 63, 180, 1), rgba(255, 201, 63, 1), rgba(63, 242, 160, 1), rgba(63, 216, 255, 1), rgba(180, 75, 255, 1), rgba(255, 63, 180, 1));
   box-shadow: 0 0 12px rgba(255, 63, 180, .6);
 }
@@ -378,8 +380,8 @@ onUnmounted(() => {
 .dparty-leave-active { transition: opacity .3s; }
 .dparty-enter-from { transform: translateX(-50%) scale(.4); opacity: 0; }
 .dparty-leave-to { opacity: 0; }
-.party .song.on, .party .vt.on .vi { animation: pulse .45s ease-in-out infinite alternate; }
-@keyframes pulse { to { box-shadow: 0 0 28px rgba(63, 216, 255, .95); } }
+.party .song.on::after, .party .vt.on .vi::after { content: ''; position: absolute; inset: 0; border-radius: inherit; pointer-events: none; box-shadow: 0 0 28px rgba(63, 216, 255, .95); opacity: 0; animation: pulse .45s ease-in-out infinite alternate; }
+@keyframes pulse { to { opacity: 1; } }
 
 /* confetti */
 .fx { position: fixed; inset: 0; z-index: 95; pointer-events: none; overflow: hidden; }
@@ -392,15 +394,20 @@ onUnmounted(() => {
   100% { transform: translate(var(--dx), calc(var(--dy) + 40px)) rotate(var(--r)) scale(1); opacity: 0; }
 }
 
+@media (max-width: 640px), (pointer: coarse) {
+  .bit { animation-duration: .3s; }
+  .tube, .bub, .single, .disc, .eqm i, .cm.busy, .party .song.on::after, .party .vt.on .vi::after { animation: none !important; }
+}
 @media (max-width: 640px) {
   .jbox { display: none; }
   .pt-top, .vbar { display: flex; }
+  .vline { display: block; }
   .vbar { justify-content: space-around; }
-  html.kb .vbar { display: none; }
+  html.kb .vbar, html.kb .vline { display: none; }
   .full .pt-top { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .tube, .bub, .single, .disc, .eqm i, .cm.busy, .party .song.on, .party .vt.on .vi { animation: none !important; }
+  .tube, .bub, .single, .disc, .eqm i, .cm.busy, .party .song.on::after, .party .vt.on .vi::after { animation: none !important; }
   .song, .vi, .vt .disc { transition: none; }
 }
 </style>

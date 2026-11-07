@@ -18,8 +18,7 @@ const SPARKS = [{ l: '6%', t: '18%', d: '0s' }, { l: '38%', t: '-6%', d: '.7s' }
         <div class="board">
           <small class="sub">{{ $t('skinDisco.tonight') }}</small>
           <h1 class="ttl">
-            <Icon v-if="icon" :name="icon" :size="22" class="ti" />
-            <span class="tt">{{ title }}</span>
+                        <span class="tt">{{ $t('skinDisco.marquee') }}</span>
             <i v-for="(s, i) in SPARKS" :key="i" class="spk" :style="{ left: s.l, top: s.t, animationDelay: s.d }" aria-hidden="true">✦</i>
           </h1>
         </div>
@@ -80,6 +79,12 @@ const SPARKS = [{ l: '6%', t: '18%', d: '0s' }, { l: '38%', t: '-6%', d: '.7s' }
   .board { padding: 7px 14px 9px; }
   .tt { font-size: 22px; }
   .sub { font-size: 9px; letter-spacing: .2em; }
+}
+@media (max-width: 640px), (pointer: coarse) {
+  .bulbs, .ttl::after, .spk { animation: none; }
+  .k2, .k3 { opacity: .35; }
+  .spk { opacity: .7; }
+  .ttl::after { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .bulbs, .ttl::after, .spk { animation: none; }

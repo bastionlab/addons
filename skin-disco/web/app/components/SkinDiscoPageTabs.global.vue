@@ -95,6 +95,9 @@ watch(() => props.tabs.length, () => nextTick(measure))
   .dpt { margin-left: -12px; margin-right: -12px; border-radius: 0; }
   .pt { min-height: 44px; padding: 7px 12px 4px; }
 }
+@media (max-width: 640px), (pointer: coarse) {
+  .pt.on .eq i { animation: none; transform: scaleY(var(--h)); }
+}
 @media (prefers-reduced-motion: reduce) {
   .pt.on .eq i { animation: none; transform: scaleY(var(--h)); }
   .pt { transition: none; }

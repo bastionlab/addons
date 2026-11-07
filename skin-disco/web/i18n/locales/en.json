@@ -13,6 +13,7 @@
     "more": "More",
     "editTabs": "Edit tabs",
     "done": "Done",
-    "pinCount": "Pinned {n}/{max}"
+    "pinCount": "Pinned {n}/{max}",
+    "marquee": "Now showing"
   }
 }
