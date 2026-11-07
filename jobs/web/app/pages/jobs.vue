@@ -25,7 +25,7 @@ function applied(item: any, v: boolean) {
 
 <template>
   <div>
-    <div v-if="!d && pending" class="muted pad">Loading jobs…</div>
+    <Skeleton v-if="!d && pending" kind="rows" :n="5" />
     <div v-else-if="error && !d" class="bad pad">
       The jobs API in CT 107 is unreachable: {{ errText(error) }}
     </div>
