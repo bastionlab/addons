@@ -67,6 +67,7 @@ function yes() { if (asking.value) emit('remove', asking.value.id); asking.value
     </div>
 
     <Teleport to="body">
+      <Transition name="sheet">
       <div v-if="asking" class="scrim" @click.self="asking = null">
         <div class="ask" role="alertdialog">
           <b>{{ t('habits.deleteQ', { name: asking.title }) }}</b>
@@ -77,6 +78,7 @@ function yes() { if (asking.value) emit('remove', asking.value.id); asking.value
           </div>
         </div>
       </div>
+      </Transition>
     </Teleport>
   </div>
 </template>
