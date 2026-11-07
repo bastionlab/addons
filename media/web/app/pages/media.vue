@@ -8,6 +8,7 @@ const { t } = useI18n()
 const tab = usePageTab('downloads')
 const tabs = computed(() => [
   { key: 'downloads', label: t('tabs.downloads'), badge: queue.value.length || undefined, tone: 'ok' as const },
+  { key: 'discover', label: t('media.tabs.discover') },
   { key: 'library', label: t('tabs.library') },
   { key: 'apps', label: t('tabs.apps') },
 ])
@@ -23,7 +24,8 @@ const queue = computed(() => [...(q.value.movies ?? []), ...(q.value.series ?? [
     />
 
     <PageTabs v-model="tab" :tabs="tabs" />
-    <Skeleton v-if="!m && pending" kind="cards" :n="6" />
+    <DiscoverPanel v-if="tab === 'discover'" />
+    <Skeleton v-else-if="!m && pending" kind="cards" :n="6" />
     <div v-else-if="error && !m" class="bad pad">Could not read the media stack: {{ error.statusMessage || error.message }}</div>
 
     <template v-if="m">
