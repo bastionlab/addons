@@ -70,6 +70,38 @@ function headersFor(req, l) {
   return h
 }
 
+// --- shared files: the agent (host) streams them. This process holds only a narrow token that opens GET /files/pub
+// (never the agent's main one), from /etc/dash-share/agent.env, which the Files add-on writes; read per request so a
+// rotation applies at once. It runs as the unprivileged dash-share user and cannot read the dashboard's /etc/dash.env.
+function agentEnv() {
+  let txt = ''
+  try { txt = fs.readFileSync(process.env.DASH_SHARE_ENV || '/etc/dash-share/agent.env', 'utf8') } catch {}
+  const get = (k) => (txt.match(new RegExp(`^${k}=(.*)$`, 'm'))?.[1] || '').trim().replace(/^["']|["']$/g, '')
+  return { url: get('DASH_AGENT_URL').replace(/\/$/, ''), token: get('DASH_FILES_TOKEN') }
+}
+const gone = (res) => { res.writeHead(404, { 'content-type': 'text/plain; charset=utf-8', 'cache-control': 'no-store', 'x-robots-tag': 'noindex' }); res.end('Link expired or not found') }
+function sendFile(req, res, token, dl) {
+  const { url: AGENT_URL, token: AGENT_TOKEN } = agentEnv()
+  if (!AGENT_URL || !AGENT_TOKEN) return gone(res)
+  const h = { authorization: `Bearer ${AGENT_TOKEN}` }
+  if (req.headers.range) h.range = req.headers.range
+  if (req.headers['if-range']) h['if-range'] = req.headers['if-range']
+  const unavailable = () => res.headersSent ? res.destroy() : page(res, 502, 'Unavailable', 'The file could not be fetched right now. Try again in a bit.')
+  let up
+  try { up = http.request(`${AGENT_URL}/files/pub?t=${encodeURIComponent(token)}${dl ? '&dl=1' : ''}`, { method: 'GET', headers: h }, (r) => {
+    if (r.statusCode === 404 || r.statusCode === 403 || r.statusCode === 401) { r.resume(); return gone(res) }
+    const out = { 'cache-control': 'no-store', 'x-robots-tag': 'noindex', 'x-content-type-options': 'nosniff' }
+    for (const k of ['content-type', 'content-length', 'content-range', 'accept-ranges', 'content-disposition', 'content-security-policy', 'etag', 'last-modified']) if (r.headers[k]) out[k] = r.headers[k]
+    res.writeHead(r.statusCode || 502, out)
+    if (req.method === 'HEAD') { r.destroy(); return res.end() } // the agent only speaks GET
+    r.pipe(res)
+    res.on('close', () => r.destroy())
+  }) } catch { return unavailable() } // a bad URL in the env file must not take the gate down
+  up.on('error', unavailable)
+  req.on('close', () => up.destroy())
+  up.end()
+}
+
 // --- public ------------------------------------------------------------------
 const pub = http.createServer((req, res) => {
   const url = req.url || '/'
@@ -90,6 +122,9 @@ const pub = http.createServer((req, res) => {
     })
     return res.end()
   }
+  // /f/<token>: a file shared from the Files tab, streamed from the agent (which checks the token); Range passes through
+  const f = url.match(/^\/f\/([A-Za-z0-9_-]{16,})\/?(?:\?(.*))?$/)
+  if (f && (req.method === 'GET' || req.method === 'HEAD')) return sendFile(req, res, f[1], new URLSearchParams(f[2] || '').get('dl') === '1')
   const l = linkFor(req)
   if (!l) return page(res, 404, 'Nothing here', 'Open the link you were sent to see the project.')
   const [host, port] = l.target.split(':')

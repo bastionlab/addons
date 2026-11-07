@@ -10,7 +10,10 @@ done
 # share links: dash-share in the dashboard CT, its public side behind Tailscale Funnel on :8443 (the dashboard on :443 stays tailnet-only)
 DASH="$(jq -r '.cts.dash.id // 104' /etc/dash/config.json)"
 HERE="$(cd "$(dirname "$0")" && pwd)"
-pct exec "$DASH" -- mkdir -p /opt/dash-share
+pct exec "$DASH" -- sh -c 'getent group dash-share >/dev/null || groupadd --system dash-share
+  id dash-share >/dev/null 2>&1 || useradd --system --no-create-home --shell /usr/sbin/nologin -g dash-share dash-share
+  mkdir -p /opt/dash-share /var/lib/dash-share /etc/dash-share && chown -R dash-share:dash-share /var/lib/dash-share && chmod 700 /var/lib/dash-share
+  chgrp dash-share /etc/dash-share && chmod 750 /etc/dash-share; [ ! -e /etc/dash-share/agent.env ] || chgrp dash-share /etc/dash-share/agent.env'
 pct push "$DASH" "$HERE/share/share.mjs" /opt/dash-share/share.mjs
 pct push "$DASH" "$HERE/share/dash-share.service" /etc/systemd/system/dash-share.service
 pct exec "$DASH" -- sh -c 'systemctl daemon-reload && systemctl enable -q dash-share && systemctl restart dash-share' && echo "   dash-share → CT $DASH"
