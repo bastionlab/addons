@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794061858,
+  "updated": 1794061987,
   "addons": [
     {
       "id": "ai",
@@ -120,7 +120,7 @@
       "id": "flats",
       "name": "Flats",
       "icon": "key",
-      "version": "1.1.4",
+      "version": "1.1.5",
       "author": "MaxJC0",
       "desc": "Rental flats from several portals, warm rent worked out, duplicates folded, a landlord message ready to send.",
       "routes": [
