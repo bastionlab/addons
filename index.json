@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1793494195,
+  "updated": 1794061733,
   "addons": [
     {
       "id": "ai",
@@ -50,7 +50,7 @@
       "id": "cost",
       "name": "Cost",
       "icon": "layers",
-      "version": "0.1.1",
+      "version": "0.1.2",
       "author": "MaxJC0",
       "desc": "What Claude, the local GPU and the server cost per day: tokens, watts and euros, next to your plan windows.",
       "routes": [
