@@ -1,18 +1,20 @@
 <script setup lang="ts">
 /**
- * Each page opens like a newspaper section: a small kicker, "METRICS SECTION" in heavy display caps between rules,
+ * Each page opens like a newspaper section: a small kicker, a themed headline (not the page name) in heavy display caps between rules,
  * and a fake byline with the edition time. Full-screen pages (/chat) keep all their height: no header.
  */
 const props = withDefaults(defineProps<{ path?: string, title?: string, icon?: string }>(), { path: '/', title: '', icon: '' })
 const { t } = useI18n()
 const FULL = ['/chat']
 const isFull = computed(() => FULL.includes(props.path))
-const kicker = computed(() => {
+const hash = computed(() => {
   let h = 0
   for (const c of props.path) h = (h * 31 + c.charCodeAt(0)) % 997
-  return t(`skinBroadsheet.kicker${(h % 6) + 1}`)
+  return h
 })
-const head = computed(() => (props.path === '/' ? t('skinBroadsheet.frontPage') : t('skinBroadsheet.section', { name: props.title })))
+const kicker = computed(() => t(`skinBroadsheet.kicker${(hash.value % 6) + 1}`))
+// a themed headline, never the page's own name
+const head = computed(() => (props.path === '/' ? t('skinBroadsheet.frontPage') : t(`skinBroadsheet.headline${((hash.value + 3) % 6) + 1}`)))
 const time = ref('')
 const stamp = () => (time.value = fmtDate(new Date(), { hour: '2-digit', minute: '2-digit' }))
 watch(() => props.path, stamp)

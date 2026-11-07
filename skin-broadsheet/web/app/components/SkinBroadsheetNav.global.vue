@@ -115,7 +115,7 @@ onUnmounted(() => { if (tick) clearInterval(tick); window.removeEventListener('k
     </nav>
 
     <!-- ======== phone bottom bar / desktop full-page key ======== -->
-    <div class="pbar">
+    <div class="pbar" data-skin-bar>
       <NuxtLink v-for="n in [...pins.pinned.value, ...(offTab ? [offTab] : [])]" :key="n.to" :to="n.to" class="pt" :class="{ on: n.to === path && !sheet }">
         <Icon :name="n.icon" :size="18" /><span class="ptl">{{ n.label }}</span>
         <span v-if="badge(n.to)" class="dotb" /><span v-else-if="mark(n.to)" class="mk pmk" :class="mark(n.to)">{{ '•' }}</span>
@@ -323,6 +323,7 @@ sup { font-size: 10px; margin-left: 2px; }
   .tk-l { font-size: 12px; padding: 0 8px; }
   html.kb .pbar { display: none; }
 }
+@media (max-width: 640px) and (pointer: coarse) { .tk-t { animation: none; } }
 @media (prefers-reduced-motion: reduce) {
   .tk-t { animation: none; }
   .mk.busy { animation: none; }
