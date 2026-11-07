@@ -5,7 +5,7 @@ icon: palette
 order: 62
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.2
+version: 0.1.3
 desc: "A whole-app skin for Designs: a centred taskbar with a Start menu, Mica windows with title buttons, an Explorer breadcrumb bar and a blue bloom wallpaper."
 routes: []
 needs: []

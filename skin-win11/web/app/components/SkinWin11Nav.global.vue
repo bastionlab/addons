@@ -88,7 +88,7 @@ const date = computed(() => now.value.toLocaleDateString('en-GB', { day: '2-digi
       </div>
     </Transition>
 
-    <nav class="taskbar">
+    <nav class="taskbar" data-skin-bar>
       <div ref="strip" class="mid">
         <div class="apps">
           <button type="button" class="app start" :class="{ down: open }" :aria-expanded="open" :aria-label="$t('skinWin11.start')" @click="toggle">
@@ -217,6 +217,11 @@ const date = computed(() => now.value.toLocaleDateString('en-GB', { day: '2-digi
 }
 @media (prefers-reduced-motion: reduce) {
   .w11-start-enter-active, .w11-start-leave-active, .ind, .cm.busy { transition: none; animation: none; }
+}
+/* phone budget (SKINS.md): no backdrop-filter on large layers, a denser translucent fill instead */
+@media (max-width: 640px), (pointer: coarse) {
+  .taskbar { backdrop-filter: none; -webkit-backdrop-filter: none; background: color-mix(in srgb, var(--bg) 94%, transparent); }
+  .startmenu { backdrop-filter: none; -webkit-backdrop-filter: none; background: color-mix(in srgb, var(--panel) 96%, transparent); }
 }
 </style>
 
