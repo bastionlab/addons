@@ -2,44 +2,17 @@
 /** the page's section tabs as a small neon sign: each tab a neon tube (pink / cyan / sun), the open one lit and flickering on; same behaviour as PageTabs.vue */
 const props = defineProps<{ tabs: { key: string, label: string, icon?: string, badge?: number | string, tone?: 'ok' | 'warn' | 'bad' }[] }>()
 const model = defineModel<string>({ required: true })
-const anchor = ref<HTMLElement>()
-const strip = ref<HTMLElement>()
-const edge = ref({ l: false, r: false })
-
-function measure() {
-  const s = strip.value
-  if (s) edge.value = { l: s.scrollLeft > 4, r: s.scrollLeft + s.clientWidth < s.scrollWidth - 4 }
-}
-function reveal(smooth = true) {
-  const s = strip.value
-  const b = s?.querySelector<HTMLElement>('.on')
-  if (!s || !b) return
-  const left = b.offsetLeft - (s.clientWidth - b.offsetWidth) / 2
-  s.scrollTo({ left: Math.max(0, left), behavior: smooth ? 'smooth' : 'auto' })
-}
-function pick(k: string) {
-  if (k === model.value) return
-  model.value = k
-  // scrolled past the bar: bring the new section's start up under it instead of leaving you mid-page
-  const a = anchor.value
-  const stick = parseFloat(getComputedStyle(a?.nextElementSibling ?? document.body).top) || 0
-  const y = a?.getBoundingClientRect().top ?? 0
-  if (a && y < stick) window.scrollTo({ top: window.scrollY + y - stick })
-}
-watch(model, () => nextTick(() => reveal()))
-onMounted(() => { nextTick(() => { reveal(false); measure() }); window.addEventListener('resize', measure) })
-onBeforeUnmount(() => window.removeEventListener('resize', measure))
-watch(() => props.tabs.length, () => nextTick(measure))
+const { anchor, strip, nav, edge, measure, pick } = usePageTabs({ count: () => props.tabs.length, model, autoCompact: true })
 </script>
 
 <template>
   <div class="sw-ptabs-wrap">
     <div ref="anchor" />
-    <nav class="sw-ptabs" :class="{ l: edge.l, r: edge.r }">
+    <nav ref="nav" class="sw-ptabs" :class="{ l: edge.l, r: edge.r }">
       <div ref="strip" class="strip" role="tablist" @scroll.passive="measure">
         <button
-          v-for="(t, i) in tabs" :key="t.key" type="button" role="tab" class="tube" :class="[{ on: model === t.key }, 'h' + (i % 3)]"
-          :aria-selected="model === t.key" @click="pick(t.key)"
+          v-for="(t, i) in tabs" :key="t.key" type="button" role="tab" class="tube" :class="[{ on: model === t.key, ico: !!t.icon }, 'h' + (i % 3)]"
+          :aria-selected="model === t.key" :aria-label="t.label" :title="t.label" @click="pick(t.key)"
         >
           <Icon v-if="t.icon" :name="t.icon" :size="15" class="ic" />
           <span>{{ t.label }}</span>
@@ -57,7 +30,7 @@ watch(() => props.tabs.length, () => nextTick(measure))
   --pink: var(--accent); --cyan: rgb(52 230 255); --sun: rgb(255 204 77);
   position: sticky; top: var(--ptabs-top, env(safe-area-inset-top, 0px)); z-index: 20; margin: 0 0 18px;
   border-radius: var(--radius); border: 1px solid color-mix(in srgb, var(--pink) 55%, transparent);
-  background: linear-gradient(180deg, rgba(18, 6, 36, .9), rgba(8, 3, 20, .92)); backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px);
+  background: linear-gradient(180deg, rgba(18, 6, 36, .9), rgba(8, 3, 20, .92));
   box-shadow: 0 0 14px color-mix(in srgb, var(--pink) 30%, transparent), inset 0 0 0 1px rgba(52, 230, 255, .12);
 }
 .h0 { --glow: var(--pink); } .h1 { --glow: var(--cyan); } .h2 { --glow: var(--sun); }
@@ -86,9 +59,12 @@ watch(() => props.tabs.length, () => nextTick(measure))
 .bdg { min-width: 18px; padding: 0 5px; border-radius: 9px; font: 700 11px/17px system-ui, sans-serif; text-align: center; text-shadow: none; color: var(--bg); background: var(--warn); box-shadow: 0 0 8px var(--warn); }
 .bdg.bad { background: var(--bad); box-shadow: 0 0 8px var(--bad); }
 .bdg.ok { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+@media (min-width: 641px) { .sw-ptabs { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); } }
 @media (max-width: 640px) {
-  .sw-ptabs { margin: 0 -6px 14px; }
+  .sw-ptabs { background: linear-gradient(180deg, rgba(18, 6, 36, .97), rgba(8, 3, 20, .97)); margin: 0 -6px 14px; }
   .tube { min-height: 40px; padding: 4px 12px; font-size: 13.5px; }
+  .sw-ptabs.is-compact .tube.ico:not(.on) > span:not(.bdg) { display: none; }
+  .sw-ptabs.is-compact .tube.ico:not(.on) { min-width: 40px; justify-content: center; }
 }
 @media (prefers-reduced-motion: reduce) { .tube.on { animation: none; } .tube { transition: none; } }
 </style>
