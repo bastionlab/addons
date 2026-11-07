@@ -33,7 +33,7 @@ const due = computed(() => {
 })
 const max = computed(() => Math.max(1, ...Object.values(per.value).map(v => v.out)))
 const today = isoDay()
-const short = (n: number) => n >= 1000 ? `${(n / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 })}k` : Math.round(n).toString()
+const short = (n: number) => n >= 1000 ? `${fmtNum(n / 1000, 1)}k` : Math.round(n).toString()
 const tip = (d: string) => {
   const p = per.value[d], s = due.value[d]
   return [dayTitle(d), p?.out ? `−${fmtEur(p.out)}` : '', p?.in ? `+${fmtEur(p.in)}` : '', ...(s ?? []).map(x => `due: ${subName(x)} ${fmtEur(x.amount)}`)].filter(Boolean).join('\n')

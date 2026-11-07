@@ -114,10 +114,10 @@ async function trCode() { if (await act('trCode', { code: tr.code })) { tr.code 
       </template>
     </div>
 
-    <!-- Trade Republic -->
+    <!-- Trade Republic depot login (pytr): positions and history only, cash comes via Enable Banking -->
     <div class="blk">
       <div class="row">
-        <b title="unofficial via pytr · login = one tap in the TR app">Trade Republic</b>
+        <b title="unofficial via pytr · login = one tap in the TR app · feeds the depot only">Trade Republic depot</b>
         <button v-if="setup.tr" class="btn ghost sm" @click="tr.edit = !tr.edit">Change login</button>
       </div>
       <div v-if="!setup.tr || tr.edit" class="form">
