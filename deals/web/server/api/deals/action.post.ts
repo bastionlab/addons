@@ -3,6 +3,8 @@
  * action name is validated here and every argument is rebuilt rather than
  * forwarded, so nothing the browser sends reaches CT 107 unchecked.
  */
+// where a search may look; keep in step with app/sources MODULES in the deals backend
+const SOURCES = ['kleinanzeigen', 'vinted', 'ebay', 'mydealz', 'shpock', 'refurb']
 const ACTIONS = ['add', 'edit', 'enable', 'disable', 'delete', 'feedback', 'rejudge'] as const
 type Action = typeof ACTIONS[number]
 
@@ -18,6 +20,11 @@ export default defineEventHandler(async (event) => {
     if (!name || !keyword)
       throw createError({ statusCode: 400, statusMessage: 'name and search words are both required' })
     const shipping = ['any', 'ship', 'pickup'].includes(body.shipping) ? body.shipping : 'any'
+    const picked = Array.isArray(body.sources) ? body.sources : ['kleinanzeigen']
+    const unknown = picked.filter((k: unknown) => !SOURCES.includes(k as string))
+    if (unknown.length)
+      throw createError({ statusCode: 400, statusMessage: `unknown source: ${unknown.join(', ')}` })
+    const sources = SOURCES.filter(k => picked.includes(k))
     const spec = {
       name,
       keyword,
@@ -27,6 +34,7 @@ export default defineEventHandler(async (event) => {
       max_price: cleanInt(body.maxPrice),
       radius_km: Math.min(Math.max(cleanInt(body.radius) ?? 10, 0), 200),
       shipping,
+      sources: sources.length ? sources : ['kleinanzeigen'],
       intent: cleanStr(body.intent, 600),
       // not editable in the form, only carried through so an edit doesn't reset them to the backend's defaults
       ...(cleanInt(body.minScore) != null ? { min_score: Math.min(Math.max(cleanInt(body.minScore)!, 0), 100) } : {}),

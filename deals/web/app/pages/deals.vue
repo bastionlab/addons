@@ -25,7 +25,7 @@ const VIEWS = computed(() => [
 
 <template>
   <div>
-    <div v-if="!d && pending" class="muted pad">Loading listings…</div>
+    <Skeleton v-if="!d && pending" kind="cards" :n="6" />
     <div v-else-if="error && !d" class="bad pad">
       The deals API in CT 107 is unreachable: {{ errText(error) }}
     </div>
@@ -47,11 +47,9 @@ const VIEWS = computed(() => [
       </HunterTabs>
 
       <template v-if="tab !== 'searches'">
-      <div v-if="!feed.length" class="muted pad">
+      <div v-if="!feed.length && (show === 'liked' || (show === 'passed' && counts.rejected))" class="muted pad">
         <template v-if="show === 'liked'">Nothing saved yet · Thumbs-up a listing to keep it here.</template>
         <template v-else-if="show === 'passed' && counts.rejected">No matches yet · {{ counts.rejected }} rejected.</template>
-        <template v-else-if="shipping !== 'all'">Nothing {{ shipping === 'pickup' ? 'for pickup' : 'with shipping' }}.</template>
-        <template v-else>Nothing yet.</template>
       </div>
       <div v-else class="cards">
         <DealCard
