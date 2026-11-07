@@ -5,7 +5,7 @@ icon: palette
 order: 62
 author: MaxJC0
 license: AGPL-3.0
-version: 0.3.2
+version: 0.3.3
 desc: "A whole-app skin for Designs: a calm tactical HUD: condensed uppercase type, amber on olive-black, square edges, a numbered loadout column and a weapon-slot tab bar on the phone."
 routes: []
 needs: []
