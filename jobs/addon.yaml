@@ -6,7 +6,7 @@ order: 10
 author: MaxJC0
 license: AGPL-3.0
 warning: "Scrapes job portals (StepStone, LinkedIn, XING and others) whose terms forbid automated access. Personal use only, at your own risk."
-version: 1.1.4
+version: 1.1.5
 desc: "Reads your CV, polls job portals and scores every posting for fit, with the apply link found for you."
 routes: [/jobs]
 home: true          # brings app/components/HomeJobs.global.vue for the home page
