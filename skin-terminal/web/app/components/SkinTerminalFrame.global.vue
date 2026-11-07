@@ -57,7 +57,7 @@ onUnmounted(() => { if (timer) clearTimeout(timer); window.removeEventListener('
       </header>
       <div class="sh">
         <p class="cmd"><span class="ps">{{ '$' }}</span> <span class="ty">{{ typed }}</span><i class="cur" :class="{ idle: !typing }" /></p>
-        <p class="ls" :class="{ on: !typing }"><span>{{ lsLine }}</span><span v-if="title" class="cm">{{ `  # ${title}` }}</span></p>
+        <p class="ls" :class="{ on: !typing }"><span>{{ lsLine }}</span></p>
       </div>
     </template>
     <div class="body"><slot /></div>
@@ -88,7 +88,6 @@ onUnmounted(() => { if (timer) clearTimeout(timer); window.removeEventListener('
 @keyframes tcur { 50% { opacity: 0; } }
 .ls { color: var(--muted); font-size: 12.5px; opacity: 0; transform: translateY(-3px); transition: opacity .2s, transform .2s; }
 .ls.on { opacity: 1; transform: none; }
-.cm { color: var(--faint); }
 @media (min-width: 641px) {
   .tframe:not(.bare) { border: 1px solid var(--line-2); background: rgba(2, 8, 4, .55); box-shadow: 0 0 0 1px rgba(0, 0, 0, .6), 0 20px 60px rgba(0, 0, 0, .5); }
   .tframe:not(.bare) .tb { margin: -1px -1px 0; }
