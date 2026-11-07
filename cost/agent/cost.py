@@ -183,6 +183,8 @@ def summary(days):
                          "idle_w": num("idle_w", 45), "max_w": num("max_w", 65)},
             "prices": prices(), "days": [out[k] for k in sorted(out)], "plan": plan,
             "proxy": proxy_state(),
+            "power": {"shelly": cost_gpu.STATE.get("shelly_watts") is not None, "watts": cost_gpu.STATE.get("shelly_watts"),
+                      "err": cost_gpu.STATE.get("shelly_err")},
             "server_estimated": True}
 
 
@@ -208,5 +210,6 @@ def cost_summary(q):
 @get("/cost/health", quiet=True)
 def cost_health(q):
     return {"ok": True, "db": str(DB), "claude": STATE["claude"], "plan": STATE["plan"],
-            "gpu": {"last": cost_gpu.STATE.get("last"), "watts": cost_gpu.STATE.get("watts"), "error": cost_gpu.STATE.get("error")},
+            "gpu": {"last": cost_gpu.STATE.get("last"), "watts": cost_gpu.STATE.get("watts"), "error": cost_gpu.STATE.get("error"),
+                    "shelly_watts": cost_gpu.STATE.get("shelly_watts"), "shelly_err": cost_gpu.STATE.get("shelly_err")},
             "proxy": proxy_state()}

@@ -14,6 +14,7 @@ export interface CostSummary {
   days: CostDay[]
   plan: { t: number, five_h: number, week: number }[]
   proxy: { ok: boolean, since: string | null }
+  power?: { shelly: boolean, watts: number | null, err: string | null }
 }
 
 /** chart palette (the one place hex colours are fine); stable order so a model keeps its colour */

@@ -1,14 +1,14 @@
 """Cost add-on: GPU watts split by who uses the GPU (by the CT of each GPU process), and a CPU-load estimate
 for the whole server. Sampled every 10 s, summed in memory, flushed to sqlite once a minute."""
-import re, subprocess, time
+import json, re, subprocess, time, urllib.request
 from pathlib import Path
 
 from dash_sdk import ct, on_start
 
-from cost_db import LOCK, day_of, db, num
+from cost_db import LOCK, day_of, db, num, setting
 
 EVERY = 10
-STATE = {"last": None, "watts": None, "cls": None}
+STATE = {"last": None, "watts": None, "cls": None, "shelly_watts": None, "shelly_err": None}
 _acc = {"gpu": {}, "server": {}}  # day -> {cls: Wh} / day -> Wh
 
 
@@ -112,6 +112,41 @@ def server_watts(frac):
     return idle + (mx - idle) * max(0.0, min(1.0, frac))
 
 
+def _shelly():
+    """(watts now, lifetime Wh counter) of the whole-server Shelly Plug (Gen2+ RPC), or None when unset / unreachable"""
+    url = str(setting("cost", "shelly_url", "") or "").strip().rstrip("/")
+    if not url:
+        STATE["shelly_err"] = None
+        return None
+    try:
+        with urllib.request.urlopen(f"{url}/rpc/Shelly.GetStatus", timeout=2) as r:
+            st = json.loads(r.read())
+        for k, v in st.items():
+            if k.startswith("switch:") and isinstance(v, dict) and "apower" in v:
+                STATE["shelly_err"] = None
+                tot = (v.get("aenergy") or {}).get("total")
+                return float(v["apower"]), (float(tot) if tot is not None else None)
+        raise KeyError("no switch apower")
+    except (OSError, ValueError, KeyError, TypeError, urllib.error.URLError) as e:
+        STATE["shelly_err"] = str(e)[:100]
+        return None
+
+
+def _plug_delta(total):
+    """Wh the plug counted since the last stored reading (survives agent restarts and outages), or None"""
+    c = db()
+    try:
+        with LOCK, c:
+            c.execute("CREATE TABLE IF NOT EXISTS kv (k TEXT PRIMARY KEY, v REAL)")
+            row = c.execute("SELECT v FROM kv WHERE k='plug_total'").fetchone()
+            c.execute("INSERT INTO kv VALUES ('plug_total', ?) ON CONFLICT(k) DO UPDATE SET v = excluded.v", (total,))
+    finally:
+        c.close()
+    if not row or total < row[0] or total - row[0] > 5000:  # first reading, counter reset or absurd gap: skip
+        return None
+    return total - row[0]
+
+
 def flush():
     with LOCK:
         gpu, srv = _acc["gpu"], _acc["server"]
@@ -128,15 +163,21 @@ def flush():
     c.close()
 
 
-def tick(dt, gpu, frac):
-    """add dt seconds of use: gpu = (watts, shares) or None, frac = CPU busy fraction"""
+def tick(dt, gpu, frac, plug_wh=None, plug=False):
+    """add dt seconds of use: gpu = (watts, shares) or None, frac = CPU busy fraction.
+    plug: a Shelly is set; plug_wh = Wh it counted since the last reading (None = book nothing, the next reading covers it)"""
     day = day_of(time.time())
     with LOCK:
         if gpu:
             d = _acc["gpu"].setdefault(day, {})
             for cls, share in gpu[1].items():
                 d[cls] = d.get(cls, 0.0) + gpu[0] * share * dt / 3600
-        _acc["server"][day] = _acc["server"].get(day, 0.0) + server_watts(frac) * dt / 3600
+        if plug:
+            if plug_wh is not None:
+                gpu_wh = gpu[0] * sum(gpu[1].values()) * dt / 3600 if gpu else 0.0
+                _acc["server"][day] = _acc["server"].get(day, 0.0) + max(plug_wh - gpu_wh, 0.0)
+        else:
+            _acc["server"][day] = _acc["server"].get(day, 0.0) + server_watts(frac) * dt / 3600
 
 
 @on_start
@@ -161,7 +202,11 @@ def power_loop():
                 pass
             g = sample()
             STATE.update(last=now, watts=g[0] if g else None, cls=g[1] if g else None)
-            tick(dt, g, frac)
+            sh = _shelly()
+            STATE["shelly_watts"] = sh[0] if sh else None
+            has_plug = bool(str(setting("cost", "shelly_url", "") or "").strip())
+            wh = _plug_delta(sh[1]) if sh and sh[1] is not None else None
+            tick(dt, g, frac, plug_wh=wh, plug=has_plug)
             if now - last_flush >= 60:
                 flush()
                 last_flush = now
