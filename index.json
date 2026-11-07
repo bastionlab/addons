@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794063233,
+  "updated": 1794063290,
   "addons": [
     {
       "id": "ai",
@@ -566,7 +566,7 @@
       "id": "widgets",
       "name": "Widgets",
       "icon": "grid",
-      "version": "0.1.0",
+      "version": "0.1.1",
       "author": "MaxJC0",
       "desc": "Build your own Home widgets from an API, metric, service, task or note, or describe one to Claude. Install widget packs from the marketplace.",
       "routes": [
