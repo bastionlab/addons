@@ -205,6 +205,15 @@ onUnmounted(() => {
   .tile::before { opacity: .35; }
   .glints path { opacity: .8; }
 }
+/* phone budget: only the sparkle wheel, the swinging ball and one spot keep running */
+@media (max-width: 640px), (pointer: coarse) {
+  .s2, .s3, .extra, .facets, .glints path, .tile::before, .tile::after { animation: none !important; }
+  .s2, .s3, .extra { display: none; }
+  .tile::before { opacity: .3; box-shadow: none; }
+  .tile::after { opacity: .2; }
+  .glints path { opacity: .8; }
+  .ball, .party .ball { filter: none; }
+}
 </style>
 
 <style>

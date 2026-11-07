@@ -88,6 +88,7 @@ const turn = computed(() => {
 .dbody-leave-to { opacity: 0; }
 @media (max-width: 640px) { .dpanel { padding: 10px 13px 14px; } }
 @media (pointer: coarse) { .fold { width: 34px; height: 34px; } }
+@media (max-width: 640px), (pointer: coarse) { .rim i { animation: none; } }
 @media (prefers-reduced-motion: reduce) {
   .dpanel, .rim i { animation: none; }
   .fold, .dbody-enter-active { transition: none; }
