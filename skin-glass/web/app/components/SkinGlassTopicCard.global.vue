@@ -81,4 +81,8 @@ const status = computed(() => (props.chips?.some(c => c.tone) ? (props.chips.fin
   .chips, .more { display: none; }
 }
 @media (prefers-reduced-motion: reduce) { .gw { transition: none; } }
+/* phone budget (SKINS.md): no backdrop-filter on large layers, a denser translucent fill instead */
+@media (max-width: 640px), (pointer: coarse) {
+  .gw { backdrop-filter: none; -webkit-backdrop-filter: none; background: linear-gradient(150deg, hsl(var(--h) 70% 55% / .28), hsl(calc(var(--h) + 50) 70% 40% / .12) 60%, rgba(255, 255, 255, .04)), color-mix(in srgb, var(--panel) 92%, transparent); }
+}
 </style>
