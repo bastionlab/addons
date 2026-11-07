@@ -6,7 +6,7 @@ order: 9
 author: MaxJC0
 license: AGPL-3.0
 warning: "Scrapes Kleinanzeigen, ImmoScout24 (unofficial mobile API) and other portals whose terms forbid automated access. Personal use only, at your own risk."
-version: 1.1.4
+version: 1.1.5
 desc: "Rental flats from several portals, warm rent worked out, duplicates folded, a landlord message ready to send."
 routes: [/wohnungen]
 home: true          # brings app/components/HomeFlats.global.vue for the home page

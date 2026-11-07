@@ -161,7 +161,7 @@ async function submit() {
 
 const remove = (s: any) => arm(String(s.id)) && act('delete', { id: s.id })
 
-const eur = (v: number) => `${Math.round(v).toLocaleString('de-DE')} €`
+const eur = (v: number) => `${fmtNum(Math.round(v))} €`
 function summary(sp: any) {
   const parts: string[] = []
   parts.push(sp.mode === 'pin' ? `${sp.place} · ${sp.radius_km} km` : `${sp.place}${sp.radius_km ? ` +${sp.radius_km} km` : ''}`)
