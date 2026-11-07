@@ -1,0 +1,16 @@
+# one add-on: this file is what the Add-ons page and the marketplace show
+id: files
+name: Files
+label: Files
+icon: folder
+order: 12
+author: MaxJC0
+license: AGPL-3.0
+version: 0.2.3
+desc: "Phone-first file browser for folders on the host: preview video, audio, images, PDF and text, upload, rename, delete and public share links."
+routes: [/files]
+needs: []
+depends_on: []
+roles: { view: owner, use: owner }
+palette:
+  - { label: Files, to: /files, keywords: [browse, upload, download, share, folder] }
