@@ -4,44 +4,17 @@
  */
 const props = defineProps<{ tabs: { key: string, label: string, icon?: string, badge?: number | string, tone?: 'ok' | 'warn' | 'bad' }[] }>()
 const model = defineModel<string>({ required: true })
-const anchor = ref<HTMLElement>()
-const strip = ref<HTMLElement>()
-const edge = ref({ l: false, r: false })
-
-function measure() {
-  const s = strip.value
-  if (s) edge.value = { l: s.scrollLeft > 4, r: s.scrollLeft + s.clientWidth < s.scrollWidth - 4 }
-}
-function reveal(smooth = true) {
-  const s = strip.value
-  const b = s?.querySelector<HTMLElement>('.on')
-  if (!s || !b) return
-  const left = b.offsetLeft - (s.clientWidth - b.offsetWidth) / 2
-  s.scrollTo({ left: Math.max(0, left), behavior: smooth ? 'smooth' : 'auto' })
-}
-function pick(k: string) {
-  if (k === model.value) return
-  model.value = k
-  // scrolled past the bar: bring the new section's start up under it instead of leaving you mid-page
-  const a = anchor.value
-  const stick = parseFloat(getComputedStyle(a?.nextElementSibling ?? document.body).top) || 0
-  const y = a?.getBoundingClientRect().top ?? 0
-  if (a && y < stick) window.scrollTo({ top: window.scrollY + y - stick })
-}
-watch(model, () => nextTick(() => reveal()))
-onMounted(() => { nextTick(() => { reveal(false); measure() }); window.addEventListener('resize', measure) })
-onBeforeUnmount(() => window.removeEventListener('resize', measure))
-watch(() => props.tabs.length, () => nextTick(measure))
+const { anchor, strip, nav, edge, measure, pick } = usePageTabs({ count: () => props.tabs.length, model, autoCompact: true })
 </script>
 
 <template>
   <div class="tac-ptabs-wrap">
     <div ref="anchor" />
-    <nav class="tac-ptabs" :class="{ l: edge.l, r: edge.r }">
+    <nav ref="nav" class="tac-ptabs" :class="{ l: edge.l, r: edge.r }">
       <div ref="strip" class="strip" role="tablist" @scroll.passive="measure">
         <button
-          v-for="t in tabs" :key="t.key" type="button" role="tab" class="cat" :class="{ on: model === t.key }"
-          :aria-selected="model === t.key" @click="pick(t.key)"
+          v-for="t in tabs" :key="t.key" type="button" role="tab" class="cat" :class="{ on: model === t.key, ico: !!t.icon }"
+          :aria-selected="model === t.key" :aria-label="t.label" :title="t.label" @click="pick(t.key)"
         >
           <Icon v-if="t.icon" :name="t.icon" :size="15" class="ic" />
           <span class="lb">{{ t.label }}</span>
@@ -79,5 +52,7 @@ watch(() => props.tabs.length, () => nextTick(measure))
 @media (max-width: 640px) {
   .tac-ptabs { margin: 0 -12px 12px; }
   .cat { min-height: 40px; font-size: 13px; }
+  .tac-ptabs.is-compact .cat.ico:not(.on) .lb { display: none; }
+  .tac-ptabs.is-compact .cat.ico:not(.on) { min-width: 40px; justify-content: center; }
 }
 </style>

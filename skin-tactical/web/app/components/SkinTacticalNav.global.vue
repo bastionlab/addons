@@ -82,7 +82,7 @@ onUnmounted(() => {
     </div>
 
     <!-- phone: weapon slots -->
-    <nav class="pbar tac-pbar">
+    <nav class="pbar tac-pbar" :data-skin-bar="sheet ? undefined : ''">
       <NuxtLink v-for="n in pinned" :key="n.to" :to="n.to" class="ws" :class="{ on: n.to === path && !sheet }">
         <span class="no">{{ slotNo(idx(n.to)) }}</span>
         <Icon :name="n.icon" :size="20" />
