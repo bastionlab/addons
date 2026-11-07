@@ -52,7 +52,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
         </button>
       </div>
     </div>
-    <nav class="bar">
+    <nav class="bar" :data-skin-bar="open ? undefined : ''">
       <button type="button" class="start" :class="{ down: open }" :aria-expanded="open" @click="open = !open">
         <Icon name="grid" :size="16" /><b>{{ $t('skinRetro.start') }}</b>
         <span v-if="totalBadge" class="badge">{{ totalBadge }}</span>
@@ -124,4 +124,12 @@ html.skin-retro main.wrap { padding-bottom: calc(60px + env(safe-area-inset-bott
 html.skin-retro .grid, html.skin-retro .stack { gap: 10px; }
 /* chunky pixel icons: square ends, mitred corners, no anti-aliased curves where it can be helped */
 html.skin-retro svg.icon { stroke-width: 2.2; stroke-linecap: square; stroke-linejoin: miter; shape-rendering: crispEdges; }
+/* page change: a window pops in (short, opacity + a few px of travel) */
+.skin-retro-enter-active { transition: opacity .16s steps(4, end), transform .16s steps(4, end); }
+.skin-retro-leave-active { transition: opacity .08s linear; }
+.skin-retro-enter-from { opacity: 0; transform: translateY(6px); }
+.skin-retro-leave-to { opacity: 0; }
+@media (prefers-reduced-motion: reduce) {
+  .skin-retro-enter-active, .skin-retro-leave-active { transition: none; }
+}
 </style>
