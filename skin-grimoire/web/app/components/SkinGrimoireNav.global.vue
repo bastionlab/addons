@@ -51,7 +51,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 
     <!-- phone: jobs float top right (only when there are any), the bar sits at the bottom -->
     <div class="phone-jobs"><JobsButton /></div>
-    <nav class="bar">
+    <nav class="bar" :data-skin-bar="sheet ? undefined : ''">
       <NuxtLink v-for="n in pinned" :key="n.to" :to="n.to" class="tab" :class="{ on: n.to === path && !sheet }">
         <span class="ti"><Icon :name="n.icon" :size="21" /><span v-if="badge(n.to)" class="badge">{{ badge(n.to) }}</span><span v-else-if="mark(n.to)" class="cm" :class="mark(n.to)" /></span>
         <span class="l">{{ n.label }}</span>
