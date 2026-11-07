@@ -12,6 +12,8 @@ let last = 0
 let drops: number[] = []
 let ctx: CanvasRenderingContext2D | null = null
 let reduced = false
+let phoneMq: MediaQueryList | null = null
+const phone = ref(false)
 
 function size() {
   const c = cv.value
@@ -43,20 +45,29 @@ function frame(t: number) {
     else drops[i]! += 0.5 + (i % 3) * 0.18
   }
 }
-function start() { if (!raf && !reduced && !document.hidden) raf = requestAnimationFrame(frame) }
+function start() { if (!raf && !reduced && !phone.value && !document.hidden) raf = requestAnimationFrame(frame) }
 function stop() { if (raf) cancelAnimationFrame(raf); raf = 0 }
 const onVis = () => (document.hidden ? stop() : start())
-const onResize = () => size()
+const onResize = () => { if (!phone.value) size() }
+// phones get no rain at all: no rAF loop, canvas hidden
+const onPhone = () => {
+  phone.value = !!phoneMq?.matches
+  if (phone.value) stop()
+  else { size(); start() }
+}
 onMounted(() => {
   reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   if (reduced) return
-  size()
-  start()
+  phoneMq = window.matchMedia('(max-width: 640px), (pointer: coarse)')
+  phone.value = phoneMq.matches
+  phoneMq.addEventListener('change', onPhone)
+  if (!phone.value) { size(); start() }
   document.addEventListener('visibilitychange', onVis)
   window.addEventListener('resize', onResize, { passive: true })
 })
 onUnmounted(() => {
   stop()
+  phoneMq?.removeEventListener('change', onPhone)
   document.removeEventListener('visibilitychange', onVis)
   window.removeEventListener('resize', onResize)
 })
@@ -64,7 +75,7 @@ onUnmounted(() => {
 
 <template>
   <div class="tm-bd" aria-hidden="true">
-    <canvas ref="cv" class="rain" />
+    <canvas v-show="!phone" ref="cv" class="rain" />
     <div class="glow" />
   </div>
 </template>

@@ -106,7 +106,7 @@ function run(raw: string) {
       return print({ text: t('skinTerminal.rm'), kind: 'err' })
     case 'exit': case 'logout': case 'quit':
       print({ text: t('skinTerminal.logout'), kind: 'dim' })
-      setTimeout(() => go('/'), 450)
+      setTimeout(() => go('/'), 250)
       return
     case 'whoami':
       return print({ text: user.value })
@@ -242,7 +242,8 @@ onUnmounted(() => {
 
     <button v-if="full" type="button" class="corner" :aria-label="$t('skinTerminal.openPrompt')" @click="openPrompt">{{ '>_' }}</button>
 
-    <div class="dock" :style="kb ? { transform: `translateY(${-kb}px)` } : undefined">
+    <!-- data-skin-bar: slides away with the stock phone bar; not while the prompt has focus (typing would hide it) -->
+    <div class="dock" :data-skin-bar="focused ? undefined : ''" :style="kb ? { transform: `translateY(${-kb}px)` } : undefined">
       <!-- scrollback + autocomplete float above the prompt -->
       <div v-if="out.length || showList" class="pop">
         <div v-if="out.length" class="out">
@@ -328,7 +329,7 @@ onUnmounted(() => {
   position: fixed; z-index: 60; left: 0; right: 0; bottom: 0; padding-bottom: env(safe-area-inset-bottom);
   background: rgba(1, 6, 3, .94); border-top: 1px solid var(--line-2);
   box-shadow: 0 -10px 30px rgba(0, 0, 0, .55), 0 -1px 0 rgba(57, 255, 106, .12);
-  transition: transform .12s;
+  transition: transform .12s, translate .2s cubic-bezier(.2, .8, .2, 1);
 }
 .ls {
   display: flex; gap: 2px; height: var(--row); align-items: center; padding: 0 8px; overflow-x: auto; scrollbar-width: none;
@@ -431,6 +432,7 @@ button.dir.pinned { outline: 1px solid var(--accent); outline-offset: -1px; }
   .pop { left: 4px; right: 4px; }
   .crt { border-radius: 0; }
   html.kb .tm-nav:not(.focus) .dock { display: none; }
+  :global(html.bar-hid) .pop { display: none; }
 }
 @media (pointer: coarse) { .dir, .pin { height: 32px; } }
 @media (prefers-reduced-motion: reduce) {

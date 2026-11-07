@@ -5,7 +5,7 @@ icon: palette
 order: 64
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.2
+version: 0.1.3
 desc: "A whole-app skin for Designs: green phosphor terminal with a typed prompt for navigation, box-drawn panels, matrix rain and CRT scanlines."
 routes: []
 needs: []
