@@ -19,7 +19,7 @@ const STEP = 0.45 // seconds per stroke
       <path v-for="(d, i) in data.paths" :key="i" :d="d" pathLength="1" class="ink" :style="{ animationDelay: `${i * STEP}s` }" />
       <text v-for="([x, y, n], i) in data.nums" :key="`n${i}`" :x="x" :y="y" class="num" :style="{ animationDelay: `${i * STEP}s` }">{{ n }}</text>
     </svg>
-    <div v-else class="faint small ph">{{ error || 'Loading…' }}</div>
+    <div v-else class="faint small ph"><template v-if="error">{{ error }}</template><Skeleton v-else kind="lines" :n="3" style="width: 80%" /></div>
     <button v-if="data" type="button" class="lnk small" @click="run++">Replay</button>
   </div>
 </template>

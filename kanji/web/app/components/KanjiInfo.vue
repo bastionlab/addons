@@ -61,7 +61,7 @@ const practice = ref(0)
           <button v-if="x.card" type="button" class="btn sm" :class="{ sure: armed === 'forget' }" @click="forget">{{ armed === 'forget' ? 'Sure?' : 'Reset to new' }}</button>
         </div>
       </template>
-      <p v-else-if="!error" class="muted small">Loading…</p>
+      <Skeleton v-else-if="!error" kind="lines" :n="2" />
     </div>
   </div>
 </template>
