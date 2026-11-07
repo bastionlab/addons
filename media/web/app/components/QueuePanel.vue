@@ -2,7 +2,19 @@
 const props = defineProps<{ title: string, sub?: string, items: any[], empty?: string, id?: string }>()
 const list = computed(() => props.items ?? [])
 const active = computed(() => [...new Set(list.value.filter(i => (i.speed ?? 0) > 0).map(i => i.hash ?? i.id))])
-const eta = (s?: string | null) => (!s ? null : s.replace(/^00:/, '').replace(/\.\d+$/, ''))
+// the *arr's own timeleft when it has one ("hh:mm:ss", "d.hh:mm:ss"), else bytes left / current speed
+const fmtSecs = (sec: number) => {
+  if (!isFinite(sec) || sec <= 0) return null
+  const d = Math.floor(sec / 86400), h = Math.floor(sec % 86400 / 3600), m = Math.floor(sec % 3600 / 60)
+  return d ? `${d}d ${h}h` : h ? `${h}h ${m}m` : m ? `${m}m` : '<1m'
+}
+const eta = (s?: string | null, left?: number, speed?: number) => {
+  if (s) {
+    const m = /^(?:(\d+)\.)?(\d+):(\d+):\d+/.exec(s)
+    if (m) return fmtSecs((+(m[1] ?? 0)) * 86400 + +m[2] * 3600 + +m[3] * 60)
+  }
+  return left && speed ? fmtSecs(left / speed) : null
+}
 // A download at 0% is not news; one that has had no bytes for an hour is. qb-watchdog
 // repairs it after a few more, so this is the warning the row shows in between.
 const stuck = (i: any) => !i.speed && typeof i.idleHours === 'number' && i.idleHours >= 1
@@ -110,11 +122,11 @@ const toggle = (k: string) => {
               <span class="pill" :class="tone(i.tag)">{{ i.tag }}</span>
             </div>
             <div v-if="i.sub" class="small muted sub">{{ i.sub }}</div>
-            <div class="track"><i :style="{ width: Math.max(1, i.progress || 0) + '%' }" /></div>
+            <div class="track"><i :style="{ transform: `scaleX(${Math.max(1, i.progress || 0) / 100})` }" /></div>
             <div class="small muted meta">
               <span>{{ i.progress }}% of {{ bytes(i.size) }}</span>
               <span v-if="i.speed">{{ bytes(i.speed) }}/s</span>
-              <span v-if="eta(i.eta)">eta {{ eta(i.eta) }}</span>
+              <span v-if="eta(i.eta, i.left, i.speed)">eta {{ eta(i.eta, i.left, i.speed) }}</span>
               <span v-if="i.seeds != null">{{ i.seeds }} seeds</span>
               <span v-if="stuck(i)" class="warn">nothing for {{ i.idleHours }} h</span>
               <span v-if="i.ratio != null">ratio {{ i.ratio }}</span>
@@ -135,20 +147,21 @@ const toggle = (k: string) => {
           </span>
         </button>
         <div class="small muted sub indent">{{ g.items.length }} episodes<template v-if="g.seasons"> · {{ g.seasons }}</template></div>
-        <div class="track indent"><i :style="{ width: Math.max(1, pct(g)) + '%' }" /></div>
+        <div class="track indent"><i :style="{ transform: `scaleX(${Math.max(1, pct(g)) / 100})` }" /></div>
         <div class="small muted meta indent">
           <span>{{ pct(g) }}% of {{ bytes(g.size) }}</span>
           <span v-if="g.speed">{{ bytes(g.speed) }}/s</span>
+          <span v-if="eta(null, g.left, g.speed)">{{ $t('media.queue.eta', { t: eta(null, g.left, g.speed) }) }}</span>
         </div>
 
         <div v-if="open.includes(g.key)" class="eps">
           <div v-for="r in g.rows" :key="r.key" class="ep" :class="{ err: r.lead.tag === 'error' }">
             <div class="head">
               <span class="title small">{{ r.label }}<span v-if="r.pack" class="faint"> · one torrent</span></span>
-              <span class="small muted num">{{ r.lead.progress }}%<template v-if="r.lead.speed"> · {{ bytes(r.lead.speed) }}/s</template><template v-if="eta(r.lead.eta) && r.lead.speed"> · {{ eta(r.lead.eta) }}</template></span>
+              <span class="small muted num">{{ r.lead.progress }}%<template v-if="r.lead.speed"> · {{ bytes(r.lead.speed) }}/s</template><template v-if="r.lead.speed && eta(r.lead.eta, r.lead.left, r.lead.speed)"> · {{ eta(r.lead.eta, r.lead.left, r.lead.speed) }}</template></span>
               <span class="pill" :class="tone(r.lead.tag)">{{ r.lead.tag }}</span>
             </div>
-            <div v-if="r.lead.progress > 0 && r.lead.progress < 100" class="track thin"><i :style="{ width: r.lead.progress + '%' }" /></div>
+            <div v-if="r.lead.progress > 0 && r.lead.progress < 100" class="track thin"><i :style="{ transform: `scaleX(${r.lead.progress / 100})` }" /></div>
             <div v-if="r.pack" class="small faint">{{ r.items.map(i => i.sub).join(' · ') }}</div>
             <div v-if="stuck(r.lead) && r.lead.tag !== 'queued'" class="small warn">nothing for {{ r.lead.idleHours }} h</div>
             <div v-if="r.lead.error" class="small bad">{{ r.lead.error }}</div>
@@ -168,13 +181,13 @@ const toggle = (k: string) => {
 .title { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sub { margin-top: 1px; }
 .track { height: 4px; background: var(--track); border-radius: 3px; overflow: hidden; margin: 7px 0 5px; }
-.track i { display: block; height: 100%; background: var(--accent); transition: width .6s ease; }
+.track i { display: block; width: 100%; height: 100%; background: var(--accent); transform-origin: left; transition: transform var(--dur-slow) var(--ease-out); }
 .track.thin { height: 3px; margin: 4px 0 2px; }
 .item.err .track i, .ep.err .track i { background: var(--bad); }
 .meta { display: flex; flex-wrap: wrap; gap: 4px 14px; }
 
 button.group { width: 100%; background: none; border: 0; padding: 0; font: inherit; color: inherit; text-align: left; cursor: pointer; }
-.chev { width: 14px; color: var(--muted); transition: transform .15s ease; flex: none; }
+.chev { width: 14px; color: var(--muted); transition: transform var(--dur-fast) var(--ease-out); flex: none; }
 .chev.on { transform: rotate(90deg); }
 .tags { display: flex; flex-wrap: wrap; gap: 4px; justify-content: flex-end; flex: none; max-width: 55%; }
 .indent { margin-left: 20px; }

@@ -7,7 +7,7 @@ const vpnOk = computed(() => m.value?.vpn && m.value.vpn.up && m.value.vpn.killS
 const chips = computed(() => m.value
   ? [
       { text: vpnOk.value ? 'VPN ok' : 'VPN!', tone: vpnOk.value ? 'ok' : 'bad' },
-      ...(downloading.value ? [{ text: `${downloading.value} ↓`, tone: 'accent' }] : []),
+      ...(downloading.value ? [{ text: `${downloading.value} downloading`, tone: 'accent' }] : []),
       { text: bytes(m.value.sizes?.used) },
     ]
   : [])

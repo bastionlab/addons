@@ -192,7 +192,7 @@ onBeforeUnmount(() => clearTimeout(armTimer))
           <template v-else>
             <span class="small bad grow">Cannot be undone.</span>
             <button class="btn ghost" @click="cancel">Cancel</button>
-            <button class="btn solid-bad" :disabled="step !== 2" @click="remove">
+            <button class="btn danger" :disabled="step !== 2" @click="remove">
               {{ step === 2 ? `Yes, delete ${what(plan)}` : 'Wait…' }}
             </button>
           </template>
@@ -229,5 +229,4 @@ onBeforeUnmount(() => clearTimeout(armTimer))
 .chip.on { color: var(--bad); background: var(--bad-soft); }
 .chip input { margin: 0; }
 .mono { font-family: var(--mono); word-break: break-all; }
-.btn.solid-bad { background: var(--bad); border-color: var(--bad); color: #fff; }
 </style>

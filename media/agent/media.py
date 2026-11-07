@@ -302,7 +302,12 @@ def media():
             res[k] = f.result(timeout=60)
         except Exception as e:
             res[k] = {"error": str(e)[:200]}
-    queues = {"movies": res["movies"], "series": res["series"],
+    # torrents the *arr queue does not list (it can lag or lose track) would otherwise be invisible here
+    def orphans(kind, category):
+        seen = {i.get("hash") for i in res[kind] if isinstance(i, dict)}
+        return [i for i in bare_torrents({h: t for h, t in torrents.items() if h not in seen}, category, kind)]
+    queues = {"movies": (res["movies"] if isinstance(res["movies"], list) else []) + orphans("movies", "radarr"),
+              "series": (res["series"] if isinstance(res["series"], list) else []) + orphans("series", "sonarr"),
               "books": bare_torrents(torrents, "lazylibrarian", "books")}
     active = [t for t in torrents.values() if t.get("dlspeed") or t.get("state") in ("downloading", "stalledDL", "metaDL")]
     return {"time": int(time.time()), "vpn": res["vpn"], "library": res["library"], "sizes": res["sizes"],
