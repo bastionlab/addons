@@ -5,7 +5,7 @@ icon: palette
 order: 63
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.2
+version: 0.1.3
 desc: "A whole-app skin for Designs: every page a comic page with caption boxes, inked panels, halftone and sunburst art, and POW! bursts on every button."
 routes: []
 needs: []

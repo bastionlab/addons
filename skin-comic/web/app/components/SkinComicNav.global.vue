@@ -79,7 +79,7 @@ onUnmounted(() => {
   <div class="comic-nav" :class="{ full }">
     <header class="mast">
       <NuxtLink to="/" class="logo" :aria-label="'bastion'">
-        <svg class="star" viewBox="0 0 100 100" aria-hidden="true"><polygon :points="SPIKES" fill="#ffd83d" stroke="#111111" stroke-width="3" stroke-linejoin="round" /></svg>
+        <div class="star" aria-hidden="true"><svg viewBox="0 0 100 100" width="100%" height="100%"><polygon :points="SPIKES" fill="#ffd83d" stroke="#111111" stroke-width="3" stroke-linejoin="round" /></svg></div>
         <span class="t1">{{ 'Bastion' }}</span><span class="t2">{{ 'Comics' }}</span>
       </NuxtLink>
       <span class="issue"><small>{{ 'No.' }}</small>{{ doy }}</span>
@@ -98,7 +98,7 @@ onUnmounted(() => {
       </NuxtLink>
     </nav>
 
-    <nav ref="bar" class="bubbles">
+    <nav ref="bar" class="bubbles" data-skin-bar>
       <NuxtLink v-for="n in [...pins.pinned.value, ...(offTab ? [offTab] : [])]" :key="n.to" :to="n.to" class="bub" :class="{ on: n.to === path && !pop }">
         <Icon :name="n.icon" :size="18" /><span class="bl">{{ n.label }}</span>
         <span v-if="badge(n.to)" class="bdg">{{ badge(n.to) }}</span>
@@ -115,7 +115,7 @@ onUnmounted(() => {
       </template>
     </nav>
 
-    <button v-if="full" type="button" class="fab" :aria-label="$t('skinComic.pages')" :aria-expanded="pop" @click="pop = !pop">
+    <button v-if="full" type="button" class="fab" data-skin-bar :aria-label="$t('skinComic.pages')" :aria-expanded="pop" @click="pop = !pop">
       <svg viewBox="0 0 100 100" aria-hidden="true"><polygon :points="SPIKES" fill="#ffd83d" stroke="#111111" stroke-width="4" stroke-linejoin="round" /></svg>
       <Icon name="grid" :size="18" class="fi" />
     </button>
@@ -153,7 +153,8 @@ onUnmounted(() => {
 }
 .logo { position: relative; display: flex; align-items: baseline; gap: 8px; padding: 6px 16px 6px 54px; color: var(--panel); text-decoration: none; transform: rotate(-2deg); }
 .logo:hover { text-decoration: none; }
-.star { position: absolute; left: -4px; top: 50%; width: 64px; height: 64px; margin-top: -32px; animation: cspin 30s linear infinite; }
+.star { position: absolute; left: -4px; top: 50%; width: 64px; height: 64px; margin-top: -32px; will-change: transform; animation: cspin 30s linear infinite; }
+.star svg { display: block; }
 .t1, .t2 { font-weight: 900; font-style: italic; text-transform: uppercase; line-height: 1; letter-spacing: .01em; -webkit-text-stroke: 1.5px var(--ink); paint-order: stroke fill; }
 .t1 { position: relative; font-size: 34px; color: var(--comic-red); text-shadow: 3px 3px 0 var(--ink); }
 .t2 { position: relative; font-size: 22px; color: var(--comic-yellow); text-shadow: 2px 2px 0 var(--ink); }
@@ -248,6 +249,7 @@ onUnmounted(() => {
 }
 
 @media (max-width: 640px) {
+  .star { animation: none; will-change: auto; }
   .mast { padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 4px; gap: 10px; }
   .logo { padding: 4px 8px 4px 40px; gap: 5px; }
   .star { width: 46px; height: 46px; margin-top: -23px; }

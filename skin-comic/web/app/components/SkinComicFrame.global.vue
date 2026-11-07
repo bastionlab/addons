@@ -48,12 +48,15 @@ const flavor = computed(() => { const k = `skinComic.places.${props.path.split('
 </style>
 
 <style>
-/* page change: a diagonal panel wipe */
-html.skin-comic .skin-comic-enter-active { transition: clip-path .34s cubic-bezier(.6, .05, .3, 1); }
+/* page change: a plain fade; the diagonal panel wipe (clip-path) is desktop only */
+html.skin-comic .skin-comic-enter-active { transition: opacity .18s ease-out; }
 html.skin-comic .skin-comic-leave-active { transition: opacity .12s; }
-html.skin-comic .skin-comic-enter-from { clip-path: polygon(0 0, 0 0, -30% 100%, -30% 100%); }
-html.skin-comic .skin-comic-enter-to { clip-path: polygon(0 0, 130% 0, 100% 100%, -30% 100%); }
-html.skin-comic .skin-comic-leave-to { opacity: 0; }
+html.skin-comic .skin-comic-enter-from, html.skin-comic .skin-comic-leave-to { opacity: 0; }
+@media (min-width: 641px) and (pointer: fine) {
+  html.skin-comic .skin-comic-enter-active { transition: clip-path .34s cubic-bezier(.6, .05, .3, 1); }
+  html.skin-comic .skin-comic-enter-from { clip-path: polygon(0 0, 0 0, -30% 100%, -30% 100%); opacity: 1; }
+  html.skin-comic .skin-comic-enter-to { clip-path: polygon(0 0, 130% 0, 100% 100%, -30% 100%); }
+}
 @media (prefers-reduced-motion: reduce) {
   html.skin-comic .skin-comic-enter-active { transition: opacity .12s; }
   html.skin-comic .skin-comic-enter-from { clip-path: none; opacity: 0; }
