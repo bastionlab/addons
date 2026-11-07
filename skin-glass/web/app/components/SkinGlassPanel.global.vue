@@ -60,13 +60,13 @@ h2 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.02em; color
 .chev {
   margin-left: auto; display: grid; place-items: center; width: 30px; height: 30px; padding: 0; border-radius: 50%; color: var(--muted); cursor: pointer;
   background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .1);
-  transform: rotate(90deg); transition: transform .5s cubic-bezier(.34, 1.56, .64, 1), color .2s;
+  transform: rotate(90deg); transition: transform var(--dur-slow) var(--ease-spring), color .2s;
 }
 .actions + .chev { margin-left: 0; }
 .folded .chev { transform: rotate(0deg); }
 .hd:hover .chev { color: var(--text); }
 .body { margin-top: 14px; transform-origin: top center; }
-.gfold-enter-active { transition: opacity .3s ease, transform .5s cubic-bezier(.34, 1.4, .64, 1); }
+.gfold-enter-active { transition: opacity var(--dur) ease, transform 240ms var(--ease-spring); }
 .gfold-leave-active { transition: opacity .15s ease, transform .18s ease-in; }
 .gfold-enter-from { opacity: 0; transform: translateY(-10px) scale(.97); }
 .gfold-leave-to { opacity: 0; transform: translateY(-6px) scale(.98); }
@@ -77,5 +77,9 @@ h2 { margin: 0; font-size: 17px; font-weight: 700; letter-spacing: -.02em; color
 @media (pointer: coarse) { .chev { width: 34px; height: 34px; } }
 @media (prefers-reduced-motion: reduce) {
   .chev, .gfold-enter-active, .gfold-leave-active { transition: none; }
+}
+/* phone budget (SKINS.md): no backdrop-filter on large layers, a denser translucent fill instead */
+@media (max-width: 640px), (pointer: coarse) {
+  .gpanel::before { backdrop-filter: none; -webkit-backdrop-filter: none; background: linear-gradient(165deg, rgba(255, 255, 255, .11), rgba(255, 255, 255, .035) 45%, rgba(255, 255, 255, .06)), color-mix(in srgb, var(--panel) 92%, transparent); }
 }
 </style>

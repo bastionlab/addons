@@ -99,4 +99,8 @@ watch(() => props.tabs.length, () => nextTick(measure))
   .pt { padding: 8px 13px; min-height: 38px; }
 }
 @media (prefers-reduced-motion: reduce) { .pt, .pt::before { transition: none; } }
+/* phone budget (SKINS.md): no backdrop-filter on large layers, a denser translucent fill instead */
+@media (max-width: 640px), (pointer: coarse) {
+  .gpt { backdrop-filter: none; -webkit-backdrop-filter: none; background: linear-gradient(180deg, rgba(255, 255, 255, .13), rgba(255, 255, 255, .05)), color-mix(in srgb, var(--panel) 92%, transparent); }
+}
 </style>

@@ -105,7 +105,7 @@ watch(() => props.full, () => (peek.value = false))
     </div>
 
     <!-- phone capsule tab bar -->
-    <nav class="cap" :class="{ lifted: sheet }" :style="{ '--n': slots }">
+    <nav class="cap" data-skin-bar :class="{ lifted: sheet }" :style="{ '--n': slots }">
       <span v-if="hl >= 0" class="hl" :style="{ transform: `translateX(${hl * 100}%)` }" />
       <NuxtLink v-for="n in tabs" :key="n.to" :to="n.to" class="ct" :class="{ on: n.to === path && !sheet }">
         <Icon :name="n.icon" :size="22" /><span class="cl">{{ n.label }}</span>
@@ -168,7 +168,7 @@ watch(() => props.full, () => (peek.value = false))
 .glass-nav :deep(.jt) { background: rgba(255, 255, 255, .1); border-color: rgba(255, 255, 255, .16); color: var(--text); backdrop-filter: blur(20px) saturate(180%); -webkit-backdrop-filter: blur(20px) saturate(180%); }
 
 /* ---------- desktop dock ---------- */
-.dock-zone { position: fixed; z-index: 60; left: 50%; bottom: 14px; transform: translateX(-50%); transition: transform .5s cubic-bezier(.34, 1.4, .64, 1); }
+.dock-zone { position: fixed; z-index: 60; left: 50%; bottom: 14px; transform: translateX(-50%); transition: transform var(--dur-slow) var(--ease-spring); }
 .dock-zone.hidden { transform: translate(-50%, calc(100% + 4px)); }
 .handle { position: absolute; left: 50%; bottom: calc(100% + 6px); transform: translateX(-50%); display: grid; place-items: center; width: 72px; height: 32px; padding: 0; border: 0; background: none; cursor: pointer; }
 .handle i { width: 46px; height: 5px; border-radius: 99px; background: rgba(255, 255, 255, .45); box-shadow: 0 1px 8px rgba(0, 0, 0, .4); }
@@ -226,7 +226,7 @@ watch(() => props.full, () => (peek.value = false))
   position: absolute; top: 6px; bottom: 6px; left: 6px; width: calc((100% - 12px) / var(--n)); border-radius: 999px;
   background: linear-gradient(180deg, rgba(255, 255, 255, .24), rgba(255, 255, 255, .1));
   box-shadow: inset 0 1px 0 rgba(255, 255, 255, .35), 0 4px 14px rgba(0, 0, 0, .25);
-  transition: transform .5s cubic-bezier(.34, 1.45, .64, 1);
+  transition: transform var(--dur-slow) var(--ease-spring);
 }
 .ct {
   position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
@@ -276,7 +276,7 @@ watch(() => props.full, () => (peek.value = false))
 
 .gsheet-enter-active { transition: opacity .25s; }
 .gsheet-leave-active { transition: opacity .22s; }
-.gsheet-enter-active .sheet { transition: transform .55s cubic-bezier(.34, 1.3, .64, 1), opacity .25s; }
+.gsheet-enter-active .sheet { transition: transform var(--dur-slow) var(--ease-spring), opacity var(--dur); }
 .gsheet-leave-active .sheet { transition: transform .25s ease-in, opacity .22s; }
 .gsheet-enter-from, .gsheet-leave-to { opacity: 0; }
 .gsheet-enter-from .sheet, .gsheet-leave-to .sheet { transform: translateY(70%) scale(.94); opacity: 0; }
@@ -298,6 +298,13 @@ watch(() => props.full, () => (peek.value = false))
   .cm.busy, .gsheet-enter-active .app { animation: none; }
   .gsheet-enter-active .sheet, .gsheet-leave-active .sheet { transition: opacity .15s; }
   .gsheet-enter-from .sheet, .gsheet-leave-to .sheet { transform: none; }
+}
+/* phone budget (SKINS.md): no backdrop-filter on large layers, a denser translucent fill instead */
+@media (max-width: 640px), (pointer: coarse) {
+  .orb, .glass-nav :deep(.jt) { backdrop-filter: none; -webkit-backdrop-filter: none; background: color-mix(in srgb, var(--panel) 92%, transparent); }
+  .cap { backdrop-filter: none; -webkit-backdrop-filter: none; background: linear-gradient(180deg, rgba(255, 255, 255, .15), rgba(255, 255, 255, .06)), color-mix(in srgb, var(--panel) 94%, transparent); }
+  .sheet { backdrop-filter: none; -webkit-backdrop-filter: none; background: color-mix(in srgb, var(--panel) 96%, transparent); }
+  .scrim { backdrop-filter: none; -webkit-backdrop-filter: none; background: rgba(4, 6, 16, .6); }
 }
 </style>
 
