@@ -9,8 +9,20 @@ const SHIPPING = [
   { v: 'ship', label: 'shipping only' },
 ]
 
+/** where a search looks; keys match the deals backend registry (app/sources) */
+const SOURCES = [
+  { v: 'kleinanzeigen', label: 'Kleinanzeigen' },
+  { v: 'vinted', label: 'Vinted' },
+  { v: 'ebay', label: 'eBay.de' },
+  { v: 'mydealz', label: 'Mydealz' },
+  { v: 'shpock', label: 'Shpock' },
+  { v: 'refurb', label: 'Refurbished' },
+]
+const sourceLabel = (k: string) => SOURCES.find(x => x.v === k)?.label ?? k
+const sourcesOf = (s: any): string[] => (s?.spec?.sources?.length ? s.spec.sources : ['kleinanzeigen'])
+
 // minScore / locationId have no field here (CLI-only) but must survive an edit, or the backend falls back to its defaults
-const blank = () => ({ name: '', keyword: '', terms: '', exclude: '', minPrice: '', maxPrice: '', radius: '10', shipping: 'any', intent: '', minScore: '' as number | '', locationId: '' })
+const blank = () => ({ name: '', keyword: '', terms: '', exclude: '', minPrice: '', maxPrice: '', radius: '10', shipping: 'any', intent: '', minScore: '' as number | '', locationId: '', sources: ['kleinanzeigen'] as string[] })
 /** null = closed, 'new' = adding, a number = editing that search */
 const editing = ref<'new' | number | null>(null)
 const form = reactive(blank())
@@ -41,6 +53,7 @@ function openEdit(s: any) {
     shipping: sp.shipping === 'only' ? 'ship' : (sp.shipping ?? 'any'),
     minScore: sp.min_score ?? '',
     locationId: sp.location_id ?? '',
+    sources: [...sourcesOf(s)],
   })
 }
 
@@ -119,7 +132,8 @@ async function compose() {
         else if (e.step === 'probing') steps.value.push({ text: `Test run ${e.round} on Kleinanzeigen…` })
         else if (e.step === 'probed') {
           const last = steps.value[steps.value.length - 1]
-          if (last) last.text = `Test run ${e.round}: ${e.found} ads, ${e.kept} match`
+          if (e.found === 0) steps.value.pop()   // no "0 ads" remark: drop the "Test run…" line
+          else if (last) last.text = `Test run ${e.round}: ${e.found} ads, ${e.kept} match`
         }
         else if (e.step === 'checking') steps.value.push({ text: 'Checking against your description…' })
         else if (e.step === 'verdict') {
@@ -228,6 +242,12 @@ const shipLabel = (sp: any) => SHIPPING.find(x => x.v === (sp?.shipping === 'onl
           <textarea v-model="form.intent" rows="2" placeholder="NAS hard drive with at least 6 TB. No empty enclosures, no SSDs." />
         </label>
       </div>
+      <div class="srcs" role="group" aria-label="Where to search">
+        <span class="small muted">Search on</span>
+        <label v-for="o in SOURCES" :key="o.v" class="chk">
+          <input v-model="form.sources" type="checkbox" :value="o.v"> {{ o.label }}
+        </label>
+      </div>
       <div class="row end">
         <button class="btn ghost" type="button" @click="editing = null">Cancel</button>
         <button class="btn primary" :disabled="!!busy" :title="editing === 'new' ? 'The first run only records the current state' : 'Re-checks stored ads, without notifications'">
@@ -247,6 +267,7 @@ const shipLabel = (sp: any) => SHIPPING.find(x => x.v === (sp?.shipping === 'onl
           <b>{{ s.name }}</b>
           <span class="small muted kw">{{ s.spec?.keyword }}</span>
           <span v-if="s.spec?.intent" class="ai small"><Icon name="sparkles" :size="14"/></span>
+          <span v-for="k in sourcesOf(s)" :key="k" class="chip small">{{ sourceLabel(k) }}</span>
         </div>
         <div v-if="s.last_error" class="small bad ell">{{ s.last_error }}</div>
       </div>
@@ -296,6 +317,10 @@ label { display: flex; flex-direction: column; gap: 3px; font-size: 11.5px; colo
 .row-item { display: flex; align-items: center; gap: 10px; padding: 7px 0; }
 .row-item.off { opacity: .6; }
 .kw { margin-left: 8px; }
+.chip { margin-left: 6px; padding: 1px 6px; border: 1px solid var(--line); border-radius: 999px; color: var(--muted); font-size: 11px; }
+.srcs { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; }
+.srcs .chk { flex-direction: row; align-items: center; gap: 5px; font-size: 12.5px; color: var(--text); }
+.srcs .chk input { padding: 0; }
 .ai { color: var(--accent); margin-left: 6px; }
 .acts { display: flex; gap: 0; flex: none; }
 .ic { width: 30px; height: 30px; padding: 0; font-size: 13px; }
