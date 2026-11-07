@@ -100,7 +100,7 @@ onUnmounted(() => {
     </aside>
 
     <!-- phone: the bubble bar -->
-    <nav class="bubbles">
+    <nav class="bubbles" data-skin-bar>
       <div ref="strip" class="strip">
         <NuxtLink v-for="n in bar" :key="n.to" :to="n.to" class="bub" :class="{ on: n.to === path && !more }" :aria-label="n.label">
           <span class="bi" :style="{ background: n.to === path && !more ? hue(idx(n.to)) : undefined }"><Icon :name="n.icon" :size="20" /></span>
@@ -138,7 +138,7 @@ onUnmounted(() => {
     </Transition>
 
     <!-- the mascot -->
-    <div class="mascot" :class="{ paused, hop }">
+    <div class="mascot" data-skin-bar :class="{ paused, hop }">
       <Transition name="kw-say"><div v-if="said" class="bubble" role="status">{{ said }}</div></Transition>
       <span v-for="h in hearts" :key="h.id" class="pop" :style="{ '--x': `${h.x}px`, '--r': `${h.r}deg`, animationDelay: `${h.d}ms` }">{{ '♥' }}</span>
       <button type="button" class="cat" :aria-label="$t('skinKawaii.mascot')" @click="pet">
@@ -256,9 +256,8 @@ onUnmounted(() => {
   .upt { font-size: 12px; font-weight: 700; color: var(--faint); }
   .bubbles {
     position: fixed; z-index: 60; left: 10px; right: 10px; bottom: calc(10px + env(safe-area-inset-bottom)); height: 62px; display: flex; align-items: center;
-    border-radius: 31px; background: color-mix(in srgb, var(--panel) 92%, transparent); border: 2px solid var(--line);
+    border-radius: 31px; background: color-mix(in srgb, var(--panel) 96%, transparent); border: 2px solid var(--line);
     box-shadow: 0 8px 24px rgba(214, 69, 140, .2), inset 0 -3px 0 color-mix(in srgb, var(--line) 70%, transparent);
-    backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   }
   .strip { flex: 1; min-width: 0; height: 100%; display: flex; align-items: center; gap: 4px; padding: 0 8px; overflow-x: auto; scrollbar-width: none; }
   .strip::-webkit-scrollbar { display: none; }
@@ -295,6 +294,8 @@ onUnmounted(() => {
   .bubble::after { left: auto; right: 26px; }
 }
 
+/* phone budget: the mascot's SVG parts stay still */
+@media (max-width: 640px) and (pointer: coarse) { .eyes, .tail { animation: none; } }
 @media (prefers-reduced-motion: reduce) {
   .eyes, .tail, .hop .cat, .bub.on, .bub:active .bi, .kpage:active .si, .cm.busy, .kw-say-enter-active { animation: none; }
   .sticker { transition: none; }

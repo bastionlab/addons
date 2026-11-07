@@ -57,6 +57,11 @@ const SHAPE: Record<string, string> = {
 @keyframes kwdrift { from { transform: translateX(-260px); } to { transform: translateX(110vw); } }
 @keyframes kwrise { from { transform: translateY(0); opacity: 0; } 8% { opacity: .85; } 85% { opacity: .85; } to { transform: translateY(-110vh); opacity: 0; } }
 @keyframes kwsway { from { transform: translateX(-10px) rotate(-14deg); } to { transform: translateX(10px) rotate(14deg); } }
+@media (max-width: 640px) and (pointer: coarse) {
+  .cloud, .bit, .sway { animation: none; }
+  .bit { bottom: auto; top: 30%; opacity: .5; }
+  .cloud { transform: translateX(20vw); }
+}
 @media (prefers-reduced-motion: reduce) {
   .cloud, .bit, .sway { animation: none; }
   .bit { bottom: auto; top: 30%; opacity: .5; }
