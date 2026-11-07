@@ -27,7 +27,7 @@ const sources = computed(() => Object.entries(st.value?.per_source ?? {}).map(([
 
 <template>
   <div>
-    <div v-if="!d && pending" class="muted pad">Loading flats…</div>
+    <Skeleton v-if="!d && pending" kind="rows" :n="5" />
     <div v-else-if="error && !d" class="bad pad">
       The flats API in CT 107 is unreachable: {{ errText(error) }}
     </div>

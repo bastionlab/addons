@@ -4,7 +4,7 @@ const props = defineProps<{ item: any, busy?: boolean, checked?: boolean }>()
 const emit = defineEmits<{ (e: 'verdict', v: 'up' | 'down' | null): void }>()
 
 const SOURCES: Record<string, string> = { kleinanzeigen: 'Kleinanzeigen', inberlinwohnen: 'inberlinwohnen', immoscout24: 'ImmoScout24', bienici: "Bien'ici" }
-const eur = (v?: number | null) => (v == null ? '' : `${Math.round(v).toLocaleString('de-DE')} €`)
+const eur = (v?: number | null) => (v == null ? '' : `${fmtNum(Math.round(v))} €`)
 
 const warm = computed(() => props.item.warm == null ? (props.item.list_price ? eur(props.item.list_price) : '—') : eur(props.item.warm))
 // what the warm figure is made of, so an estimate never passes for a quote
@@ -59,10 +59,10 @@ async function copy() {
     <div class="main">
       <a :href="item.url" target="_blank" rel="noopener" class="title">{{ item.title }}</a>
       <div class="facts">
-        <b v-if="item.rooms">{{ item.rooms.toLocaleString('de-DE') }} rooms</b>
-        <b v-if="item.area">{{ item.area.toLocaleString('de-DE') }} m²</b>
+        <b v-if="item.rooms">{{ fmtNum(item.rooms, 3) }} rooms</b>
+        <b v-if="item.area">{{ fmtNum(item.area, 3) }} m²</b>
         <span v-if="item.district" class="muted">{{ item.district }}</span>
-        <span v-if="item.distance_km != null" class="muted">{{ item.distance_km.toLocaleString('de-DE') }} km</span>
+        <span v-if="item.distance_km != null" class="muted">{{ fmtNum(item.distance_km, 3) }} km</span>
         <span v-if="item.available_from" class="muted">from {{ item.available_from }}</span>
       </div>
       <div class="pills">
