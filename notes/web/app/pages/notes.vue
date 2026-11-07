@@ -165,14 +165,14 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 
     <template v-if="pinned.length">
       <h2 class="sec">Pinned</h2>
-      <div class="masonry">
+      <TransitionGroup name="list" tag="div" class="masonry">
         <NoteCard v-for="n in pinned" :key="n.id" :note="n" @open="open(n.id)" @patch="f => patch(n, f)" @tag="pickTag" />
-      </div>
+      </TransitionGroup>
       <h2 v-if="rest.length" class="sec">Others</h2>
     </template>
-    <div class="masonry">
+    <TransitionGroup name="list" tag="div" class="masonry">
       <NoteCard v-for="n in rest" :key="n.id" :note="n" @open="open(n.id)" @patch="f => patch(n, f)" @tag="pickTag" />
-    </div>
+    </TransitionGroup>
 
     <NoteView
       v-if="current" :note="current" :notes="notes"
@@ -203,9 +203,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   .search { flex: 1 1 0; width: 0; min-width: 0; max-width: none; }
   .find select { flex: none; max-width: 40%; }
   .bar .btn.ghost { margin-left: auto; }
-  /* one swipeable row instead of a wall of chips */
-  .chips { flex-wrap: nowrap; overflow-x: auto; scrollbar-width: none; margin: 0 -12px 14px; padding: 0 12px; }
-  .chip { flex: none; }
+  /* chips wrap onto more lines; a long tag is cut with an ellipsis rather than pushing past the edge */
+  .chip { max-width: 100%; min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .masonry { columns: 1; }
 }
 </style>

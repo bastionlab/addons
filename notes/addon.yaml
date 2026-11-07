@@ -5,7 +5,7 @@ icon: note
 order: 1
 author: MaxJC0
 license: AGPL-3.0
-version: 1.0.2
+version: 1.0.3
 desc: "Quick-capture notebook the local model tidies: one topic per note, todos, pasted images, undo."
 routes: [/notes]
 home: true          # brings app/components/HomeNotes.global.vue for the home page
