@@ -130,7 +130,7 @@ const start = computed(() => (props.guide && !done.value ? expected[idx.value]?.
       <polyline v-if="wrong" :points="line(wrong)" class="wrong" />
       <polyline v-if="drawing.length" :points="line(drawing)" class="pen" />
     </svg>
-    <div v-if="!data" class="ph faint small">{{ error || 'Loading…' }}</div>
+    <div v-if="!data" class="ph faint small"><template v-if="error">{{ error }}</template><Skeleton v-else kind="lines" :n="3" style="width: 60%" /></div>
     <div v-else class="info faint small">
       <span>{{ Math.min(idx, total) }}/{{ total }} strokes</span>
       <span v-if="mistakes" class="bad">{{ mistakes }} miss{{ mistakes > 1 ? 'es' : '' }}</span>
