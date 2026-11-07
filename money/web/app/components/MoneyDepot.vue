@@ -82,7 +82,7 @@ const label = (p: any) => p.label || p.name
       <button v-for="p in positions" :key="p.isin" class="pos" :class="{ on: pick === p.isin }" @click="pick = pick === p.isin ? '' : p.isin">
         <span class="pn">
           <span class="nm">{{ label(p) }}</span>
-          <span class="faint small">{{ p.shares.toLocaleString('de-DE', { maximumFractionDigits: 3 }) }} sh. · avg {{ fmtEur(p.buyin / p.shares) }} → {{ fmtEur(p.value / p.shares) }}</span>
+          <span class="faint small">{{ fmtNum(p.shares, 3) }} sh. · avg {{ fmtEur(p.buyin / p.shares) }} → {{ fmtEur(p.value / p.shares) }}</span>
           <span class="alloc"><i :style="{ width: (100 * (p.share ?? 0)) + '%' }" /></span>
         </span>
         <span class="pv">
@@ -97,7 +97,7 @@ const label = (p: any) => p.label || p.name
     <Panel v-if="trades.length" title="Buys & sells" :sub="sel ? label(sel) : ''" id="money-trades" class="gap" fold="phone">
       <div v-for="(t, i) in trades" :key="i" class="tr small">
         <span class="faint">{{ dayTitle(t.day) }}</span>
-        <span>{{ t.shares > 0 ? 'Buy' : 'Sell' }} {{ Math.abs(t.shares).toLocaleString('de-DE', { maximumFractionDigits: 4 }) }} sh.</span>
+        <span>{{ t.shares > 0 ? 'Buy' : 'Sell' }} {{ fmtNum(Math.abs(t.shares), 4) }} sh.</span>
         <span class="num">{{ fmtEur(Math.abs(t.amount)) }}</span>
       </div>
     </Panel>

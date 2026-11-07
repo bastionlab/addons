@@ -82,11 +82,25 @@ const moved = computed(() => {
   }
   return { tr, inv }
 })
-const vsAvg = computed(() => (L.value?.avg_spending ? L.value.spending - L.value.avg_spending : null))
+// mid-month, compare with the part of the average that has passed (hidden in the first week: too noisy)
+const vsAvg = computed(() => {
+  if (!L.value?.avg_spending) return null
+  const [y, m] = String(L.value.month).split('-').map(Number)
+  const now = new Date()
+  if (now.getFullYear() !== y || now.getMonth() + 1 !== m) return L.value.spending - L.value.avg_spending
+  if (now.getDate() < 7) return null
+  return L.value.spending - L.value.avg_spending * (now.getDate() / new Date(y, m, 0).getDate())
+})
 
 const pf = computed(() => d.value?.portfolio)
 const depotIn = computed(() => (pf.value?.positions ?? []).reduce((a: number, p: any) => a + (p.buyin || 0), 0))
 const gain = computed(() => (pf.value?.positions?.length ? d.value.invested_value - depotIn.value : null))
+// the pytr cash row only feeds the depot once Enable Banking carries Trade Republic's cash: keep it out of the list
+const accountRows = computed(() => {
+  const list = d.value?.accounts ?? []
+  const ebTr = list.some((a: any) => a.source === 'eb' && String(a.name || '').startsWith('Trade Republic'))
+  return ebTr ? list.filter((a: any) => !(a.key === 'tr:cash')) : list
+})
 const trCash = computed(() => d.value?.accounts?.find((a: any) => a.key === 'tr:cash')?.balance ?? null)
 const activeSubs = computed(() => (d.value?.subs ?? []).filter((s: any) => s.state === 'active' && s.kind !== 'in'))
 const nextDue = computed(() => {
@@ -265,7 +279,7 @@ const attention = computed(() => {
           <span><span class="lbl">Income</span><b class="num ok">{{ fmtEur(L.income, 0) }}</b></span>
           <span><span class="lbl">Spending</span><b class="num">{{ fmtEur(L.spending, 0) }}</b></span>
           <span><span class="lbl">Net</span><b class="num" :class="L.income - L.spending >= 0 ? 'ok' : 'bad'">{{ fmtSigned(L.income - L.spending) }}</b></span>
-          <span v-if="vsAvg != null"><span class="lbl">vs. 3-month avg</span><b class="num" :class="vsAvg <= 0 ? 'ok' : 'warn'">{{ fmtSigned(vsAvg) }}</b></span>
+          <span v-if="vsAvg != null"><span class="lbl">vs. 3-month avg (so far)</span><b class="num" :class="vsAvg <= 0 ? 'ok' : 'warn'">{{ fmtSigned(vsAvg) }}</b></span>
         </div>
         <p v-if="moved.tr || moved.inv" class="small faint excl">
           excl. <button class="lnk" @click="goTab('buchungen', { k: 'tr' })">transfers {{ fmtEur(moved.tr, 0) }}</button><template v-if="moved.inv"> and investments {{ fmtEur(moved.inv, 0) }}</template>
@@ -274,7 +288,7 @@ const attention = computed(() => {
           <span class="lbl">Month-end forecast</span>
           <span>Spending ~<b class="num">{{ fmtEur(L.forecast.spending, 0) }}</b> · Net ~<b class="num" :class="L.forecast.saldo >= 0 ? 'ok' : 'bad'">{{ fmtSigned(L.forecast.saldo) }}</b>
             · Accounts ~<b class="num">{{ fmtEur(d.cash + L.forecast.rest_in - L.forecast.rest_out, 0) }}</b></span>
-          <span class="faint small">{{ L.forecast.days_left }} days left: subs {{ fmtEur(L.forecast.subs_due, 0) }} + ~{{ fmtEur(L.forecast.pace_day, 0) }}/day<template v-if="L.forecast.rest_in > 1"> · expected income ~{{ fmtEur(L.forecast.rest_in, 0) }}</template></span>
+          <span class="faint small">{{ L.forecast.days_left }} days left: subs {{ fmtEur(L.forecast.subs_due, 0) }} + ~{{ fmtEur(L.forecast.pace_day, 0) }}/day<template v-if="L.forecast.rest_in > 1"> · expected income ~{{ fmtEur(L.forecast.rest_in, 0) }}</template><template v-if="L.forecast.stale_subs?.length"> · not counted, check: {{ L.forecast.stale_subs.join(', ') }}</template></span>
         </div>
         <Panel v-if="odd.length" title="Unusual" :sub="`${odd.length} charge${odd.length > 1 ? 's' : ''}`" id="money-odd" class="oddp">
           <div v-for="a in odd" :key="a.journal_id" class="odd">
@@ -295,7 +309,7 @@ const attention = computed(() => {
                 <span class="tp"><span class="py">{{ t.alias || t.payee }}</span><span class="faint small">{{ t.share_of ? `Share of ${t.share_of}` : t.category || '—' }}</span></span>
                 <span class="num" :class="t.amount > 0 ? 'ok' : ''">{{ fmtEur(t.amount) }}</span>
               </button>
-              <button v-if="dayTx.length" class="btn ghost sm" @click="goTab('buchungen', { d: day })">Open in bookings →</button>
+              <button v-if="dayTx.length" class="btn ghost sm" @click="goTab('buchungen', { d: day })">Open in bookings</button>
             </div>
           </Panel>
           <Panel title="Spending by category" id="money-cats">
@@ -394,7 +408,7 @@ const attention = computed(() => {
             <button class="btn sm" :disabled="d.syncing" @click="act('sync')">{{ d.syncing ? 'syncing…' : 'Sync now' }}</button>
           </template>
           <div v-if="!d.accounts.length" class="faint small">No accounts connected yet.</div>
-          <div v-for="a in d.accounts" :key="a.key" class="acc">
+          <div v-for="a in accountRows" :key="a.key" class="acc">
             <span class="dot" :class="a.error ? 'bad' : a.last_sync ? 'ok' : ''" />
             <span class="an">
               <span>{{ a.name }}<span v-if="a.iban" class="faint small"> · {{ a.iban.slice(-4) }}</span></span>
@@ -403,7 +417,7 @@ const attention = computed(() => {
                 <template v-if="linkFor(a)?.valid_until"> · access for {{ daysLeft(linkFor(a).valid_until) }} more days</template>
               </span>
               <span v-if="a.error" class="bad small">{{ a.error }}</span>
-              <button class="lnk small" @click="goTab('buchungen', { a: a.name })">Bookings →</button>
+              <button class="lnk small" @click="goTab('buchungen', { a: a.name })">Bookings</button>
             </span>
             <span class="num ab">{{ fmtEur(a.balance) }}</span>
           </div>

@@ -38,7 +38,7 @@ function move(e: PointerEvent) {
   hover.value = best
 }
 const h = computed(() => (hover.value == null ? null : pts.value[hover.value]))
-const short = (n: number) => n >= 10000 ? `${(n / 1000).toLocaleString('de-DE', { maximumFractionDigits: 1 })}k` : Math.round(n).toLocaleString('de-DE')
+const short = (n: number) => n >= 10000 ? `${fmtNum(n / 1000, 1)}k` : fmtNum(Math.round(n))
 const dm = (d: string) => new Date(d + 'T12:00').toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: '2-digit' })
 </script>
 
