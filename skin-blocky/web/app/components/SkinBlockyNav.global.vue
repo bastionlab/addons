@@ -119,7 +119,7 @@ onUnmounted(() => {
       </symbol>
     </svg>
 
-    <div class="hud">
+    <div class="hud" data-skin-bar>
       <Transition name="bkname">
         <div v-if="showName && here" :key="here.to" class="iname">{{ here.label }}</div>
       </Transition>
@@ -315,6 +315,7 @@ onUnmounted(() => {
   .barrow { gap: 4px; }
   html.kb .hud { display: none; }
 }
+@media (max-width: 640px) and (pointer: coarse) { .hearts.low .pip { animation: none; } }
 @media (prefers-reduced-motion: reduce) {
   .hearts.low .pip, .glint::after { animation: none; }
   .bkinv-enter-active .gui { transition: none; }
