@@ -34,6 +34,7 @@ const days = computed<CostDay[]>(() => {
   }
   return out
 })
+const plug = computed(() => !!sum.value?.power?.shelly && !sum.value?.power?.err)
 const has = computed(() => costHasData(sum.value))
 const month = computed(() => sum.value ? costTotals(sum.value, costMonthDays(sum.value)) : null)
 const rangeTot = computed(() => sum.value ? costTotals(sum.value, days.value) : null)
@@ -100,7 +101,7 @@ const usdFmt = (n: number) => costUsd(n, n < 10 ? 2 : 0)
             <div class="card"><span class="lbl">{{ t('cost.claudeList') }}</span><b>{{ costUsd(month.usd) }}</b><span class="faint small">{{ fmtMoney(month.eur) }}</span></div>
             <div class="card"><span class="lbl">{{ t('cost.saved') }}</span><b class="ok">{{ costUsd(month.saved) }}</b><span class="faint small">{{ t('cost.savedSub') }}</span></div>
             <div class="card"><span class="lbl">{{ t('cost.localValue') }}</span><b>{{ fmtMoney(month.apiLo) }} – {{ fmtMoney(month.apiHi) }}</b><span class="faint small">{{ t('cost.localValueSub') }}</span></div>
-            <div class="card"><span class="lbl">{{ t('cost.electricity') }}</span><b>{{ fmtMoney(month.power) }}</b><span class="faint small">{{ costKwh(month.gpuWh + month.srvWh) }} · {{ t('cost.electricitySub') }}</span></div>
+            <div class="card"><span class="lbl">{{ t('cost.electricity') }}</span><b>{{ fmtMoney(month.power) }}</b><span class="faint small">{{ costKwh(month.gpuWh + month.srvWh) }} · {{ t(plug ? 'cost.electricitySubPlug' : 'cost.electricitySub') }}</span></div>
           </div>
           <div class="vs">
             <span class="lbl">{{ t('cost.vsApi') }}</span>
@@ -155,7 +156,7 @@ const usdFmt = (n: number) => costUsd(n, n < 10 ? 2 : 0)
       </template>
 
       <template v-else-if="tab === 'power' && rangeTot">
-        <Panel :title="t('cost.powerDay')" :sub="`${costKwh(rangeTot.gpuWh)} · ${t('cost.powerSub')}`">
+        <Panel :title="t('cost.powerDay')" :sub="`${costKwh(rangeTot.gpuWh + rangeTot.srvWh)} · ${t(plug ? 'cost.powerSubPlug' : 'cost.powerSub')}`">
           <CostBars v-model="sel" :bars="powerBars" :series="powerSeries" :fmt="kwhFmt" />
           <p class="faint small hint">{{ t('cost.tapBar') }}</p>
           <div v-if="powerDay" class="detail">
@@ -164,17 +165,17 @@ const usdFmt = (n: number) => costUsd(n, n < 10 ? 2 : 0)
               <span class="nm">{{ t(`cost.classes.${c}`) }}</span><span />
               <b class="num">{{ costKwh(powerDay.gpu_wh?.[c] || 0) }}</b>
             </div>
-            <div class="row"><span class="nm">{{ t('cost.server') }}</span><span /><b class="num">{{ costKwh(powerDay.server_wh || 0) }}</b></div>
+            <div class="row"><span class="nm">{{ t(plug ? 'cost.serverPlug' : 'cost.server') }}</span><span /><b class="num">{{ costKwh(powerDay.server_wh || 0) }}</b></div>
           </div>
         </Panel>
-        <Panel :title="t('cost.electricity')" :sub="t('cost.powerSub')">
+        <Panel :title="t('cost.electricity')" :sub="t(plug ? 'cost.powerSubPlug' : 'cost.powerSub')">
           <div class="cards">
-            <div class="card"><span class="lbl">{{ t('cost.gpu') }}</span><b>{{ costKwh(rangeTot.gpuWh) }}</b><span class="faint small">{{ fmtMoney((rangeTot.gpuWh / 1000) * kwhRate) }}</span></div>
-            <div class="card"><span class="lbl">{{ t('cost.server') }}</span><b>{{ costKwh(rangeTot.srvWh) }}</b><span class="faint small">{{ fmtMoney((rangeTot.srvWh / 1000) * kwhRate) }}</span></div>
-            <div class="card"><span class="lbl">{{ t('cost.total') }} · {{ range }} d</span><b>{{ fmtMoney(rangeTot.power) }}</b><span class="faint small">{{ fmtMoney(rangeTot.power / Math.max(days.length, 1)) }} / d</span></div>
-            <div class="card"><span class="lbl">{{ t('cost.month') }}</span><b>{{ fmtMoney(month?.power ?? 0) }}</b></div>
+            <div class="card"><span class="lbl">{{ t('cost.total') }} · {{ range }} d</span><b>{{ fmtMoney(rangeTot.power) }}</b><span class="faint small">{{ costKwh(rangeTot.gpuWh + rangeTot.srvWh) }} · {{ fmtMoney(rangeTot.power / Math.max(days.length, 1)) }} / d</span></div>
+            <div class="card"><span class="lbl">{{ t('cost.month') }}</span><b>{{ fmtMoney(month?.power ?? 0) }}</b><span class="faint small">{{ costKwh((month?.gpuWh ?? 0) + (month?.srvWh ?? 0)) }}</span></div>
+            <div class="card"><span class="lbl">{{ t('cost.gpu') }}</span><b>{{ fmtMoney((rangeTot.gpuWh / 1000) * kwhRate) }}</b><span class="faint small">{{ costKwh(rangeTot.gpuWh) }}</span></div>
+            <div class="card"><span class="lbl">{{ t(plug ? 'cost.serverPlug' : 'cost.server') }}</span><b>{{ fmtMoney((rangeTot.srvWh / 1000) * kwhRate) }}</b><span class="faint small">{{ costKwh(rangeTot.srvWh) }}</span></div>
           </div>
-          <p class="faint small hint">{{ t('cost.serverNote') }}</p>
+          <p class="faint small hint">{{ (plug ? t('cost.serverNotePlug', { w: Math.round(sum.power?.watts ?? 0) }) : t('cost.serverNote')) }}</p>
         </Panel>
       </template>
       <p v-if="sum.proxy?.ok && sum.proxy.since" class="faint small hint">{{ t('cost.proxySince', { d: fmtDate(sum.proxy.since) }) }}</p>

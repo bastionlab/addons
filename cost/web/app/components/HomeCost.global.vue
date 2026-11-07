@@ -5,7 +5,7 @@ const tot = computed(() => data.value ? costTotals(data.value, costMonthDays(dat
 const chips = computed(() => tot.value ? [
   { text: fmtMoney(tot.value.power + tot.value.eur, 0) },
   { text: `${costUsd(tot.value.usd, 0)} Claude` },
-  { text: fmtMoney(tot.value.power, 0) + ' ⚡' },
+  { text: fmtMoney(tot.value.power, 0) + ' power' },
 ] : [])
 </script>
 

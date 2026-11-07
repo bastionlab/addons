@@ -6,7 +6,7 @@ icon: layers           # a name from web/app/components/Icon.vue in the core
 order: 12              # where its tab sits among the add-on tabs
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.1
+version: 0.1.2
 desc: "What Claude, the local GPU and the server cost per day: tokens, watts and euros, next to your plan windows."
 routes: [/cost]
 home: true             # web/app/components/HomeCost.global.vue = its card in Home's Sections
@@ -21,3 +21,4 @@ settings:
   - { key: max_w, label: "Server max watts, excluding GPU (estimate)", type: number, default: 65, min: 0, max: 2000 }
   - { key: gpu_idle_w, label: "GPU idle watts", type: number, default: 14, min: 0, max: 200, help: "GPU power up to this counts as Idle; only the excess is split between Ollama, Speech and Games" }
   - { key: prices_json, label: "Price table override (JSON)", type: text, default: "", help: "Optional, USD per million tokens: {\"opus\":{\"in\":5,\"out\":25,\"cache_read\":0.5,\"cache_write\":6.25}}" }
+  - { key: shelly_url, label: "Shelly plug address (whole server)", type: text, default: "", help: "e.g. http://192.168.178.172. Empty = estimate from CPU load" }
