@@ -5,7 +5,7 @@ icon: grid
 order: 95
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.0
+version: 0.1.1
 desc: "Build your own Home widgets from an API, metric, service, task or note, or describe one to Claude. Install widget packs from the marketplace."
 routes: [/widgets]
 home: true

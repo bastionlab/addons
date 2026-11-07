@@ -1,0 +1,6 @@
+{
+  "widgets": [
+    { "id": "cpu", "name": "CPU", "size": "S", "look": "gauge", "source": { "type": "metric", "pick": "host.cpu" }, "format": { "suffix": "%", "decimals": 0, "max": 100 } },
+    { "id": "jellyfin", "name": "Jellyfin", "size": "S", "look": "number", "source": { "type": "service", "name": "Jellyfin" } }
+  ]
+}
