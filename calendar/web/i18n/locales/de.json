@@ -1,0 +1,86 @@
+{
+  "calendar": {
+    "title": "Kalender",
+    "view": {
+      "week": "Woche",
+      "month": "Monat",
+      "day": "Tag",
+      "agenda": "Agenda"
+    },
+    "views": "Ansicht",
+    "weekN": "Woche {n}",
+    "goTo": "Zu Datum springen",
+    "menu": "Mehr",
+    "refresh": "Aktualisieren",
+    "openDay": "Tagesansicht",
+    "prev": "Zurück",
+    "next": "Weiter",
+    "today": "Heute",
+    "tomorrow": "Morgen",
+    "new": "Neuer Termin",
+    "edit": "Termin bearbeiten",
+    "calendars": "Kalender",
+    "noCalendars": "Noch keine Kalender.",
+    "allDay": "Ganztägig",
+    "empty": "Nichts geplant.",
+    "noTitleShort": "(ohne Titel)",
+    "more": "+{n} weitere",
+    "close": "Schließen",
+    "saving": "Speichern…",
+    "deleting": "Löschen…",
+    "sure": "Sicher?",
+    "discard": "Änderungen verwerfen?",
+    "readonly": "Dieser Kalender ist schreibgeschützt.",
+    "connect": {
+      "text": "Kein Google-Konto verbunden.",
+      "btn": "Google-Konto verbinden"
+    },
+    "err": {
+      "unreachable": "Der Dashboard-Agent ist nicht erreichbar. Bitte erneut versuchen.",
+      "endBefore": "Das Ende muss nach dem Beginn liegen",
+      "date": "Gültiges Datum und Uhrzeit eingeben"
+    },
+    "what": {
+      "select": "Kalender-Sichtbarkeit"
+    },
+    "f": {
+      "title": "Titel hinzufügen",
+      "allDay": "Ganztägig",
+      "location": "Ort hinzufügen",
+      "description": "Beschreibung hinzufügen",
+      "calColor": "Kalenderfarbe",
+      "calendar": "Kalender",
+      "colour": "Farbe",
+      "colourN": "Farbe {n}",
+      "repeat": "Wiederholen",
+      "weekdays": "Wiederholen am",
+      "start": "Beginn",
+      "end": "Ende",
+      "to": "bis",
+      "startDate": "Startdatum",
+      "startTime": "Startzeit",
+      "endDate": "Enddatum",
+      "endTime": "Endzeit"
+    },
+    "rep": {
+      "none": "Keine Wiederholung",
+      "daily": "Täglich",
+      "weekly": "Wöchentlich",
+      "monthly": "Monatlich",
+      "yearly": "Jährlich",
+      "ends": "Endet",
+      "never": "Endet nie",
+      "until": "Bis Datum",
+      "count": "Nach N Mal",
+      "keep": "Die Wiederholungsregel bleibt, wenn du hier keine wählst."
+    },
+    "askSave": "Änderungen speichern für:",
+    "askDelete": "Löschen:",
+    "one": "Nur dieser Termin",
+    "all": "Alle Termine",
+    "back": "Zurück",
+    "cancel": "Abbrechen",
+    "save": "Speichern",
+    "delete": "Löschen"
+  }
+}
