@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794062987,
+  "updated": 1794063043,
   "addons": [
     {
       "id": "ai",
@@ -476,7 +476,7 @@
       "id": "skin-synthwave",
       "name": "Synthwave skin",
       "icon": "palette",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: 80s outrun with a striped sun, a moving neon grid, neon-tube navigation and VHS glitches.",
       "depends_on": [
