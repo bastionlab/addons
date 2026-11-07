@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794062828,
+  "updated": 1794062874,
   "addons": [
     {
       "id": "ai",
@@ -437,7 +437,7 @@
       "id": "skin-kawaii",
       "name": "Kawaii skin",
       "icon": "palette",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: pastel sky, a sticker-sheet nav, washi-taped bubble cards and a little cat that cheers you on.",
       "depends_on": [
