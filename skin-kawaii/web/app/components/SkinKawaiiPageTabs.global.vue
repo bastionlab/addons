@@ -59,7 +59,7 @@ watch(() => props.tabs.length, () => nextTick(measure))
 .kt-wrap { display: contents; }
 .kt {
   position: sticky; top: var(--ptabs-top, env(safe-area-inset-top, 0px)); z-index: 20; margin: 0 0 14px;
-  background: color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
+  background: color-mix(in srgb, var(--bg) 94%, transparent);
   border-bottom: 2px dashed color-mix(in srgb, var(--accent) 28%, transparent);
 }
 .strip { display: flex; align-items: center; gap: 8px; overflow-x: auto; scrollbar-width: none; padding: 8px 4px 11px; overscroll-behavior-x: contain; }
