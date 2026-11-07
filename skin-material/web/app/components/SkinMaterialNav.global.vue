@@ -16,6 +16,11 @@ const emit = defineEmits<{ search: [] }>()
 const drawer = ref(false)
 const here = computed(() => props.nav.find(n => n.to === props.path))
 const { pinned: bottom, isPinned, toggle, editing, full: pinsFull, max, keys } = useNavPins(() => props.nav)
+// pages that are not pinned to the bar: the current one shows in the More slot, their badges/marks roll up into it
+const offTab = computed(() => (here.value && !bottom.value.some(t => t.to === here.value!.to) ? here.value : null))
+const rest = computed(() => props.nav.filter(n => !bottom.value.some(t => t.to === n.to)))
+const restBadge = computed(() => rest.value.reduce((s, n) => s + (props.badge(n.to) || 0), 0))
+const restMark = computed(() => rest.value.map(n => props.mark(n.to)).find(Boolean) ?? '')
 watch(drawer, v => { if (!v) editing.value = false })
 const scrolled = ref(false)
 const top = ref(true) // at the very top the bar is see-through, so it doesn't cut the backdrop shapes
@@ -25,6 +30,13 @@ function onScroll() {
   raf = requestAnimationFrame(() => { raf = 0; scrolled.value = window.scrollY > 56; top.value = window.scrollY < 2 })
 }
 watch(() => props.path, () => { drawer.value = false; nextTick(onScroll) })
+// phone keyboard: the bottom bar slides away while a field is focused (the core only does this without a skin)
+const barHid = ref(false)
+const isPhone = () => window.matchMedia('(max-width: 640px)').matches
+const FIELD = 'input:not([type=checkbox]):not([type=radio]), textarea, [contenteditable]'
+function setKb(v: boolean) { barHid.value = v; document.documentElement.classList.toggle('m3-kb', v) }
+function onFocusIn(e: FocusEvent) { if (isPhone() && (e.target as HTMLElement | null)?.matches?.(FIELD)) setKb(true) }
+function onFocusOut() { setKb(false) }
 function search() { drawer.value = false; emit('search') }
 const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') drawer.value = false }
 
@@ -55,12 +67,17 @@ onMounted(() => {
   window.addEventListener('keydown', onKey)
   window.addEventListener('scroll', onScroll, { passive: true })
   document.addEventListener('pointerdown', ripple, { passive: true })
+  document.addEventListener('focusin', onFocusIn)
+  document.addEventListener('focusout', onFocusOut)
   onScroll()
 })
 onUnmounted(() => {
   window.removeEventListener('keydown', onKey)
   window.removeEventListener('scroll', onScroll)
   document.removeEventListener('pointerdown', ripple)
+  document.removeEventListener('focusin', onFocusIn)
+  document.removeEventListener('focusout', onFocusOut)
+  document.documentElement.classList.remove('m3-kb')
   if (raf) cancelAnimationFrame(raf)
   document.querySelectorAll('.m3-ripple-box').forEach(b => b.remove())
 })
@@ -70,13 +87,14 @@ onUnmounted(() => {
   <div class="m3-nav" :class="{ full }">
     <!-- phone: top app bar -->
     <header v-if="!full" class="m3-top" :class="{ scrolled, top }">
-      <span class="m3-title" :class="{ show: scrolled || !here }">{{ here?.label ?? 'bastion' }}</span>
+      <span class="m3-title">{{ here?.label ?? 'bastion' }}</span>
+      <span class="m3-st" :title="stateText"><span class="dot" :class="state" />{{ stateText }}</span>
       <JobsButton />
       <button type="button" class="m3-icon m3-rip" :aria-label="$t('skinMaterial.search')" @click="search"><Icon name="search" :size="22" /></button>
     </header>
 
     <!-- phone: bottom navigation bar -->
-    <nav class="m3-bar">
+    <nav class="m3-bar" data-skin-bar :class="{ hid: barHid }">
       <NuxtLink v-for="n in bottom" :key="n.to" :to="n.to" class="m3-item m3-dest" :class="{ on: n.to === path }">
         <span class="ind">
           <span class="pill" />
@@ -86,9 +104,14 @@ onUnmounted(() => {
         </span>
         <span class="lbl">{{ n.label }}</span>
       </NuxtLink>
-      <button type="button" class="m3-item m3-dest" :aria-label="$t('skinMaterial.menu')" :aria-expanded="drawer" @click="drawer = true">
-        <span class="ind"><span class="pill" /><Icon name="grid" :size="24" class="ic" /></span>
-        <span class="lbl">{{ $t('skinMaterial.pages') }}</span>
+      <button type="button" class="m3-item m3-dest" :class="{ on: !!offTab }" :aria-label="$t('skinMaterial.menu')" :aria-expanded="drawer" @click="drawer = true">
+        <span class="ind">
+          <span class="pill" />
+          <Icon :name="offTab ? offTab.icon : 'grid'" :size="24" class="ic" />
+          <span v-if="restBadge" class="bdg">{{ restBadge }}</span>
+          <span v-else-if="restMark" class="cm" :class="restMark" />
+        </span>
+        <span class="lbl">{{ offTab ? offTab.label : $t('skinMaterial.pages') }}</span>
       </button>
     </nav>
 
@@ -163,12 +186,13 @@ onUnmounted(() => {
 /* top app bar (phone) */
 .m3-top { display: none; }
 .m3-bar { display: none; }
-.m3-title { flex: 1; min-width: 0; font-size: 22px; line-height: 28px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; opacity: 0; transform: translateY(6px); transition: opacity .2s, transform .25s cubic-bezier(.2, 0, 0, 1); }
-.m3-title.show { opacity: 1; transform: none; }
+.m3-title { flex: 1; min-width: 0; font-size: 22px; line-height: 28px; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.m3-st { display: flex; align-items: center; gap: 5px; flex: none; margin-right: 2px; font-size: 11px; color: var(--faint); white-space: nowrap; }
 
 /* destinations (bar + rail) */
 .m3-dest { position: relative; display: flex; flex-direction: column; align-items: center; gap: 4px; min-width: 0; color: var(--muted); text-decoration: none; background: none; border: 0; font: inherit; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.m3-dest:hover { text-decoration: none; color: var(--text); }
+.m3-dest { text-decoration: none; }
+@media (hover: hover) { .m3-dest:hover { color: var(--text); } }
 .ind { position: relative; display: grid; place-items: center; width: 64px; height: 32px; }
 .pill { position: absolute; inset: 0; border-radius: 16px; background: var(--m3-sec); opacity: 0; transform: scaleX(.32); transition: transform .38s cubic-bezier(.2, 0, 0, 1), opacity .16s; }
 .m3-dest.on .pill { opacity: 1; transform: scaleX(1); }
@@ -180,7 +204,7 @@ onUnmounted(() => {
 /* navigation rail (desktop) */
 .m3-rail { position: fixed; z-index: 60; top: 0; bottom: 0; left: 0; width: 88px; display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px 0 12px; background: var(--bg); }
 .m3-fab { display: grid; place-items: center; width: 56px; height: 56px; flex: none; margin-bottom: 8px; border: 0; border-radius: 16px; background: var(--m3-pri-c); color: var(--m3-on-pri-c); cursor: pointer; box-shadow: 0 1px 3px rgba(0, 0, 0, .3), 0 4px 8px 3px rgba(0, 0, 0, .15); transition: box-shadow .2s, border-radius .25s; }
-.m3-fab:hover { box-shadow: 0 2px 3px rgba(0, 0, 0, .3), 0 6px 10px 4px rgba(0, 0, 0, .15); }
+@media (hover: hover) { .m3-fab:hover { box-shadow: 0 2px 3px rgba(0, 0, 0, .3), 0 6px 10px 4px rgba(0, 0, 0, .15); } }
 .rail-list { flex: 1; min-height: 0; width: 100%; display: flex; flex-direction: column; align-items: center; gap: 10px; overflow-y: auto; scrollbar-width: none; padding: 4px 0; }
 .rail-list::-webkit-scrollbar { display: none; }
 .rail-list .m3-dest { width: 80px; }
@@ -196,7 +220,8 @@ onUnmounted(() => {
 .brand { font-size: 14px; font-weight: 500; color: var(--muted); letter-spacing: .1px; }
 .dstate { display: flex; align-items: center; gap: 8px; padding: 0 16px 8px; font-size: 12px; color: var(--faint); }
 .drow { display: flex; flex-direction: row; align-items: center; gap: 12px; min-height: 56px; padding: 0 24px 0 16px; border: 0; border-radius: 28px; background: none; color: var(--muted); font: inherit; font-size: 14px; font-weight: 500; letter-spacing: .1px; text-align: left; text-decoration: none; cursor: pointer; flex: none; }
-.drow:hover { text-decoration: none; background: color-mix(in srgb, var(--text) 8%, transparent); }
+.drow:hover { text-decoration: none; }
+@media (hover: hover) { .drow:hover { background: color-mix(in srgb, var(--text) 8%, transparent); } }
 .drow.on { background: var(--m3-sec); color: var(--m3-on-sec); }
 .drow .l { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .drow .cm { position: static; }
@@ -216,16 +241,17 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 6px 16px; flex: none;
 @media (max-width: 640px) {
   .m3-rail { display: none; }
   .m3-top { position: fixed; z-index: 60; top: 0; left: 0; right: 0; display: flex; align-items: center; gap: 4px; height: calc(64px + env(safe-area-inset-top)); padding: env(safe-area-inset-top) 4px 0; background: var(--bg); transition: background-color .25s; }
-  .m3-top.scrolled { background: var(--panel); }
+  .m3-top.scrolled { background: var(--m3-surf); }
   .m3-top.top { background: transparent; }
   .m3-top :deep(.jt) { margin-right: 2px; }
   .m3-title { padding-left: 16px; }
-  .m3-bar { position: fixed; z-index: 60; left: 0; right: 0; bottom: 0; display: flex; height: calc(80px + env(safe-area-inset-bottom)); padding: 12px 0 calc(16px + env(safe-area-inset-bottom)); background: var(--panel); }
+  .m3-bar { position: fixed; z-index: 60; left: 0; right: 0; bottom: 0; display: flex; height: calc(80px + env(safe-area-inset-bottom)); padding: 12px 0 calc(16px + env(safe-area-inset-bottom)); background: var(--panel); transition: transform .2s cubic-bezier(.2, .8, .2, 1), translate .2s cubic-bezier(.2, .8, .2, 1); }
+  .m3-bar.hid { transform: translateY(100%); }
   .m3-bar .m3-dest { flex: 1; }
   .m3-bar .lbl { max-width: 84px; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .pill, .m3-title, .ic, .m3d-enter-active .m3-drawer, .m3d-leave-active .m3-drawer { transition: none !important; }
+  .m3-bar, .m3-top, .m3d-enter-active, .m3d-leave-active, .pill, .m3-title, .ic, .m3d-enter-active .m3-drawer, .m3d-leave-active .m3-drawer { transition: none !important; }
   .cm.busy { animation: none; }
 }
 </style>
@@ -238,21 +264,22 @@ html.skin-material {
   --m3-pri-c: color-mix(in srgb, var(--accent) 34%, var(--bg));
   --m3-on-pri-c: color-mix(in srgb, var(--accent) 45%, var(--text));
   --m3-on-pri: color-mix(in srgb, var(--accent) 22%, black);
+  --m3-surf: var(--panel); /* top bar once scrolled + sticky page tabs once stuck */
 }
 /* see-through body: the tonal Backdrop (z-index -1) paints the surface */
 html.skin-material body { background: transparent; }
-/* M3 symbols: 2 px strokes with a tonal fill */
-html.skin-material svg.icon { stroke-width: 2; fill: color-mix(in srgb, currentColor 14%, transparent); }
-html.skin-material .m3-dest.on svg.icon { fill: color-mix(in srgb, currentColor 30%, transparent); }
+/* M3 symbols: 2 px strokes (line icons stay unfilled) */
+html.skin-material svg.icon { stroke-width: 2; }
 html.skin-material body { font-family: Roboto, "Google Sans", "Google Sans Text", system-ui, sans-serif; }
 @media (min-width: 641px) {
   html.skin-material .shell.skinned { padding-left: 88px; }
 }
 @media (max-width: 640px) {
   html.skin-material .shell.skinned { --tabbar: calc(80px + env(safe-area-inset-bottom)); }
+  html.skin-material.m3-kb .shell.skinned { --tabbar: env(safe-area-inset-bottom, 0px); }
   html.skin-material .m3-nav:not(.full) ~ main.wrap { padding-top: calc(68px + env(safe-area-inset-top)); }
 }
-html.skin-material .m3-ripple-box { position: fixed; z-index: 9999; overflow: hidden; pointer-events: none; animation: m3-rip-fade .7s linear forwards; }
+html.skin-material .m3-ripple-box { position: fixed; z-index: 61; overflow: hidden; pointer-events: none; animation: m3-rip-fade .7s linear forwards; }
 html.skin-material .m3-ripple-dot { position: absolute; border-radius: 50%; opacity: .14; transform: scale(0); animation: m3-rip .45s cubic-bezier(.2, 0, 0, 1) forwards; }
 @keyframes m3-rip { to { transform: scale(1); } }
 @keyframes m3-rip-fade { 0%, 55% { opacity: 1; } 100% { opacity: 0; } }

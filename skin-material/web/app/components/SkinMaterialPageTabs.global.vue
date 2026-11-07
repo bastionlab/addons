@@ -6,15 +6,9 @@
  */
 const props = defineProps<{ tabs: { key: string, label: string, icon?: string, badge?: number | string, tone?: 'ok' | 'warn' | 'bad' }[] }>()
 const model = defineModel<string>({ required: true })
-const anchor = ref<HTMLElement>()
-const strip = ref<HTMLElement>()
-const edge = ref({ l: false, r: false })
+const { anchor, strip, nav, edge, measure, pick, fit } = usePageTabs({ count: () => props.tabs.length, model, autoCompact: true })
 const ind = ref({ x: 0, w: 0, ready: false })
 
-function measure() {
-  const s = strip.value
-  if (s) edge.value = { l: s.scrollLeft > 4, r: s.scrollLeft + s.clientWidth < s.scrollWidth - 4 }
-}
 // the indicator sits under the open tab's content (strip coordinates, so it scrolls along with the tabs)
 function place() {
   const s = strip.value
@@ -23,22 +17,6 @@ function place() {
   const sr = s.getBoundingClientRect()
   const cr = c.getBoundingClientRect()
   ind.value = { x: cr.left - sr.left + s.scrollLeft, w: cr.width, ready: true }
-}
-function reveal(smooth = true) {
-  const s = strip.value
-  const b = s?.querySelector<HTMLElement>('.on')
-  if (!s || !b) return
-  const left = b.offsetLeft - (s.clientWidth - b.offsetWidth) / 2
-  s.scrollTo({ left: Math.max(0, left), behavior: smooth ? 'smooth' : 'auto' })
-}
-function pick(k: string) {
-  if (k === model.value) return
-  model.value = k
-  // scrolled past the bar: bring the new section's start up under it instead of leaving you mid-page
-  const a = anchor.value
-  const stick = parseFloat(getComputedStyle(a?.nextElementSibling ?? document.body).top) || 0
-  const y = a?.getBoundingClientRect().top ?? 0
-  if (a && y < stick) window.scrollTo({ top: window.scrollY + y - stick })
 }
 // see-through until it reaches its sticky spot, so a page that opens with its tabs doesn't cut a band out of the backdrop
 const stuck = ref(false)
@@ -53,10 +31,11 @@ function onScroll() {
     stuck.value = a.getBoundingClientRect().top < (parseFloat(getComputedStyle(n).top) || 0) + 1
   })
 }
-const onResize = () => { measure(); place(); onScroll() }
-watch(model, () => nextTick(() => { place(); reveal() }))
+// usePageTabs refits (and may flip is-compact) on its own resize listener: place the indicator after it
+const onResize = () => { fit(); place(); onScroll() }
+watch(model, () => nextTick(() => place()))
 onMounted(() => {
-  nextTick(() => { place(); reveal(false); measure(); onScroll() })
+  nextTick(() => { fit(); place(); onScroll() })
   window.addEventListener('resize', onResize)
   window.addEventListener('scroll', onScroll, { passive: true })
 })
@@ -67,11 +46,11 @@ watch(() => props.tabs, () => nextTick(onResize), { deep: true })
 <template>
   <div class="m3t-wrap">
     <div ref="anchor" />
-    <nav class="m3t" :class="{ l: edge.l, r: edge.r, stuck }">
+    <nav ref="nav" class="m3t" :class="{ l: edge.l, r: edge.r, stuck }">
       <div ref="strip" class="strip" role="tablist" @scroll.passive="measure">
         <button
-          v-for="t in tabs" :key="t.key" type="button" role="tab" class="tab m3-rip" :class="{ on: model === t.key }"
-          :aria-selected="model === t.key" @click="pick(t.key)"
+          v-for="t in tabs" :key="t.key" type="button" role="tab" class="tab m3-rip" :class="{ on: model === t.key, ico: !!t.icon }"
+          :aria-selected="model === t.key" :aria-label="t.label" :title="t.label" @click="pick(t.key)"
         >
           <span class="in">
             <Icon v-if="t.icon" :name="t.icon" :size="20" />
@@ -91,7 +70,7 @@ watch(() => props.tabs, () => nextTick(onResize), { deep: true })
   position: sticky; top: var(--ptabs-top, env(safe-area-inset-top, 0px)); z-index: 20; margin: 0 0 16px;
   background: transparent; border-bottom: 1px solid var(--line); transition: background-color .2s;
 }
-.m3t.stuck { background: var(--bg); }
+.m3t.stuck { background: var(--m3-surf, var(--panel)); }
 .strip { position: relative; display: flex; overflow-x: auto; scrollbar-width: none; overscroll-behavior-x: contain; }
 .strip::-webkit-scrollbar { display: none; }
 .m3t.l .strip { mask-image: linear-gradient(to right, transparent, black 28px); }
@@ -102,10 +81,10 @@ watch(() => props.tabs, () => nextTick(onResize), { deep: true })
   background: none; color: var(--muted); font: inherit; font-size: 14px; font-weight: 500; letter-spacing: .1px; white-space: nowrap;
   cursor: pointer; -webkit-tap-highlight-color: transparent; transition: background-color .15s, color .15s;
 }
-.tab:hover { background: color-mix(in srgb, var(--text) 8%, transparent); color: var(--text); }
+@media (hover: hover) { .tab:hover { background: color-mix(in srgb, var(--text) 8%, transparent); color: var(--text); } }
 .tab:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
 .tab.on { color: var(--accent); }
-.tab.on:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--accent); }
+@media (hover: hover) { .tab.on:hover { background: color-mix(in srgb, var(--accent) 8%, transparent); color: var(--accent); } }
 .in { display: inline-flex; align-items: center; gap: 8px; }
 .ind {
   position: absolute; left: 0; bottom: 0; height: 3px; min-width: 24px; border-radius: 3px 3px 0 0; background: var(--accent);
@@ -121,6 +100,9 @@ watch(() => props.tabs, () => nextTick(onResize), { deep: true })
 @media (max-width: 640px) {
   .m3t { margin-left: -12px; margin-right: -12px; }
   .tab { min-width: 0; padding: 0 14px; }
+  /* phone, only when the row overflows (is-compact): a closed tab with an icon shows only the icon (its name is in aria-label/title); the open one keeps its label */
+  .m3t.is-compact .tab.ico:not(.on) { min-width: 52px; padding: 0 12px; }
+  .m3t.is-compact .tab.ico:not(.on) .lab { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .tab, .ind.ready { transition: none; }

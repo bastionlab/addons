@@ -48,7 +48,7 @@ h2 { margin: 0; font-size: 16px; font-weight: 500; line-height: 24px; letter-spa
 .actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; cursor: default; }
 .fold { margin-left: auto; display: grid; place-items: center; width: 40px; height: 40px; flex: none; padding: 0; border: 0; border-radius: 50%; background: none; color: var(--muted); cursor: pointer; }
 .actions + .fold { margin-left: 0; }
-.fold:hover { background: color-mix(in srgb, var(--text) 8%, transparent); }
+@media (hover: hover) { .fold:hover { background: color-mix(in srgb, var(--text) 8%, transparent); } }
 .fold :deep(svg) { transform: rotate(90deg); transition: transform .3s cubic-bezier(.2, 0, 0, 1); }
 .folded .fold :deep(svg) { transform: rotate(0deg); }
 .body { padding-top: 8px; }
