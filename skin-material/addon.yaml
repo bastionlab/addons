@@ -5,7 +5,7 @@ icon: palette
 order: 62
 author: MaxJC0
 license: AGPL-3.0
-version: 0.1.4
+version: 0.1.5
 desc: "A whole-app skin for Designs in the style of Android Material 3: top app bar with a navigation drawer, bottom navigation and a navigation rail, tonal cards, ripples and shared-axis page transitions."
 routes: []
 needs: []

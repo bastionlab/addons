@@ -29,7 +29,8 @@ withDefaults(defineProps<{
 
 <style scoped>
 .m3-topic { position: relative; display: flex; flex-direction: column; justify-content: center; gap: 8px; height: 100%; min-width: 0; overflow: hidden; padding: 10px 14px; border-radius: 16px; color: var(--text); text-decoration: none; background: color-mix(in srgb, var(--accent) 5%, var(--panel)); box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 1px 3px 1px rgba(0, 0, 0, .15); transition: box-shadow .2s, background-color .2s; }
-.m3-topic:hover { text-decoration: none; background: color-mix(in srgb, var(--accent) 9%, var(--panel)); box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 2px 6px 2px rgba(0, 0, 0, .15); }
+.m3-topic:hover { text-decoration: none; }
+@media (hover: hover) { .m3-topic:hover { background: color-mix(in srgb, var(--accent) 9%, var(--panel)); box-shadow: 0 1px 2px rgba(0, 0, 0, .3), 0 2px 6px 2px rgba(0, 0, 0, .15); } }
 .hd { display: flex; align-items: center; gap: 12px; min-width: 0; }
 .ic { display: grid; place-items: center; width: 40px; height: 40px; flex: none; border-radius: 50%; background: var(--m3-sec); color: var(--m3-on-sec); }
 .txt { display: flex; flex-direction: column; min-width: 0; flex: 1; }

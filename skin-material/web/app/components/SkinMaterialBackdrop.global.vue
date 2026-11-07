@@ -37,7 +37,7 @@ const spot = computed(() => {
   <div class="m3-bd" :class="{ paused }" :style="spot" aria-hidden="true">
     <div class="glow" />
     <div class="cookie">
-      <svg class="turn" viewBox="0 0 100 100" width="100%" height="100%"><path :d="COOKIE" /></svg>
+      <div class="turn"><svg viewBox="0 0 100 100" width="100%" height="100%"><path :d="COOKIE" /></svg></div>
     </div>
     <div class="pillw"><div class="pill" /></div>
   </div>
@@ -51,7 +51,8 @@ const spot = computed(() => {
   transform: translate(var(--c-x), var(--c-y)) rotate(var(--c-r)) scale(var(--c-s));
   transition: transform 1.4s cubic-bezier(.2, 0, 0, 1);
 }
-.turn { display: block; animation: m3-turn 140s linear infinite; }
+.turn { width: 100%; height: 100%; will-change: transform; animation: m3-turn 140s linear infinite; }
+.turn svg { display: block; }
 .turn path { fill: color-mix(in srgb, var(--accent) 8%, var(--bg)); }
 .pillw {
   position: absolute; left: -18vmin; bottom: -8vmin; width: 78vmin; height: 30vmin;
@@ -63,6 +64,7 @@ const spot = computed(() => {
 .paused .turn, .paused .pill { animation-play-state: paused; }
 @media (max-width: 640px) {
   .cookie { top: -10vmin; right: -22vmin; width: 80vmin; height: 80vmin; }
+  .pill { animation: none; }
   .pillw { left: -30vmin; bottom: 6vh; width: 96vmin; height: 34vmin; }
 }
 @media (prefers-reduced-motion: reduce) {
