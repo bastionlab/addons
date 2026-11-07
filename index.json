@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794061987,
+  "updated": 1794062043,
   "addons": [
     {
       "id": "ai",
@@ -140,7 +140,7 @@
       "id": "habits",
       "name": "Habits",
       "icon": "check",
-      "version": "2.0.1",
+      "version": "2.0.2",
       "author": "MaxJC0",
       "desc": "Habit tracker with daily, weekly and weekday schedules, streaks, a calendar and a perfect-day celebration.",
       "routes": [
