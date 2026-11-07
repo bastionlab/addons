@@ -1,0 +1,16 @@
+# one add-on: this file is what the Add-ons page (and later the marketplace index) shows
+id: calendar
+name: Calendar
+icon: calendar
+order: 5
+author: MaxJC0
+license: AGPL-3.0
+version: 0.2.0
+desc: "Google Calendar for every connected Google account: week, month, day and agenda views, create, edit and delete events, repeating events and Google's colours."
+routes: [/calendar]
+home: false
+needs: []
+depends_on: []
+settings:
+  - { key: week_start, label: "First day of the week", type: select, options: [monday, sunday], default: monday }
+# web/ is a Nuxt layer; Google is the source of truth (no local database), the login is the shared agent/google_auth.py
