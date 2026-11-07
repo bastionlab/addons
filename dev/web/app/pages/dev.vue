@@ -37,7 +37,7 @@ const tabs = computed(() => [
     <div v-show="tab === 'terminals'"><ShellsPanel /></div>
 
     <div v-show="tab === 'projects'">
-    <div v-if="!boxes && pending" class="muted pad">Loading dev boxes…</div>
+    <Skeleton v-if="!boxes && pending" kind="cards" :n="2" />
     <section v-for="box in boxes ?? []" :key="box.vmid" class="box">
       <h2 class="sec">
         {{ box.name }}

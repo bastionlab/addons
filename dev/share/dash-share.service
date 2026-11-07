@@ -3,6 +3,13 @@ Description=Bastion share links: public gate for dev previews (Tailscale Funnel 
 After=network-online.target tailscaled.service
 
 [Service]
+User=dash-share
+Group=dash-share
+NoNewPrivileges=yes
+ProtectSystem=strict
+ProtectHome=yes
+PrivateTmp=yes
+ReadWritePaths=/var/lib/dash-share
 ExecStart=/usr/bin/node /opt/dash-share/share.mjs
 Restart=always
 RestartSec=2
