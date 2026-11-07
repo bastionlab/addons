@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794063106,
+  "updated": 1794063165,
   "addons": [
     {
       "id": "ai",
@@ -502,7 +502,7 @@
       "id": "skin-terminal",
       "name": "Hacker Terminal skin",
       "icon": "palette",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: green phosphor terminal with a typed prompt for navigation, box-drawn panels, matrix rain and CRT scanlines.",
       "depends_on": [
