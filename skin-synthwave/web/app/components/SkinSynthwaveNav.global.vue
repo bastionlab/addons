@@ -22,6 +22,10 @@ const offTab = computed(() => {
   return here && !pinned.value.some(p => p.to === here.to) ? here : null
 })
 const moreBadge = computed(() => list.value.filter(n => !pinned.value.some(p => p.to === n.to)).reduce((s, n) => s + b(n.to), 0))
+const moreMark = computed(() => {
+  const ms = list.value.filter(n => !pinned.value.some(p => p.to === n.to)).map(n => m(n.to))
+  return ms.includes('input') ? 'input' : ms.includes('busy') ? 'busy' : ''
+})
 
 const sheet = ref(false)
 function go(to: string) { if (editing.value) return toggle(to); sheet.value = false; navigateTo(to) }
@@ -66,7 +70,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
     </header>
 
     <!-- phone: bottom neon bar -->
-    <nav class="pbar">
+    <nav class="pbar" :data-skin-bar="sheet ? undefined : ''">
       <NuxtLink v-for="n in pinned" :key="n.to" :to="n.to" class="pt" :class="{ on: n.to === path && !sheet }">
         <Icon :name="n.icon" :size="20" />
         <span class="l">{{ n.label }}</span>
@@ -77,6 +81,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
         <Icon :name="offTab && !sheet ? offTab.icon : 'grid'" :size="20" />
         <span class="l">{{ offTab && !sheet ? offTab.label : $t('skinSynthwave.more') }}</span>
         <span v-if="moreBadge" class="badge">{{ moreBadge }}</span>
+        <span v-else-if="moreMark" class="cm" :class="moreMark" />
       </button>
     </nav>
 
@@ -176,8 +181,14 @@ html.skin-synthwave svg.icon { stroke-width: 2; }
   html.skin-synthwave .shell.skinned { --tabbar: calc(62px + env(safe-area-inset-bottom)); }
   html.skin-synthwave main.wrap { padding-bottom: calc(84px + env(safe-area-inset-bottom)); }
 }
-html.skin-synthwave .skin-synthwave-enter-active { animation: sw-glitch .3s linear; }
-html.skin-synthwave .skin-synthwave-leave-active { animation: sw-glitch-out .12s linear; }
+html.skin-synthwave .skin-synthwave-enter-active { transition: opacity .18s ease-out; }
+html.skin-synthwave .skin-synthwave-leave-active { transition: opacity .1s linear; }
+html.skin-synthwave .skin-synthwave-enter-from, html.skin-synthwave .skin-synthwave-leave-to { opacity: 0; }
+/* the VHS glitch (clip-path + filter) is desktop only; a phone just fades */
+@media (min-width: 641px) and (pointer: fine) {
+  html.skin-synthwave .skin-synthwave-enter-active { transition: none; animation: sw-glitch .3s linear; }
+  html.skin-synthwave .skin-synthwave-leave-active { transition: none; animation: sw-glitch-out .12s linear; }
+}
 @keyframes sw-glitch {
   0% { opacity: 0; transform: translateX(-10px); clip-path: inset(42% 0 36% 0); filter: drop-shadow(5px 0 rgba(255, 0, 90, .9)) drop-shadow(-5px 0 rgba(0, 240, 255, .9)); }
   18% { opacity: 1; transform: translateX(8px) skewX(-3deg); clip-path: inset(8% 0 62% 0); }
@@ -187,5 +198,5 @@ html.skin-synthwave .skin-synthwave-leave-active { animation: sw-glitch-out .12s
   100% { opacity: 1; transform: none; clip-path: inset(0); filter: none; }
 }
 @keyframes sw-glitch-out { to { opacity: 0; transform: translateX(6px) skewX(4deg); } }
-@media (prefers-reduced-motion: reduce) { html.skin-synthwave .skin-synthwave-enter-active, html.skin-synthwave .skin-synthwave-leave-active { animation: none; } }
+@media (prefers-reduced-motion: reduce) { html.skin-synthwave .skin-synthwave-enter-active, html.skin-synthwave .skin-synthwave-leave-active { animation: none; transition: none; } }
 </style>
