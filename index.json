@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794062677,
+  "updated": 1794062744,
   "addons": [
     {
       "id": "ai",
@@ -411,7 +411,7 @@
       "id": "skin-glass",
       "name": "Liquid Glass skin",
       "icon": "palette",
-      "version": "0.1.2",
+      "version": "0.1.3",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: drifting aurora behind frosted glass cards, a magnifying dock, a capsule tab bar and iOS-style large titles.",
       "depends_on": [
