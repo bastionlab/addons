@@ -1,11 +1,9 @@
 <script setup lang="ts">
 /**
- * Page chrome: the title in bold monospace with a hard drop shadow next to its item slot, and on every page change
+ * Page chrome: no page title (the page shows its own), and on every page change
  * an "Achievement get! / Opened Metrics" toast sliding in at the top for 3 s, like unlocking an advancement.
  */
 const props = withDefaults(defineProps<{ path?: string, title?: string, icon?: string }>(), { path: '/', title: '', icon: '' })
-const FULL = ['/chat']
-const isFull = computed(() => FULL.includes(props.path))
 const toast = ref<{ id: number, title: string, icon: string } | null>(null)
 let seq = 0
 let t: ReturnType<typeof setTimeout> | undefined
@@ -26,27 +24,12 @@ onUnmounted(() => clearTimeout(t))
         <span class="atx"><b>{{ $t('skinBlocky.achievement') }}</b><span>{{ $t('skinBlocky.opened', { page: toast.title }) }}</span></span>
       </div>
     </Transition>
-    <h1 v-if="title && !isFull" class="ttl">
-      <span class="tslot"><Icon :name="icon || 'grid'" :size="22" /></span>
-      <span class="tt">{{ title }}</span>
-    </h1>
     <slot />
   </div>
 </template>
 
 <style scoped>
 .bframe { min-width: 0; }
-.ttl { display: flex; align-items: center; gap: 12px; margin: 4px 0 20px; min-width: 0; }
-.tslot {
-  flex: none; display: grid; place-items: center; width: 44px; height: 44px; color: var(--text);
-  background: rgba(139, 139, 139, .8); box-shadow: inset 3px 3px 0 rgba(55, 55, 55, 1), inset -3px -3px 0 rgba(230, 230, 230, 1), 0 0 0 2px rgba(0, 0, 0, 1);
-}
-.tslot :deep(svg) { filter: drop-shadow(2px 2px 0 rgba(40, 40, 40, 1)); }
-.tt {
-  min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
-  font-family: "Courier New", Courier, monospace; font-size: 34px; font-weight: 900; letter-spacing: .02em; color: var(--text);
-  text-shadow: 4px 4px 0 rgba(40, 40, 40, 1);
-}
 .ach {
   position: fixed; z-index: 92; top: calc(10px + env(safe-area-inset-top, 0px)); left: 50%; margin-left: -150px; width: 300px; max-width: calc(100vw - 20px);
   display: flex; align-items: center; gap: 10px; padding: 8px 12px; pointer-events: none;
@@ -61,11 +44,6 @@ onUnmounted(() => clearTimeout(t))
 .bkach-leave-active { transition: transform .3s steps(6); }
 .bkach-enter-from, .bkach-leave-to { transform: translateY(-140%); }
 @media (max-width: 380px) { .ach { left: 10px; margin-left: 0; } }
-@media (max-width: 640px) {
-  .ttl { margin: 2px 0 16px; gap: 10px; }
-  .tslot { width: 38px; height: 38px; }
-  .tt { font-size: 24px; text-shadow: 3px 3px 0 rgba(40, 40, 40, 1); }
-}
 @media (prefers-reduced-motion: reduce) {
   .bkach-enter-active, .bkach-leave-active { transition: opacity .15s; }
   .bkach-enter-from, .bkach-leave-to { transform: none; opacity: 0; }

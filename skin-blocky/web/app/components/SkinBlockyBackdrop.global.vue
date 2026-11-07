@@ -191,6 +191,10 @@ const trees = TREE_COLS.map(c => ({ x: c * 16, base: near[c]!.top }))
 .dusk .dark, .dawn .dark { opacity: .12; }
 
 .paused .stars i, .paused .cloud { animation-play-state: paused; }
+@media (max-width: 640px) and (pointer: coarse) {
+  .stars i, .cloud { animation: none; }
+  .cloud { transform: translateX(30vw); }
+}
 @media (prefers-reduced-motion: reduce) {
   .stars i, .cloud { animation: none; }
   .cloud { transform: translateX(20vw); }
