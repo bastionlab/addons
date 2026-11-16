@@ -1,0 +1,4 @@
+{
+  "GET /briefing/alerts": { "alerts": [] },
+  "POST /briefing/push": { "ok": true }
+}

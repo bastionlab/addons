@@ -1,0 +1,29 @@
+# one add-on: this file is what the Add-ons page and the marketplace show
+id: briefing
+name: Daily briefing
+label: Briefing
+icon: alarm-clock      # a name from web/app/components/icon-paths.ts in the core
+order: 14              # where its tab sits among the add-on tabs
+author: MaxJC0
+license: AGPL-3.0
+version: 0.1.4
+desc: "A short morning briefing from your calendar, mail, hunters, habits, server and the weather, written by the local model and pushed only when something needs you."
+routes: [/briefing]
+home: true             # web/app/components/HomeBriefing.global.vue = its card in Home's Sections
+needs: [Local AI (Ollama)]
+depends_on: []         # every section is optional: it reads what is installed and on, and skips the rest
+roles: { view: owner, use: owner }
+# fields on /settings; values in /etc/dash/settings/briefing.json, read by the app through addonSettings('briefing')
+settings:
+  - { key: time, label: "Briefing time", type: select, options: ["05:00", "05:30", "06:00", "06:30", "07:00", "07:30", "08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30", "12:00"], default: "07:30" }
+  - { key: push, label: "Push when something needs you", type: toggle, default: true, help: "Turn the Briefing topic on in Notifications (Settings) on each device" }
+  - { key: lang, label: "Summary language", type: select, options: [en, de], default: en }
+  - { key: location, label: "Weather place", type: text, default: "", help: "Empty = the server's location" }
+  - { key: sec_calendar, label: "Include calendar", type: toggle, default: true }
+  - { key: sec_mail, label: "Include mail", type: toggle, default: true }
+  - { key: sec_deals, label: "Include deals", type: toggle, default: true }
+  - { key: sec_flats, label: "Include flats", type: toggle, default: true }
+  - { key: sec_jobs, label: "Include jobs", type: toggle, default: true }
+  - { key: sec_habits, label: "Include habits", type: toggle, default: true }
+  - { key: sec_system, label: "Include system", type: toggle, default: true }
+  - { key: sec_weather, label: "Include weather", type: toggle, default: true }

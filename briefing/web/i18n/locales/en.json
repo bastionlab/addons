@@ -1,0 +1,60 @@
+{
+  "briefing": {
+    "title": "Daily briefing",
+    "today": "Today",
+    "quiet": "Nothing needs you today",
+    "unreadable": "Could not read: {x}",
+    "next": "Next briefing at {time}",
+    "generate": "Generate now",
+    "generating": "Writing…",
+    "failed": "Briefing failed: {why}",
+    "attention": "Needs a look",
+    "source": {
+      "model": "Written by the local model",
+      "facts": "From the facts",
+      "quiet": "Quiet day",
+      "pending": "Writing",
+      "incomplete": "Incomplete"
+    },
+    "home": {
+      "error": "Could not load",
+      "writing": "Writing today's briefing",
+      "next": "Next briefing at {time}",
+      "name": "Briefing"
+    },
+    "sections": {
+      "calendar": "Calendar",
+      "mail": "Mail",
+      "deals": "Deals",
+      "flats": "Flats",
+      "jobs": "Jobs",
+      "habits": "Habits",
+      "system": "System",
+      "weather": "Weather"
+    },
+    "n": {
+      "events": "{n} event | {n} events",
+      "mail": "{n} important mail | {n} important mails",
+      "deals": "{n} deal | {n} deals",
+      "flats": "{n} flat | {n} flats",
+      "jobs": "{n} job | {n} jobs",
+      "alerts": "{n} alert | {n} alerts"
+    },
+    "allDay": "All day",
+    "noEvents": "No events today",
+    "mailLine": "{n} important unread, {unread} unread in total",
+    "noNew": "Nothing new",
+    "huntLine": {
+      "deals": "{n} new deal | {n} new deals",
+      "flats": "{n} new flat | {n} new flats",
+      "jobs": "{n} new job | {n} new jobs"
+    },
+    "habitsLine": "{done} of {total} done, best streak {best}",
+    "habitsShort": "{done}/{total} habit | {done}/{total} habits",
+    "noAlerts": "No alerts",
+    "backupAge": "Last backup {h} h ago",
+    "pool": "{name} {pct} % full",
+    "weatherLine": "{place}: {label}, {min} to {max} C",
+    "weatherMore": "Rain {rain} %, wind {wind} km/h"
+  }
+}
