@@ -1,0 +1,86 @@
+{
+  "calendar": {
+    "title": "Calendar",
+    "view": {
+      "week": "Week",
+      "month": "Month",
+      "day": "Day",
+      "agenda": "Agenda"
+    },
+    "views": "View",
+    "weekN": "Week {n}",
+    "goTo": "Go to date",
+    "menu": "More",
+    "refresh": "Refresh",
+    "openDay": "Day view",
+    "prev": "Previous",
+    "next": "Next",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "new": "New event",
+    "edit": "Edit event",
+    "calendars": "Calendars",
+    "noCalendars": "No calendars yet.",
+    "allDay": "All day",
+    "empty": "Nothing planned.",
+    "noTitleShort": "(no title)",
+    "more": "+{n} more",
+    "close": "Close",
+    "saving": "Saving…",
+    "deleting": "Deleting…",
+    "sure": "Sure?",
+    "discard": "Discard your changes?",
+    "readonly": "This calendar is read-only.",
+    "connect": {
+      "text": "No Google account connected.",
+      "btn": "Connect a Google account"
+    },
+    "err": {
+      "unreachable": "Could not reach the dashboard agent. Try again.",
+      "endBefore": "End must be after start",
+      "date": "Enter a valid date and time"
+    },
+    "what": {
+      "select": "Calendar visibility"
+    },
+    "f": {
+      "title": "Add title",
+      "allDay": "All day",
+      "location": "Add location",
+      "description": "Add description",
+      "calColor": "Calendar colour",
+      "calendar": "Calendar",
+      "colour": "Colour",
+      "colourN": "Colour {n}",
+      "repeat": "Repeat",
+      "weekdays": "Repeat on",
+      "start": "Start",
+      "end": "End",
+      "to": "to",
+      "startDate": "Start date",
+      "startTime": "Start time",
+      "endDate": "End date",
+      "endTime": "End time"
+    },
+    "rep": {
+      "none": "Does not repeat",
+      "daily": "Daily",
+      "weekly": "Weekly",
+      "monthly": "Monthly",
+      "yearly": "Yearly",
+      "ends": "Ends",
+      "never": "Never ends",
+      "until": "Until date",
+      "count": "After N times",
+      "keep": "Repeat rule stays as it is unless you pick one here."
+    },
+    "askSave": "Save changes to:",
+    "askDelete": "Delete:",
+    "one": "Only this event",
+    "all": "All events",
+    "back": "Back",
+    "cancel": "Cancel",
+    "save": "Save",
+    "delete": "Delete"
+  }
+}
