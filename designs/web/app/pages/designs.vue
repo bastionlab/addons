@@ -193,7 +193,7 @@ const publish = (d: Design) => useConfirm().ask('design_publish', { id: d.id, na
   <div>
     <div v-if="err" class="errbox">{{ err }}</div>
     <Skeleton v-else-if="!data" kind="cards" :n="4" />
-    <div v-else class="stack">
+    <div v-else class="stack cin">
       <Panel v-if="isOwner" :title="$t('designs.describe')" fold="phone">
         <div class="ed">
           <textarea v-model="ask" rows="2" :placeholder="$t('designs.describeHint')" :disabled="!!aiJob" />
@@ -274,7 +274,7 @@ const publish = (d: Design) => useConfirm().ask('design_publish', { id: d.id, na
           <button class="btn sm" :disabled="!code.trim()" @click="doImport">{{ $t('designs.import') }}</button>
         </div>
         <p v-if="!data.mine.length" class="empty-state">{{ $t('designs.empty') }}</p>
-        <div class="cards">
+        <TransitionGroup name="list" tag="div" class="cards">
           <DesignCard v-for="d in data.mine" :key="d.id" :name="d.name" :tokens="d.tokens" :active="data.pick === `d:${d.id}`" :sub="sub(skinLine(d.skin), d.shared ? `${$t('designs.sharedPill')} · ${usersLine(d)}` : '')">
             <button v-if="data.pick !== `d:${d.id}`" class="btn sm primary" :disabled="!!draft" @click="use(`d:${d.id}`)">{{ $t('designs.use') }}</button>
             <button class="btn sm" :disabled="!!draft" @click="startEdit(d)">{{ $t('designs.edit') }}</button>
@@ -283,16 +283,16 @@ const publish = (d: Design) => useConfirm().ask('design_publish', { id: d.id, na
             <button v-if="isOwner" class="btn sm ghost" @click="publish(d)">{{ $t('designs.publish') }}</button>
             <button class="btn sm ghost sure" :class="{ danger: armed === `del${d.id}` }" @click="remove(d)">{{ armed === `del${d.id}` ? $t('designs.sure') : $t('designs.delete') }}</button>
           </DesignCard>
-        </div>
+        </TransitionGroup>
       </Panel>
 
       <Panel v-else-if="tab === 'builtin'" :title="$t('designs.builtin')">
-        <div class="cards">
+        <TransitionGroup name="list" tag="div" class="cards">
           <DesignCard v-for="p in data.presets" :key="p.key" :name="p.name" :tokens="p.tokens" :active="data.pick === `p:${p.key}`" :sub="skinLine(p.skin)">
             <button v-if="data.pick !== `p:${p.key}`" class="btn sm primary" :disabled="!!draft" @click="use(`p:${p.key}`)">{{ $t('designs.use') }}</button>
             <button class="btn sm" :disabled="!!draft" @click="startEdit(undefined, lookOf(p), $t('designs.copyName', { name: p.name }))">{{ $t('designs.copy') }}</button>
           </DesignCard>
-        </div>
+        </TransitionGroup>
       </Panel>
 
       <Panel v-else-if="tab === 'market'" :title="$t('designs.market')">
@@ -303,24 +303,24 @@ const publish = (d: Design) => useConfirm().ask('design_publish', { id: d.id, na
         <template v-else>
           <input v-if="cat.length > 6" v-model="catQ" class="catq" :placeholder="$t('designs.search')">
           <p v-if="!catShown.length" class="empty-state">{{ $t('designs.marketEmpty') }}</p>
-          <div class="cards">
+          <TransitionGroup name="list" tag="div" class="cards">
             <DesignCard v-for="d in catShown" :key="d.slug" :name="d.name" :tokens="d.tokens" :sub="sub($t('designs.by', { name: d.author }), skinLine(d.skin))">
               <button class="btn sm primary" :disabled="!!draft" @click="add(d)">{{ $t('designs.add') }}</button>
             </DesignCard>
-          </div>
+          </TransitionGroup>
         </template>
       </Panel>
 
       <Panel v-else :title="$t('designs.shared')">
         <p v-if="!data.gallery.length" class="empty-state">{{ $t('designs.galleryEmpty') }}</p>
-        <div class="cards">
+        <TransitionGroup name="list" tag="div" class="cards">
           <DesignCard v-for="d in data.gallery" :key="d.id" :name="d.name" :tokens="d.tokens" :active="data.pick === `d:${d.id}`" :sub="sub($t('designs.by', { name: d.author }), usersLine(d), skinLine(d.skin))">
             <button v-if="data.pick !== `d:${d.id}`" class="btn sm primary" :disabled="!!draft" @click="use(`d:${d.id}`)">{{ $t('designs.use') }}</button>
             <button class="btn sm" :disabled="!!draft" @click="startEdit(undefined, lookOf(d), $t('designs.copyName', { name: d.name }))">{{ $t('designs.copy') }}</button>
             <button class="btn sm ghost" @click="copyCode(d)">{{ $t('designs.code') }}</button>
             <button v-if="isOwner" class="btn sm ghost sure" :class="{ danger: armed === `del${d.id}` }" @click="remove(d)">{{ armed === `del${d.id}` ? $t('designs.sure') : $t('designs.delete') }}</button>
           </DesignCard>
-        </div>
+        </TransitionGroup>
       </Panel>
       </div>
       <p class="faint small">{{ $t('designs.safe') }}</p>
@@ -346,4 +346,6 @@ textarea { width: 100%; resize: vertical; }
 .imp input { flex: 1; min-width: 0; }
 .catq { width: 100%; margin-bottom: 10px; }
 .ed > .chip { align-self: flex-start; }
+.cin { animation: cin var(--dur) var(--ease-out) backwards; }
+@keyframes cin { from { opacity: 0; } }
 </style>
