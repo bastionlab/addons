@@ -48,7 +48,7 @@ function clone(r: any) {
       </select>
     </div>
 
-    <div v-if="pending && !gh" class="faint small pad">Loading repos…</div>
+    <Skeleton v-if="pending && !gh" kind="rows" :n="3" />
     <div v-else-if="gh?.error" class="bad small pad">GitHub: {{ gh.error }}</div>
     <div v-else-if="!repos.length" class="faint small pad">No repos match.</div>
 

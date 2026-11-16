@@ -1,7 +1,7 @@
 """dev boxes: `pv` previews and Claude Code sessions, web shells, and the full-screen terminal (tmux on a pty)"""
 import fcntl, json, os, pty, re, secrets, signal, struct, subprocess, termios, threading, tty, time
 
-from dash_sdk import POOL, PV, cts
+from dash_sdk import POOL, PV, cached, cts, stale_after_jobs
 
 
 # --- dev previews ------------------------------------------------------------
@@ -16,6 +16,8 @@ def pv(vmid, *args, timeout=30):
     return r.stdout
 
 
+# one `pct exec pv ls` per box takes ~3 s: serve the last answer while one background refresh runs
+@cached(10, stale=300)
 def projects():
     def one(c):
         if c["status"] != "running":
@@ -27,10 +29,16 @@ def projects():
     return list(POOL.map(one, dev_cts()))
 
 
+stale_after_jobs("projects")
+
+
 def checked_project(vmid, path):
     if not any(c["vmid"] == vmid and c["status"] == "running" for c in dev_cts()):
         raise ValueError(f"CT {vmid} is not a running dev box")
-    known = [p["path"] for p in json.loads(pv(vmid, "ls", "--json"))]
+    # the cached list answers at once; only an unknown path pays for a fresh `pct exec pv ls`
+    known = [p["path"] for c in projects() if c["vmid"] == vmid for p in c.get("projects", [])]
+    if path not in known:
+        known = [p["path"] for p in json.loads(pv(vmid, "ls", "--json"))]
     if path not in known:
         raise ValueError(f"unknown project {path}")
     return path
@@ -170,6 +178,11 @@ class Term:
                       "set", "destroy-unattached", "on"]
             if cur.stdout.strip().isdigit():
                 attach += [";", "select-window", "-t", ":" + cur.stdout.strip()]
+            # wheel / swipe on the phone reaches tmux as mouse events (copy-mode scrollback), see TermFull scroll()
+            attach += [";", "set-option", "-w", "mouse", "on"]
+        if target != "ship":
+            subprocess.run(["pct", "exec", str(vmid), "--", "runuser", "-u", "max", "--", *tmux, "set-option", "-w",
+                            "-t", "=" + session + ":", "mouse", "on"], capture_output=True, timeout=15)
         pid, fd = pty.fork()
         if pid == 0:
             tty.setraw(0)

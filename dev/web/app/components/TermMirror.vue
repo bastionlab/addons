@@ -83,7 +83,9 @@ onBeforeUnmount(() => { mounted = false; ro?.disconnect(); term?.dispose() })
 </template>
 
 <style scoped>
-.mirror { height: 100%; overflow-x: auto; overflow-y: hidden; padding: 6px 8px; background: var(--term-bg); }
+.mirror { height: 100%; overflow-x: auto; overflow-y: hidden; overscroll-behavior: contain; padding: 6px 8px; background: var(--term-bg); }
 .xt { width: max-content; }
+.xt :deep(.xterm-viewport) { touch-action: pan-y; }
+.xt :deep(.xterm-screen) { touch-action: pan-x pan-y; }
 .xt :deep(.xterm-viewport) { background: var(--term-bg) !important; }
 </style>

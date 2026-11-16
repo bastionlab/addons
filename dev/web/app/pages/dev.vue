@@ -38,7 +38,7 @@ const tabs = computed(() => [
 
     <div v-show="tab === 'projects'">
     <Skeleton v-if="!boxes && pending" kind="cards" :n="2" />
-    <section v-for="box in boxes ?? []" :key="box.vmid" class="box">
+    <section v-for="box in boxes ?? []" :key="box.vmid" class="box cin">
       <h2 class="sec">
         {{ box.name }}
         <span class="faint small">CT {{ box.vmid }} · {{ box.projects?.length ?? 0 }} projects</span>
@@ -51,9 +51,9 @@ const tabs = computed(() => [
         </span>
       </h2>
       <div v-if="box.error" class="small bad">{{ box.error }}</div>
-      <div class="projects">
+      <TransitionGroup name="list" tag="div" class="projects">
         <ProjectCard v-for="p in box.projects" :key="p.path" :box="box" :p="p" @refresh="refresh" @action="act" />
-      </div>
+      </TransitionGroup>
       <div v-if="!box.projects?.length && !box.error" class="faint small">No projects yet.</div>
     </section>
     </div>
@@ -77,4 +77,6 @@ const tabs = computed(() => [
 .projects { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(350px, 100%), 1fr)); gap: 10px; }
 .two { grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); align-items: start; }
 @media (max-width: 900px) { .two { grid-template-columns: minmax(0, 1fr); } }
+.cin { animation: cin var(--dur) var(--ease-out) backwards; }
+@keyframes cin { from { opacity: 0; } }
 </style>

@@ -51,6 +51,7 @@ const left = (l: any) => l.expires ? `ends ${new Date(l.expires).toLocaleString(
       <button class="btn primary" :disabled="busy" @click="create">{{ busy ? '…' : 'Create link' }}</button>
     </div>
     <div v-if="error" class="small bad">{{ error }}</div>
+    <TransitionGroup name="list" tag="div" class="links">
     <div v-for="l in mine" :key="l.id" class="link small" :class="{ off: l.status !== 'active' }">
       <span class="pill" :class="l.status === 'active' ? 'ok' : ''">{{ l.status }}</span>
       <span class="faint meta">:{{ l.project.port }} · {{ l.once ? 'one visit' : left(l) }} · {{ l.uses }} open{{ l.uses === 1 ? '' : 's' }}</span>
@@ -58,6 +59,7 @@ const left = (l: any) => l.expires ? `ends ${new Date(l.expires).toLocaleString(
       <button v-if="!l.revoked" class="btn ghost sm danger" @click="act('revoke', l.id)">Revoke</button>
       <button v-else class="btn ghost sm" title="remove from the list" @click="act('delete', l.id)" aria-label="remove"><Icon name="x" :size="16"/></button>
     </div>
+    </TransitionGroup>
   </div>
 </template>
 
@@ -66,6 +68,7 @@ const left = (l: any) => l.expires ? `ends ${new Date(l.expires).toLocaleString(
 .form { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 .form select { padding: 4px 6px; }
 .once { display: flex; align-items: center; gap: 4px; }
+.links { display: flex; flex-direction: column; gap: 6px; }
 .link { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .link.off { opacity: .6; }
 .meta { flex: 1; min-width: 0; }
