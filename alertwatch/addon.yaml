@@ -1,0 +1,21 @@
+# one add-on: this file is what the Add-ons page and the marketplace show
+id: alertwatch
+name: "Alert watch"
+label: Alerts
+icon: siren            # a name from web/app/components/icon-paths.ts in the core
+order: 15              # where its tab sits among the add-on tabs
+author: MaxJC0
+license: AGPL-3.0
+version: 0.1.0
+desc: "When a host alert opens, Claude looks into it read-only and leaves a fix with undo steps you can run with one tap."
+routes: [/alerts]
+home: true             # web/app/components/HomeAlertwatch.global.vue = its card in Home's Sections
+needs: [Claude]
+depends_on: [chat]
+roles: { view: owner, use: owner }
+# fields on /settings; values in /etc/dash/settings/alertwatch.json, read by the app through addonSettings('alertwatch')
+settings:
+  - { key: "on", label: "Investigate new alerts", type: toggle, default: true }
+  - { key: cooldown, label: "Hours before the same alert is looked at again", type: number, default: 12, min: 1, max: 168 }
+  - { key: model, label: "Lead model", type: select, options: [sonnet, opus, haiku], default: sonnet }
+  - { key: effort, label: "Effort", type: select, options: [low, medium, high], default: medium }
