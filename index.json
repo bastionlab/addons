@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794063290,
+  "updated": 1794872981,
   "addons": [
     {
       "id": "ai",
@@ -16,6 +16,25 @@
       "ct": "ai",
       "license": "AGPL-3.0",
       "path": "ai"
+    },
+    {
+      "id": "alertwatch",
+      "name": "Alert watch",
+      "icon": "siren",
+      "version": "0.1.0",
+      "author": "MaxJC0",
+      "desc": "When a host alert opens, Claude looks into it read-only and leaves a fix with undo steps you can run with one tap.",
+      "routes": [
+        "/alerts"
+      ],
+      "needs": [
+        "Claude"
+      ],
+      "depends_on": [
+        "chat"
+      ],
+      "license": "AGPL-3.0",
+      "path": "alertwatch"
     },
     {
       "id": "armenian",
