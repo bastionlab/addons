@@ -1,0 +1,60 @@
+{
+  "briefing": {
+    "title": "Tagesbriefing",
+    "today": "Heute",
+    "quiet": "Heute braucht dich nichts",
+    "unreadable": "Nicht lesbar: {x}",
+    "next": "Nächstes Briefing um {time}",
+    "generate": "Jetzt erzeugen",
+    "generating": "Schreibt…",
+    "failed": "Briefing fehlgeschlagen: {why}",
+    "attention": "Ansehen",
+    "source": {
+      "model": "Vom lokalen Modell geschrieben",
+      "facts": "Aus den Fakten",
+      "quiet": "Ruhiger Tag",
+      "pending": "Wird geschrieben",
+      "incomplete": "Unvollständig"
+    },
+    "home": {
+      "error": "Konnte nicht laden",
+      "writing": "Das heutige Briefing wird geschrieben",
+      "next": "Nächstes Briefing um {time}",
+      "name": "Briefing"
+    },
+    "sections": {
+      "calendar": "Kalender",
+      "mail": "Mail",
+      "deals": "Deals",
+      "flats": "Wohnungen",
+      "jobs": "Jobs",
+      "habits": "Gewohnheiten",
+      "system": "System",
+      "weather": "Wetter"
+    },
+    "n": {
+      "events": "{n} Termin | {n} Termine",
+      "mail": "{n} wichtige Mail | {n} wichtige Mails",
+      "deals": "{n} Deal | {n} Deals",
+      "flats": "{n} Wohnung | {n} Wohnungen",
+      "jobs": "{n} Job | {n} Jobs",
+      "alerts": "{n} Warnung | {n} Warnungen"
+    },
+    "allDay": "Ganztägig",
+    "noEvents": "Heute keine Termine",
+    "mailLine": "{n} wichtig ungelesen, {unread} insgesamt ungelesen",
+    "noNew": "Nichts Neues",
+    "huntLine": {
+      "deals": "{n} neuer Deal | {n} neue Deals",
+      "flats": "{n} neue Wohnung | {n} neue Wohnungen",
+      "jobs": "{n} neuer Job | {n} neue Jobs"
+    },
+    "habitsLine": "{done} von {total} erledigt, beste Serie {best}",
+    "habitsShort": "{done}/{total} Gewohnheit | {done}/{total} Gewohnheiten",
+    "noAlerts": "Keine Warnungen",
+    "backupAge": "Letztes Backup vor {h} h",
+    "pool": "{name} zu {pct} % voll",
+    "weatherLine": "{place}: {label}, {min} bis {max} C",
+    "weatherMore": "Regen {rain} %, Wind {wind} km/h"
+  }
+}
