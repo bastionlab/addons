@@ -2,26 +2,31 @@
 import { MILESTONES, type HabitChecks, type HabitRow } from '../utils/habits'
 import { burst, rain, sfx, vibrate } from '../utils/habitsFx'
 /** the perfect-day screen: medal with the streak rolling up, stats, this week, confetti and a fanfare */
-const props = defineProps<{ n: number, done: number, habits: HabitRow[], checks: HabitChecks, today: Date }>()
+const props = defineProps<{ open: boolean, n: number, done: number, habits: HabitRow[], checks: HabitChecks, today: Date }>()
 const emit = defineEmits<{ close: [] }>()
 const { t } = useI18n()
-const ms = MILESTONES.includes(props.n)
-const cheer = t(`habits.cheer.${Math.floor(Math.random() * 7)}`)
+const ms = computed(() => MILESTONES.includes(props.n))
+const cheer = ref('')
 const medal = ref<HTMLElement>()
 const go = ref<HTMLElement>()
 const reduced = () => matchMedia('(prefers-reduced-motion: reduce)').matches
-onMounted(() => {
+// stays mounted so the Transition inside the Teleport can run its leave; the show-off restarts on every open
+watch(() => props.open, async (v) => {
+  if (!v || !import.meta.client) return
+  cheer.value = t(`habits.cheer.${Math.floor(Math.random() * 7)}`)
+  await nextTick()
   go.value?.focus({ preventScroll: true })
   sfx('win'); vibrate([20, 70, 20, 70, 40])
   if (reduced()) return
-  rain(ms ? 160 : 110)
+  rain(ms.value ? 160 : 110)
   setTimeout(() => burst(medal.value, 40, 160), 350)
-})
+}, { immediate: true })
 </script>
 
 <template>
   <Teleport to="body">
-    <div class="cele" role="dialog" aria-modal="true" @click.self="emit('close')">
+    <Transition name="cele-out">
+    <div v-if="open" class="cele" role="dialog" aria-modal="true" @click.self="emit('close')">
       <div class="card">
         <div ref="medal" class="medal"><span class="glow" /><HabitsFlame :size="96" />
           <b class="num"><span class="old">{{ n - 1 }}</span><span class="new">{{ n }}</span></b></div>
@@ -36,12 +41,14 @@ onMounted(() => {
         <button ref="go" class="btn primary go" @click="emit('close')">{{ t('habits.celebrate.continue') }}</button>
       </div>
     </div>
+    </Transition>
   </Teleport>
 </template>
 
 <style scoped>
 .cele { position: fixed; inset: 0; z-index: 190; display: grid; place-items: center; padding: 20px; overflow-y: auto;
-  background: radial-gradient(circle at 50% 35%, var(--warn-soft), color-mix(in srgb, var(--bg) 92%, transparent) 60%); backdrop-filter: blur(6px); animation: fade .3s both; }
+  background: radial-gradient(circle at 50% 35%, var(--warn-soft), color-mix(in srgb, var(--bg) 92%, transparent) 60%); backdrop-filter: blur(6px); animation: fade .3s backwards; }
+@media (max-width: 640px) { .cele { backdrop-filter: none; } } /* a big blur is costly on phones */
 .card { width: 100%; max-width: 380px; text-align: center; }
 .medal { position: relative; width: 150px; height: 150px; margin: 0 auto 6px; display: grid; place-items: center; color: var(--warn); animation: medal .9s cubic-bezier(.3, 1.4, .5, 1) both; }
 .medal svg { animation: flicker 2.4s .9s ease-in-out infinite; transform-origin: 50% 90%; }
@@ -58,12 +65,10 @@ p { margin: 6px 0 20px; color: var(--muted); animation: rise .5s .35s both; }
 .cstats span { display: block; color: var(--faint); font-size: 11px; margin-top: 2px; }
 .card :deep(.week) { margin: 4px 0 22px; }
 .go { width: 100%; padding: 13px; font-size: 16px; border-radius: 14px; background: var(--ok); border-color: var(--ok); animation: rise .5s 1.1s both; }
+.cele-out-leave-active { transition: opacity var(--dur) var(--ease-in); }
+.cele-out-leave-to { opacity: 0; }
 @keyframes fade { from { opacity: 0 } }
-@keyframes rise { from { opacity: 0; transform: translateY(10px) } }
-@keyframes pop-in { from { opacity: 0; transform: scale(.5) } }
 @keyframes medal { 0% { transform: scale(0) rotate(-25deg); opacity: 0 } 60% { transform: scale(1.15) rotate(6deg); opacity: 1 } 100% { transform: none } }
 @keyframes roll { from { transform: translateY(0) } to { transform: translateY(-100%) } }
-@keyframes spin { to { transform: rotate(360deg) } }
-@keyframes flicker { 0%, 100% { transform: scale(1) rotate(0) } 25% { transform: scale(1.08, .94) rotate(-4deg) } 50% { transform: scale(.95, 1.07) rotate(3deg) } 75% { transform: scale(1.05) rotate(-2deg) } }
 @media (prefers-reduced-motion: reduce) { * { animation: none !important; } .num .old { display: none; } }
 </style>

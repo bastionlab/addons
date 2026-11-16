@@ -59,7 +59,7 @@ function yes() { if (asking.value) emit('remove', asking.value.id); asking.value
 
     <h3 v-if="rows.length" class="sec">{{ t('habits.count', rows.length) }}</h3>
     <div class="list">
-      <div v-for="{ h, s } in rows" :key="h.id" class="row" :class="{ edit: editing?.id === h.id }" role="button" tabindex="0" @click="emit('open', h.id)" @keydown.enter="emit('open', h.id)">
+      <div v-for="{ h, s } in rows" :key="h.id" class="row press" :class="{ edit: editing?.id === h.id }" role="button" tabindex="0" @click="emit('open', h.id)" @keydown.enter="emit('open', h.id)">
         <span class="t">{{ h.title }}<span class="s">{{ label(h) }}<template v-if="s.rate !== null"> · {{ s.rate }}%</template></span></span>
         <HabitsChip :n="s.streak" :best="s.best" :weekly="h.freq === 'weekly'" />
         <button class="btn ghost sm x" :aria-label="t('habits.delete')" @click.stop="asking = h"><Icon name="x" :size="16"/></button>
@@ -93,7 +93,7 @@ input[type=text]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(
 .actions { display: flex; gap: 8px; justify-content: flex-end; }
 .sec { margin: 18px 3px 9px; }
 .list { display: flex; flex-direction: column; gap: 8px; }
-.row { display: flex; align-items: center; gap: 10px; padding: 12px 8px 12px 15px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer; transition: border-color .2s; }
+.row { display: flex; align-items: center; gap: 10px; padding: 12px 8px 12px 15px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer; transition: border-color var(--dur); }
 .row:hover { border-color: var(--line-2); }
 .row.edit { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-soft); }
 .t { flex: 1; min-width: 0; overflow-wrap: anywhere; }
@@ -101,6 +101,7 @@ input[type=text]:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(
 .x { color: var(--faint); }
 .x:hover { color: var(--bad); }
 .scrim { position: fixed; inset: 0; z-index: 150; display: grid; place-items: center; padding: 20px; background: color-mix(in srgb, var(--bg) 70%, transparent); backdrop-filter: blur(4px); }
+@media (max-width: 640px) { .scrim { backdrop-filter: none; } } /* a big blur is costly on phones */
 .ask { width: 100%; max-width: 340px; background: var(--panel); border: 1px solid var(--line-2); border-radius: var(--radius); padding: 18px; display: flex; flex-direction: column; gap: 6px; overflow-wrap: anywhere; }
 .ask p { margin: 0 0 10px; }
 </style>

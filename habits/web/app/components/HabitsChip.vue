@@ -16,6 +16,5 @@ watch(() => props.n, (n, o) => {
 <style scoped>
 .hchip { flex: none; display: inline-flex; align-items: center; gap: 3px; padding: 3px 9px; border-radius: 999px; background: var(--warn-soft); color: var(--warn); font-size: 12px; font-weight: 650; font-variant-numeric: tabular-nums; }
 .hchip svg { animation: flicker 2.4s ease-in-out infinite; transform-origin: 50% 90%; }
-@keyframes flicker { 0%, 100% { transform: scale(1) rotate(0) } 25% { transform: scale(1.08, .94) rotate(-4deg) } 50% { transform: scale(.95, 1.07) rotate(3deg) } 75% { transform: scale(1.05) rotate(-2deg) } }
 @media (prefers-reduced-motion: reduce) { .hchip svg { animation: none; } }
 </style>

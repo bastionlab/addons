@@ -35,8 +35,6 @@ const days = computed(() => {
 .week.big .wk i { width: 34px; height: 34px; }
 .week.big .wk { animation: pop-in .4s cubic-bezier(.3, 1.4, .5, 1) both; animation-delay: calc(var(--i) * 60ms + 650ms); }
 .week.big .wk.now.win i { animation: stamp .7s 1.15s cubic-bezier(.3, 1.4, .5, 1) both; box-shadow: 0 0 0 4px var(--warn-soft); }
-@keyframes spin { to { transform: rotate(360deg) } }
-@keyframes pop-in { from { opacity: 0; transform: scale(.5) } }
 @keyframes stamp { 0% { transform: scale(2.2); opacity: 0 } 60% { transform: scale(.9); opacity: 1 } 100% { transform: scale(1) } }
 @media (prefers-reduced-motion: reduce) { .wk, .wk i { animation: none !important; } }
 </style>
