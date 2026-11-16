@@ -71,7 +71,7 @@ h2 { margin: 0 2px; font-size: 22px; font-weight: 650; letter-spacing: -.02em; o
 .stat span { display: block; color: var(--faint); font-size: 11px; margin-top: 2px; }
 .grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
 .wh { text-align: center; color: var(--faint); font-size: 11px; padding-bottom: 2px; }
-.c { aspect-ratio: 1; display: grid; place-items: center; border-radius: 10px; border: 1px solid transparent; background: none; font: inherit; font-size: 13px; font-variant-numeric: tabular-nums; padding: 0; color: var(--muted); transition: background .25s, color .25s, border-color .2s; }
+.c { aspect-ratio: 1; display: grid; place-items: center; border-radius: 10px; border: 1px solid transparent; background: none; font: inherit; font-size: 13px; font-variant-numeric: tabular-nums; padding: 0; color: var(--muted); transition: background var(--dur-slow), color var(--dur-slow), border-color var(--dur); }
 button.c { cursor: pointer; }
 button.c:hover { border-color: var(--line-2); }
 .c.done { background: var(--ok); color: var(--bg); font-weight: 650; }

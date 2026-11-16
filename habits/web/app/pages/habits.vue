@@ -51,6 +51,8 @@ function check(hid: string, day: string, done: boolean) {
 }
 
 const celebrating = ref<{ n: number, done: number } | null>(null)
+const celeLast = ref({ n: 0, done: 0 }) // kept so the screen can fade out after close
+watch(celebrating, (v) => { if (v) celeLast.value = v })
 const sound = ref(true)
 onMounted(() => { sound.value = soundOn() })
 function toggleSound() { sound.value = !sound.value; setSoundOn(sound.value); if (sound.value) sfx('check') }
@@ -132,7 +134,7 @@ watch(tab, () => { editing.value = null })
       <HabitsList v-else :habits="habits" :checks="ck" :now="now" :editing="editing" @save="save" @cancel="editing = null" @open="openDetail" @remove="remove" />
     </template>
     </div>
-    <HabitsCelebrate v-if="celebrating" :n="celebrating.n" :done="celebrating.done" :habits="habits" :checks="ck" :today="today" @close="celebrating = null" />
+    <HabitsCelebrate :open="!!celebrating" :n="celeLast.n" :done="celeLast.done" :habits="habits" :checks="ck" :today="today" @close="celebrating = null" />
   </div>
 </template>
 

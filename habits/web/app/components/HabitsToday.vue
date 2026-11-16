@@ -57,7 +57,7 @@ const sub = computed(() => {
     </div>
     <TransitionGroup v-else name="hl" tag="div" class="list">
       <button
-        v-for="({ h, done, s }, i) in list" :key="h.id" class="row" :class="{ done }" :style="{ '--i': i }"
+        v-for="({ h, done, s }, i) in list" :key="h.id" class="row press" :class="{ done }" :style="{ '--i': i }"
         @click="emit('toggle', h.id, ($event.currentTarget as HTMLElement))"
       >
         <span class="box"><Icon name="check" :size="14" /></span>
@@ -97,26 +97,24 @@ const sub = computed(() => {
 
 .list { display: flex; flex-direction: column; gap: 8px; position: relative; }
 .row { position: relative; display: flex; align-items: center; gap: 13px; width: 100%; text-align: left; padding: 14px 15px; font: inherit; color: var(--text);
-  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer; transition: background .25s, border-color .25s, transform .12s; }
+  background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); cursor: pointer; transition: background var(--dur-slow), border-color var(--dur-slow), transform var(--dur-fast); }
 .row:hover { border-color: var(--line-2); }
 .row:active { transform: scale(.985); }
 .row.done { background: color-mix(in srgb, var(--panel) 60%, var(--bg)); }
-.box { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--line-2); display: grid; place-items: center; color: var(--bg); transition: background .25s, border-color .25s; }
+.box { flex: none; width: 24px; height: 24px; border-radius: 50%; border: 2px solid var(--line-2); display: grid; place-items: center; color: var(--bg); transition: background var(--dur-slow), border-color var(--dur-slow); }
 .box svg { opacity: 0; }
 .row:hover .box { border-color: var(--muted); }
 .done .box { background: var(--ok); border-color: var(--ok); }
 .done .box svg { opacity: 1; }
 .done .box { animation: pop .45s cubic-bezier(.3, 1.4, .5, 1); }
 .t { flex: 1; min-width: 0; overflow-wrap: anywhere; }
-.tx { background: linear-gradient(currentColor, currentColor) 0 58% / 0 1.5px no-repeat; transition: color .3s, background-size .4s; }
+.tx { background: linear-gradient(currentColor, currentColor) 0 58% / 0 1.5px no-repeat; transition: color var(--dur-slow), background-size .4s; }
 .done .tx { color: var(--faint); background-size: 100% 1.5px; }
 .done :deep(.hchip) { opacity: .65; }
 .hl-move { transition: transform .48s cubic-bezier(.2, .8, .2, 1); }
 .hl-enter-active { animation: rise .45s cubic-bezier(.2, .8, .2, 1) both; animation-delay: calc(var(--i, 0) * 45ms); }
 .eico { font-size: 34px; margin-bottom: 8px; }
 @keyframes pop { 0% { transform: scale(.55) } 60% { transform: scale(1.22) } 100% { transform: scale(1) } }
-@keyframes rise { from { opacity: 0; transform: translateY(10px) } }
-@keyframes flicker { 0%, 100% { transform: scale(1) rotate(0) } 25% { transform: scale(1.08, .94) rotate(-4deg) } 50% { transform: scale(.95, 1.07) rotate(3deg) } 75% { transform: scale(1.05) rotate(-2deg) } }
 @media (pointer: coarse) { .snd { min-width: 34px; } }
 @media (prefers-reduced-motion: reduce) { .row, .box, .tx, .ring .val, .hl-move, .hl-enter-active, .pn svg { animation: none !important; transition: none !important; } }
 </style>
