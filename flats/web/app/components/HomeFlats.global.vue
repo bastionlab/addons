@@ -10,7 +10,7 @@ const chips = computed(() => d.value
     ]
   : [])
 // large card: the newest flats
-const more = computed(() => (d.value?.feed ?? []).slice(0, 4).map((i: any) => ({ text: i.title, sub: [i.district, i.warm ? `${i.warm} €` : ''].filter(Boolean).join(' · ') })))
+const more = computed(() => (d.value?.feed ?? []).slice(0, 8).map((i: any) => ({ text: i.title, sub: [i.district, i.warm ? `${i.warm} €` : ''].filter(Boolean).join(' · ') })))
 </script>
 
 <template>
