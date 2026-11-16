@@ -1,0 +1,21 @@
+{
+  "alertwatch": {
+    "title": "Alerts",
+    "open": "Open",
+    "history": "History",
+    "quiet": "All quiet.",
+    "quietSince": "All quiet since {time}",
+    "quietNow": "All quiet",
+    "lastCheck": "Last check {time}",
+    "investigating": "Investigating…",
+    "cleared": "Cleared by itself: {why}",
+    "closed": "Closed",
+    "openChat": "Open chat",
+    "execute": "Execute fix",
+    "executed": "Executed",
+    "investigate": "Investigate now",
+    "failed": "Could not start: {why}",
+    "error": "Could not load",
+    "home": { "name": "Last alert" }
+  }
+}
