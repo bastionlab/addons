@@ -1,18 +1,19 @@
 # one add-on: this file is what the Add-ons page (and later the marketplace index) shows
 id: ai
 name: Local AI
+label: Models
 icon: spark
 order: 50
 author: MaxJC0
 license: AGPL-3.0
-version: 1.2.1
-desc: "Ollama + Open WebUI on the GPU. Powers the Ask bar and reads ads, postings and bank lines for the hunters, Notes and Money."
-routes: []
+version: 1.7.0
+desc: "Ollama + Open WebUI on the GPU. Powers the Ask bar and reads ads, postings and bank lines for the hunters, Notes and Money. Model cookbook: what fits the GPU, benchmark, a model per job, VRAM planner, model ranking."
+routes: [/ai]
 ct: ai
 needs: [NVIDIA GPU (8 GB+), 16 GB RAM]
 depends_on: []
 roles: { view: admin, use: admin }
-admin_actions: [ollama_pull, ollama_stop]
+admin_actions: [ollama_pull, ollama_stop, ollama_delete]
 # tiles on Home (group app) and the service checks on Metrics (see media/addon.yaml for the fields)
 apps:
   - { name: Open WebUI, icon: "🤖", note: "Local AI chat", group: app, hue: 210, ct: ai, port: 8080, ts: true, health: /health }

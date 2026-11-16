@@ -29,3 +29,9 @@ def a_ollama_pull(args):
 def a_ollama_stop(args):
     model = _model(args)
     return f"unload {model} from VRAM (the model stays on disk)", ["pct", "exec", str(ct("ai")), "--", "ollama", "stop", model], 120
+
+
+@action("ollama_delete")
+def a_ollama_delete(args):
+    model = _model(args)
+    return f"delete the Ollama model {model} from disk (it can be pulled again)", ["pct", "exec", str(ct("ai")), "--", "ollama", "rm", model], 120
