@@ -1,0 +1,154 @@
+{
+  "imagine": {
+    "title": "Imagine",
+    "prompt": "Describe the picture",
+    "promptHint": "A fox in a snowy forest at dusk",
+    "style": "Style",
+    "styles": {
+      "photo": "Photo",
+      "anime": "Anime",
+      "pixel": "Pixel",
+      "logo": "Logo"
+    },
+    "size": "Size",
+    "sizes": {
+      "square": "Square",
+      "portrait": "Portrait",
+      "landscape": "Landscape",
+      "phone": "Phone"
+    },
+    "draft": "Draft",
+    "adult": "Adult",
+    "adultHint": "Adult anime, adults only. Off keeps it safe. Draft ignores this.",
+    "make4": "Make 4",
+    "make1": "Make 1",
+    "generate": "Generate",
+    "queued": "Queued",
+    "running": "Making {n} of {count}",
+    "paused": "Paused",
+    "freeing": "Freeing memory",
+    "voicePaused": "Voice and subtitles are paused until the images are done",
+    "done": "Done",
+    "failed": "Something went wrong",
+    "cancelled": "Cancelled",
+    "cancel": "Cancel",
+    "dismiss": "Dismiss",
+    "loadFailed": "Could not load Imagine",
+    "gamesStreaming": "Games are streaming, try later",
+    "aiDown": "Image generation needs ComfyUI on the AI box, which is not running.",
+    "retry": "Retry",
+    "notReady": "The image engine is not installed yet.",
+    "empty": "No pictures yet.",
+    "close": "Close",
+    "download": "Download",
+    "reuse": "Reuse prompt",
+    "delete": "Delete",
+    "sure": "Sure?",
+    "prev": "Previous",
+    "next": "Next",
+    "submitted": "Added to the queue",
+    "deleted": "Deleted",
+    "today": "Today",
+    "yesterday": "Yesterday",
+    "gallery": "Gallery",
+    "queue": "Queue",
+    "editBusy": "An image is being made, wait for it to finish",
+    "from": "From an earlier picture",
+    "edit": {
+      "title": "Edit",
+      "groups": {
+        "subject": {
+          "label": "Subject",
+          "hint": "Who or what the picture is of."
+        },
+        "scene": {
+          "label": "Scene",
+          "hint": "Where it happens, and the time of day."
+        },
+        "look": {
+          "label": "Look",
+          "hint": "Light, colors and the feeling of it."
+        },
+        "shot": {
+          "label": "Shot",
+          "hint": "How it is framed, the camera view."
+        },
+        "extras": {
+          "label": "Extras",
+          "hint": "Small details, one per line, up to 6."
+        }
+      },
+      "fields": {
+        "lighting": "Lighting",
+        "colors": "Colors",
+        "mood": "Mood"
+      },
+      "keepSeed": "Keep seed",
+      "regenerate": "Regenerate"
+    },
+    "tabs": {
+      "create": "Create",
+      "characters": "Characters"
+    },
+    "chars": {
+      "character": "Character",
+      "none": "None",
+      "sameLook": "Match reference",
+      "sameLookNeeds": "Pick a reference picture for this character first.",
+      "new": "New character",
+      "empty": "No characters yet.",
+      "pick": "Pick a character or make a new one.",
+      "ageOf": "Age {age}",
+      "name": "Name",
+      "gender": "Gender",
+      "genders": {
+        "girl": "Girl",
+        "boy": "Boy",
+        "other": "Other"
+      },
+      "age": "Age",
+      "hair": "Hair",
+      "eyes": "Eyes",
+      "build": "Build",
+      "outfit": "Outfit",
+      "extras": "Extras",
+      "note": "Note",
+      "adultHint": "Adults only. Off keeps it safe.",
+      "ageErr": "Age must be a whole number, 18 or older.",
+      "nameErr": "Give the character a name.",
+      "save": "Save",
+      "saved": "Saved",
+      "looks": "Looks",
+      "makeLooks": "Make 4 looks",
+      "noLooks": "No looks yet.",
+      "saveFirst": "Save your changes first.",
+      "saveForLooks": "Save the character to make looks.",
+      "useAsReference": "Use as reference",
+      "isReference": "Reference",
+      "referenceSet": "Reference set",
+      "reference": "Reference",
+      "change": "Change",
+      "noReference": "Pick a reference in Looks first.",
+      "makeMore": "Make 4 more",
+      "batchQueued": "4 pictures queued",
+      "toRate": "To rate",
+      "nothingToRate": "Nothing to rate.",
+      "good": "Good",
+      "bad": "Bad",
+      "set": "Set",
+      "setProgress": "{have} of {max} for the set",
+      "setRemove": "Remove",
+      "ownOnly": "My own pictures of an original character. No real people, no art of published characters.",
+      "addPics": "Add pictures",
+      "upload": "Upload",
+      "upSending": "Sending",
+      "upWaiting": "Waiting",
+      "upBig": "Over {mb} MB",
+      "upRead": "Could not read the file",
+      "rejected": "Rejected ({n})",
+      "restore": "Restore",
+      "cleanup": "Delete rejected",
+      "cleanupDone": "Rejected pictures deleted"
+    }
+  }
+}

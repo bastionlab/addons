@@ -1,0 +1,17 @@
+# Imagine: local image generator, runs on the AI container's GPU
+id: imagine
+name: Imagine
+label: Imagine
+icon: image
+order: 90
+author: MaxJC0
+license: AGPL-3.0
+version: 0.8.0
+desc: "Describe a picture, pick a style and size, and get images made on your own GPU. Nothing leaves your server; it waits while games stream."
+routes: [/imagine]
+needs: [Local AI container with ComfyUI, models in /models/comfyui]
+depends_on: [ai, files]
+ct: ai
+roles: { view: owner, use: owner }
+palette:
+  - { label: Make an image, to: /imagine, keywords: [image, picture, generate, draw, art] }
