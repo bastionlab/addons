@@ -11,7 +11,7 @@ const chips = computed(() => d.value
   : [])
 // large card: the newest finds
 const eur = (c: number | null | undefined) => (c == null ? '' : `${Math.round(c / 100)} €`)
-const more = computed(() => (d.value?.feed ?? []).slice(0, 4).map((i: any) => ({ text: i.title, sub: eur(i.price_cents) })))
+const more = computed(() => (d.value?.feed ?? []).slice(0, 8).map((i: any) => ({ text: i.title, sub: eur(i.price_cents) })))
 </script>
 
 <template>

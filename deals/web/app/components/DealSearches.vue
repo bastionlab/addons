@@ -13,10 +13,8 @@ const SHIPPING = [
 const SOURCES = [
   { v: 'kleinanzeigen', label: 'Kleinanzeigen' },
   { v: 'vinted', label: 'Vinted' },
-  { v: 'ebay', label: 'eBay.de' },
   { v: 'mydealz', label: 'Mydealz' },
   { v: 'shpock', label: 'Shpock' },
-  { v: 'refurb', label: 'Refurbished' },
 ]
 const sourceLabel = (k: string) => SOURCES.find(x => x.v === k)?.label ?? k
 const sourcesOf = (s: any): string[] => (s?.spec?.sources?.length ? s.spec.sources : ['kleinanzeigen'])
@@ -249,7 +247,7 @@ const shipLabel = (sp: any) => SHIPPING.find(x => x.v === (sp?.shipping === 'onl
         </label>
       </div>
       <div class="row end">
-        <button class="btn ghost" type="button" @click="editing = null">Cancel</button>
+        <button class="btn ghost" type="button" @click="editing = null">{{ $t('common.cancel') }}</button>
         <button class="btn primary" :disabled="!!busy" :title="editing === 'new' ? 'The first run only records the current state' : 'Re-checks stored ads, without notifications'">
           {{ busy ? 'Saving…' : editing === 'new' ? 'Add search' : 'Save' }}
         </button>
@@ -281,7 +279,7 @@ const shipLabel = (sp: any) => SHIPPING.find(x => x.v === (sp?.shipping === 'onl
           @click="act('rejudge', { id: s.id, all: true })"
         ><template v-if="busy === 'rejudge' + s.id">…</template><Icon v-else name="sparkles" :size="16"/></button>
         <button class="btn ghost ic" :disabled="!!busy" :title="s.enabled ? 'Pause' : 'Resume'" @click="act(s.enabled ? 'disable' : 'enable', { id: s.id })"><Icon :name="s.enabled ? 'pause' : 'play'" :size="16"/></button>
-        <button class="btn ghost ic danger" :disabled="!!busy" :class="{ sure: armed === String(s.id) }" :title="armed === String(s.id) ? 'Delete search and hits' : 'Delete'" @click="remove(s)"><template v-if="armed === String(s.id)">Sure?</template><Icon v-else name="x" :size="16"/></button>
+        <button class="btn ghost ic danger" :disabled="!!busy" :class="{ sure: armed === String(s.id) }" :title="armed === String(s.id) ? 'Delete search and hits' : 'Delete'" @click="remove(s)"><template v-if="armed === String(s.id)">{{ $t('common.sure') }}</template><Icon v-else name="x" :size="16"/></button>
       </div>
     </div>
   </Panel>

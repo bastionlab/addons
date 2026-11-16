@@ -8,6 +8,10 @@ const show = computed(() => (tab.value === 'searches' ? 'passed' : tab.value) as
 const { selected, d, error, pending, load, searches, st, counts, feed, tabs, verdict, isBusy, onChanged } = useHunter('/api/deals', 20000,
   sel => ({ search: sel ?? undefined, shipping: shipping.value === 'all' ? undefined : shipping.value, show: show.value, limit: 120 }),
   [shipping, show])
+// the feed's row transitions (enter/leave) are for single cards leaving or arriving; a filter change or a re-sort
+// must swap the whole list without per-row motion, so the group is keyed by the filter its data was loaded for
+const gkey = ref('')
+watch(d, () => { gkey.value = `${tab.value}|${selected.value ?? ''}|${shipping.value}` }, { immediate: true })
 
 const SHIP = [
   { v: 'all' as const, label: 'All' },
@@ -51,12 +55,12 @@ const VIEWS = computed(() => [
         <template v-if="show === 'liked'">Nothing saved yet · Thumbs-up a listing to keep it here.</template>
         <template v-else-if="show === 'passed' && counts.rejected">No matches yet · {{ counts.rejected }} rejected.</template>
       </div>
-      <div v-else class="cards">
+      <TransitionGroup v-else :key="gkey" name="list" tag="div" class="cards" move-class="nomove">
         <DealCard
           v-for="i in feed" :key="i.search_id + ':' + i.source_id" :item="i"
           :busy="isBusy(i)" @verdict="verdict(i, $event)"
         />
-      </div>
+      </TransitionGroup>
       </template>
     </template>
   </div>

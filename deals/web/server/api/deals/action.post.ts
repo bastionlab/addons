@@ -4,7 +4,7 @@
  * forwarded, so nothing the browser sends reaches CT 107 unchecked.
  */
 // where a search may look; keep in step with app/sources MODULES in the deals backend
-const SOURCES = ['kleinanzeigen', 'vinted', 'ebay', 'mydealz', 'shpock', 'refurb']
+const SOURCES = ['kleinanzeigen', 'vinted', 'mydealz', 'shpock']
 const ACTIONS = ['add', 'edit', 'enable', 'disable', 'delete', 'feedback', 'rejudge'] as const
 type Action = typeof ACTIONS[number]
 

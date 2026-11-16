@@ -32,7 +32,7 @@ async function ask() {
 
 <template>
   <article class="card" :class="{ down: item.verdict === 'down', filtered: item.passed === 0, reserved: item.status === 'reserved' }">
-    <a :href="item.url" target="_blank" rel="noopener" class="shot">
+    <a :href="item.url" target="_blank" rel="noopener" class="shot press">
       <img v-if="item.image_url" :src="item.image_url" :alt="item.title" loading="lazy">
       <div v-else class="noshot"><Icon name="tag" :size="24"/></div>
     </a>
