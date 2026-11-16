@@ -191,10 +191,10 @@ const copy = (s: string) => navigator.clipboard?.writeText(s)
         <TermMirror :snap="snap" />
       </div>
       <pre v-else class="empty">{{ live ? '…' : tab === 'ship' ? `no ${ship?.session} session — start /conduct in the repo` : `nothing running in ${tab === 'claude' ? 'Claude' : 'Preview'}` }}</pre>
-      <TermFull
+      <Teleport to="body"><Transition name="tf"><TermFull
         v-if="full" :vmid="box.vmid" :path="p.path" :target="tab === 'claude' ? 'cc' : tab" :title="`${p.name} · ${session}`"
         @close="full = false; loadLog()"
-      />
+      /></Transition></Teleport>
     </div>
   </div>
 </template>

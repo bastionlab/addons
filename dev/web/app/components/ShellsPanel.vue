@@ -43,8 +43,9 @@ function kill(b: any, s: any) {
             {{ busy === `new:${b.vmid}` ? '…' : '+ New shell' }}
           </button>
         </div>
+        <TransitionGroup name="list" tag="div">
         <div v-for="s in b.shells" :key="s.session" class="row" :class="{ att: s.attached }">
-          <button class="open" :title="`started ${new Date(s.created * 1000).toLocaleString()}${s.attached ? ' · open somewhere' : ''}`" @click="show(b, s)">
+          <button class="open press" :title="`started ${new Date(s.created * 1000).toLocaleString()}${s.attached ? ' · open somewhere' : ''}`" @click="show(b, s)">
             <span class="dot" :class="s.attached ? 'ok' : ''" />
             <span class="mono name">{{ s.session }}</span>
             <span class="what mono">{{ /^(zsh|bash|sh)$/.test(s.command) ? s.cwd : s.command }}</span>
@@ -52,14 +53,15 @@ function kill(b: any, s: any) {
           </button>
           <button class="x" :disabled="busy === `kill:${b.vmid}:${s.session}`" :class="{ sure: armed === `${b.vmid}:${s.session}` }" :title="armed === `${b.vmid}:${s.session}` ? `still running ${s.command} — tap again to end it` : 'end this shell'" @click="kill(b, s)">{{ armed === `${b.vmid}:${s.session}` ? 'Sure?' : 'End' }}</button>
         </div>
+        </TransitionGroup>
       </div>
       <div v-if="!boxes?.length" class="faint small">No running dev boxes.</div>
     </div>
     <div v-if="error" class="small bad">{{ error }}</div>
-    <TermFull
+    <Teleport to="body"><Transition name="tf"><TermFull
       v-if="open" :key="`${open.vmid}:${open.session}`" :vmid="open.vmid" target="shell" :session="open.session" :title="open.title"
       @close="open = null; refresh()"
-    />
+    /></Transition></Teleport>
   </Panel>
 </template>
 

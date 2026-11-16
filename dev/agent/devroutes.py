@@ -212,7 +212,7 @@ def a_project_remove(args):
     and moves the project to ~/.pv-trash rather than deleting it."""
     vmid, path, box = _dev_project(args)
     short = path.rstrip("/").rsplit("/", 1)[-1]
-    force = bool(args.get("force"))
+    force = args.get("force") is True or args.get("force") in (1, "1", "true", "yes")
     bits = []
     try:
         pr = next((x for x in json.loads(pv(vmid, "ls", "--json")) if x["path"] == path), None)
