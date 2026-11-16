@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794873072,
+  "updated": 1794873203,
   "addons": [
     {
       "id": "ai",
@@ -102,7 +102,7 @@
       "id": "deals",
       "name": "Deals",
       "icon": "deals",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "author": "MaxJC0",
       "desc": "Watches Kleinanzeigen for your keywords, lets the local model judge each ad and pings Discord on a steal.",
       "routes": [
