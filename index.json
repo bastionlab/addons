@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794872981,
+  "updated": 1794873072,
   "addons": [
     {
       "id": "ai",
@@ -48,6 +48,22 @@
       ],
       "license": "AGPL-3.0",
       "path": "armenian"
+    },
+    {
+      "id": "briefing",
+      "name": "Daily briefing",
+      "icon": "alarm-clock",
+      "version": "0.1.4",
+      "author": "MaxJC0",
+      "desc": "A short morning briefing from your calendar, mail, hunters, habits, server and the weather, written by the local model and pushed only when something needs you.",
+      "routes": [
+        "/briefing"
+      ],
+      "needs": [
+        "Local AI (Ollama)"
+      ],
+      "license": "AGPL-3.0",
+      "path": "briefing"
     },
     {
       "id": "chat",
