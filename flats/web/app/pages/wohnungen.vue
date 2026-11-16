@@ -7,6 +7,11 @@ const show = computed(() => (tab.value === 'searches' ? 'passed' : tab.value) as
 const { selected, d, error, pending, load, searches, st, counts, tabs, verdict, isBusy, onChanged } = useHunter('/api/flats', 30000,
   sel => ({ search: sel ?? undefined, show: show.value === 'rejected' ? 'rejected' : 'passed', limit: 200 }), [show])
 
+// feed row transitions are for single rows leaving or arriving; a filter change or a re-sort swaps the whole list
+// without per-row motion, so the group is keyed by the filter its rows were loaded (or, for Saved, filtered) for
+const gkey = ref('')
+watch([d, () => (show.value === 'liked' ? `l${selected.value}` : 'x')], () => { gkey.value = `${show.value}|${selected.value ?? ''}` }, { immediate: true })
+
 const liked = computed(() => d.value?.liked ?? [])
 const likedLive = computed(() => liked.value.filter((i: any) => i.status !== 'gone').length)
 // 👍 flats come as their own list, so Gemerkt filters and counts per search here
@@ -58,12 +63,12 @@ const sources = computed(() => Object.entries(st.value?.per_source ?? {}).map(([
         <template v-else-if="show === 'passed' && counts.rejected">No matches yet · {{ counts.rejected }} rejected.</template>
         <template v-else>Nothing here.</template>
       </div>
-      <div v-else class="list">
+      <TransitionGroup v-else :key="gkey" name="list" tag="div" class="list" move-class="nomove">
         <FlatRow
           v-for="i in feed" :key="i.search_id + ':' + i.source + ':' + i.source_id" :item="i" :checked="show === 'liked'"
           :busy="isBusy(i)" @verdict="verdict(i, $event)"
         />
-      </div>
+      </TransitionGroup>
       </template>
     </template>
   </div>
