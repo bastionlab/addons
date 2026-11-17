@@ -58,6 +58,7 @@ const rot = computed(() => {
 .actions + .fold { margin-left: 0; }
 .folded .fold { transform: rotate(0deg); }
 .fold:active { box-shadow: none; }
+.hd:active { transform: translate(2px, 2px); }
 .body { margin-top: 14px; }
 .cbody-enter-active { transition: transform .28s cubic-bezier(.3, 1.6, .5, 1), opacity .12s; transform-origin: top left; }
 .cbody-leave-active { transition: opacity .1s; }
