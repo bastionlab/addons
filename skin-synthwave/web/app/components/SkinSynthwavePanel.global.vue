@@ -43,6 +43,7 @@ function sweep() {
   box-shadow: 0 0 14px color-mix(in srgb, var(--accent) 30%, transparent), inset 0 0 0 1px rgba(52, 230, 255, .14), inset 0 0 22px rgba(52, 230, 255, .06);
 }
 .folded { align-self: start; padding-bottom: 12px; }
+.hd:active h2 { transform: scale(.97); transform-origin: left center; }
 .fx { position: absolute; inset: 0; border-radius: inherit; overflow: hidden; pointer-events: none; }
 .sheen {
   position: absolute; top: 0; bottom: 0; left: 0; width: 45%;
@@ -61,6 +62,7 @@ h2 { margin: 0; font: italic 700 15px/1.2 "Trebuchet MS", "Futura", system-ui, s
 .ctl :deep(svg.open) { transform: rotate(90deg); }
 .body { position: relative; margin-top: 12px; animation: sw-in .25s ease-out; }
 @keyframes sw-in { from { opacity: 0; transform: translateY(-4px); } }
+@media (max-width: 640px), (pointer: coarse) { .sheen { animation-duration: .35s; } }
 @media (max-width: 640px) { .slab { padding: 12px 12px 14px; } }
 @media (pointer: coarse) { .ctl { width: 36px; height: 34px; } }
 @media (prefers-reduced-motion: reduce) { .sheen { display: none; } .body { animation: none; } .ctl :deep(svg) { transition: none; } }
