@@ -38,12 +38,12 @@ onUnmounted(() => mo?.disconnect())
       </span>
       <button v-if="editing" type="button" class="btn sm ed" @click="sheet = true"><Icon name="edit" :size="16" /> {{ t('widgets.edit') }}</button>
     </div>
-    <div v-if="tall && count" class="gr">
+    <TransitionGroup name="list" tag="div" v-if="tall && count" class="gr">
       <div v-for="w in api.onHome.value" :key="w.id" class="c" :class="`sz-${w.size}`">
         <WidgetView :def="w" :packs="packs" />
       </div>
-    </div>
-    <WidgetsBuilder v-if="sheet" :api="api" :packs="packs" @close="sheet = false" />
+    </TransitionGroup>
+    <Teleport to="body"><Transition name="sheet"><WidgetsBuilder v-if="sheet" :api="api" :packs="packs" @close="sheet = false" /></Transition></Teleport>
   </div>
 </template>
 
