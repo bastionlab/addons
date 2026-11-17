@@ -101,7 +101,7 @@ const when = (t: number) => new Date(t * 1000).toLocaleString('en-GB', { day: 'n
 
       <Skeleton v-if="!loaded" kind="rows" />
       <p v-else-if="!runs.length" class="empty-state">Nothing yet.</p>
-      <div v-else class="grid" style="margin-top:12px">
+      <TransitionGroup name="list" tag="div" v-else class="grid" style="margin-top:12px">
         <Panel v-for="r in runs" :key="r.id">
           <div class="row" style="gap:8px;align-items:flex-start">
             <button class="lnk" style="text-align:left;flex:1" @click="show(r.id)">{{ r.question }}</button>
@@ -118,7 +118,7 @@ const when = (t: number) => new Date(t * 1000).toLocaleString('en-GB', { day: 'n
             <button v-if="r.status !== 'running'" class="btn sm danger" :class="{ sure: armed === `del${r.id}` }" @click="remove(r.id)">{{ armed === `del${r.id}` ? 'Sure?' : 'Delete' }}</button>
           </div>
         </Panel>
-      </div>
+      </TransitionGroup>
     </template>
   </div>
 </template>

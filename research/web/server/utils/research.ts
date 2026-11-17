@@ -3,7 +3,7 @@ import { join } from 'node:path'
 
 /**
  * The Research tab: a question goes in, the local model plans sub-questions, searches SearXNG, reads the pages,
- * takes notes and writes a cited report. One run at a time, in this process (tick() from the plugin); the rows
+ * takes notes and writes a cited report. One run at a time, in this process (researchTick() from the plugin); the rows
  * live in CT 104 so they ride along in the nightly backup. A run that was going when the app restarted starts over.
  *
  * status: queued → running → done | failed | cancelled
@@ -114,7 +114,7 @@ async function run(id: number) {
 }
 
 let busy = false
-export async function tick() {
+export async function researchTick() {
   if (busy) return
   const next: any = db.prepare("SELECT id FROM research WHERE status = 'queued' ORDER BY id LIMIT 1").get()
   if (!next) return
