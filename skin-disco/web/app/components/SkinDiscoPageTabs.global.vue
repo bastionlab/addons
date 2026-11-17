@@ -78,6 +78,7 @@ watch(() => props.tabs.length, () => nextTick(measure))
   background: none; border: 0; border-radius: 10px; -webkit-tap-highlight-color: transparent; transition: background .2s, color .2s;
 }
 .pt:hover { color: var(--text); background: rgba(255, 255, 255, .04); }
+.pt:active { background: rgba(255, 63, 180, .18); transform: scale(.95); }
 .top { display: inline-flex; align-items: center; justify-content: center; gap: 6px; }
 .pt.on { color: var(--text); background: rgba(255, 63, 180, .12); text-shadow: 0 0 10px rgba(255, 63, 180, .8); }
 .eq { display: flex; align-items: flex-end; justify-content: center; gap: 2px; height: 9px; }

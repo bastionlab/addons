@@ -222,5 +222,5 @@ html.skin-disco { --disco-ball: 64px; --disco-ball-y: 66px; }
 @media (min-width: 961px) { html.skin-disco { --disco-side: 236px; } }
 @media (min-width: 641px) and (max-width: 960px) { html.skin-disco { --disco-side: 96px; } }
 @media (max-width: 640px) { html.skin-disco { --disco-side: 0px; --disco-ball: 42px; --disco-ball-y: 28px; } }
-html.skin-disco.disco-paused .dpanel *, html.skin-disco.disco-paused .dpanel::before { animation-play-state: paused !important; }
+html.skin-disco.disco-paused *, html.skin-disco.disco-paused *::before, html.skin-disco.disco-paused *::after { animation-play-state: paused !important; }
 </style>
