@@ -105,7 +105,7 @@ const tone = (s: number) => (s >= 70 ? 'ok' : s >= 40 ? 'accent' : '')
 
     <Skeleton v-if="!data" kind="cards" />
     <p v-else-if="!data.repos.length" class="empty-state">{{ tab === 'new' ? 'Nothing new. Refresh or check back tomorrow.' : 'Nothing yet.' }}</p>
-    <div v-else class="grid" style="margin-top:8px">
+    <TransitionGroup name="list" tag="div" v-else class="grid" style="margin-top:8px">
       <Panel v-for="r in data.repos" :key="r.repo">
         <div class="row" style="gap:8px;align-items:flex-start">
           <button class="lnk" style="text-align:left;flex:1;font-weight:600;word-break:break-word" @click="toggle(r)">{{ r.repo }}</button>
@@ -144,7 +144,7 @@ const tone = (s: number) => (s >= 70 ? 'ok' : s >= 40 ? 'accent' : '')
           </div>
         </div>
       </Panel>
-    </div>
+    </TransitionGroup>
   </div>
 </template>
 
