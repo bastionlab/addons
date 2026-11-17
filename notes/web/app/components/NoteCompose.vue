@@ -99,7 +99,7 @@ defineExpose({ focus: () => box.value?.focus() })
 </template>
 
 <style scoped>
-.compose { overflow: hidden; border: 1px solid var(--line-2); border-radius: var(--radius); background: var(--panel-2); transition: border-color .15s; }
+.compose { overflow: hidden; border: 1px solid var(--line-2); border-radius: var(--radius); background: var(--panel-2); transition: border-color var(--dur); }
 .compose:focus-within, .compose.drag { border-color: var(--accent); }
 .compose.drag { background: var(--accent-soft); }
 textarea { display: block; width: 100%; border: 0; border-radius: 0; box-shadow: none; outline: none; -webkit-appearance: none; appearance: none; background: transparent; resize: none; padding: 12px 14px 4px; font-size: 15px; line-height: 1.5; min-height: 52px; }

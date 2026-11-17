@@ -18,7 +18,7 @@ function onClick(e: MouseEvent) {
 </script>
 
 <template>
-  <article class="card" :class="[n.state, { pinned: n.pinned }]" tabindex="0" @click="onClick" @keydown.enter.self="emit('open')">
+  <article class="card press" :class="[n.state, { pinned: n.pinned }]" tabindex="0" @click="onClick" @keydown.enter.self="emit('open')">
     <img v-if="n.images.length" class="cover" :src="noteImg(n.images[0])" alt="" loading="lazy">
     <div class="in">
       <div class="head">
@@ -43,7 +43,7 @@ function onClick(e: MouseEvent) {
 </template>
 
 <style scoped>
-.card { break-inside: avoid; margin-bottom: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color .15s; }
+.card { break-inside: avoid; margin-bottom: 12px; background: var(--panel); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; cursor: pointer; transition: border-color var(--dur); }
 .card:hover, .card:focus-visible { border-color: var(--line-2); outline: none; }
 .card.pinned { border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
 .card.done { opacity: .6; }
@@ -53,7 +53,7 @@ function onClick(e: MouseEvent) {
 .head { display: flex; align-items: flex-start; gap: 8px; }
 .kind { display: flex; align-items: center; height: 20px; color: var(--muted); }
 h3 { flex: 1; margin: 0; font-size: 14.5px; font-weight: 600; line-height: 20px; min-width: 0; overflow-wrap: anywhere; }
-.tools { display: flex; gap: 2px; opacity: 0; transition: opacity .15s; margin: -3px -6px 0 0; }
+.tools { display: flex; gap: 2px; opacity: 0; transition: opacity var(--dur); margin: -3px -6px 0 0; }
 .card:hover .tools, .card:focus-within .tools { opacity: 1; }
 /* no hover on touch: keep pin + done visible, with room for a thumb */
 @media (pointer: coarse) {

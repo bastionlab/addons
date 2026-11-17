@@ -13,7 +13,7 @@ const chips = computed(() => notes.value
     ]
   : [])
 // large card: the latest notes
-const more = computed(() => [...active.value].sort((a: any, b: any) => b.updated - a.updated).slice(0, 4).map((n: any) => ({ text: n.title || '…', sub: n.topic })))
+const more = computed(() => [...active.value].sort((a: any, b: any) => b.updated - a.updated).slice(0, 8).map((n: any) => ({ text: n.title || '…', sub: n.topic })))
 </script>
 
 <template>
