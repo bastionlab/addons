@@ -1,0 +1,25 @@
+{
+  "media": {
+    "tabs": { "discover": "Discover" },
+    "queue": { "eta": "eta {t}" },
+    "discover": {
+      "request": "Request",
+      "requested": "Requested",
+      "seen": "Seen it",
+      "dismiss": "Dismiss",
+      "dismissWhat": "Dismissing",
+      "more": "Load more",
+      "loadingMore": "Loading...",
+      "season": "S{n}",
+      "requestN": "Request ({n})",
+      "all": "All seasons",
+      "seenWhat": "Marking as seen",
+      "empty": "Nothing to suggest yet.",
+      "error": "Could not load suggestions: {msg}",
+      "film": "Film",
+      "series": "Series",
+      "poster": "Poster of {title}",
+      "because": "Because you watched {title}"
+    }
+  }
+}

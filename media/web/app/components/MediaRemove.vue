@@ -13,6 +13,10 @@ const { data: items, refresh: reload, pending: loading, error: loadError } = use
 
 const kind = ref<'all' | 'series' | 'anime' | 'movie'>('all')
 const query = ref('')
+const dquery = ref('')
+let dqueryT: ReturnType<typeof setTimeout> | undefined
+watch(query, (v) => { clearTimeout(dqueryT); dqueryT = setTimeout(() => (dquery.value = v), 250) })
+onBeforeUnmount(() => clearTimeout(dqueryT))
 const LABEL: Record<string, string> = { series: 'Series', anime: 'Anime', movie: 'Film' }
 
 const matches = computed(() => {
@@ -127,18 +131,18 @@ onBeforeUnmount(() => clearTimeout(armTimer))
     </div>
 
     <div v-if="loadError" class="small bad hint">Could not read the library: {{ loadError.statusMessage || loadError.message }}</div>
-    <div v-else-if="loading && !items?.length" class="small muted hint">Loading the library…</div>
-    <div v-else class="list">
+    <Skeleton v-else-if="loading && !items?.length" kind="rows" :n="4" />
+    <TransitionGroup v-else :key="`${kind}|${dquery}`" name="list" tag="div" class="list">
       <button
-        v-for="i in matches" :key="`${i.kind}:${i.id}`" class="item"
+        v-for="i in matches" :key="`${i.kind}:${i.id}`" class="item press"
         :class="{ on: picked && picked.kind === i.kind && picked.id === i.id }" @click="pick(i)"
       >
         <span class="t">{{ i.title }} <span v-if="i.year" class="muted">{{ i.year }}</span></span>
         <span class="pill">{{ LABEL[i.group] }}</span>
         <span class="small muted num">{{ i.files ? bytes(i.size) : '–' }}</span>
       </button>
-      <div v-if="!matches.length" class="small muted empty">Nothing matches.</div>
-    </div>
+      <div v-if="!matches.length" key="none" class="small muted empty">Nothing matches.</div>
+    </TransitionGroup>
 
     <div v-if="picked" class="plan" :class="{ hot: step > 0 }">
       <div v-if="picked.kind === 'series' && seasonsOnDisk.length" class="scope">
@@ -192,7 +196,7 @@ onBeforeUnmount(() => clearTimeout(armTimer))
           <template v-else>
             <span class="small bad grow">Cannot be undone.</span>
             <button class="btn ghost" @click="cancel">Cancel</button>
-            <button class="btn solid-bad" :disabled="step !== 2" @click="remove">
+            <button class="btn danger" :disabled="step !== 2" @click="remove">
               {{ step === 2 ? `Yes, delete ${what(plan)}` : 'Wait…' }}
             </button>
           </template>
@@ -229,5 +233,4 @@ onBeforeUnmount(() => clearTimeout(armTimer))
 .chip.on { color: var(--bad); background: var(--bad-soft); }
 .chip input { margin: 0; }
 .mono { font-family: var(--mono); word-break: break-all; }
-.btn.solid-bad { background: var(--bad); border-color: var(--bad); color: #fff; }
 </style>

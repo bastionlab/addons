@@ -1,0 +1,44 @@
+#!/usr/bin/env python3
+"""media-request — ask Seerr for one film or series (all or chosen seasons), the way its own Request button does.
+
+  media-request movie  <tmdb id>
+  media-request series <tmdb id> [1,2,3]   (comma-separated seasons; default all)
+
+Seerr passes it on to Radarr/Sonarr. The API key comes from Seerr's settings in CT 106 (read by the agent's
+helpers) and is never part of the argv the dashboard shows.
+"""
+import json, sys, urllib.error, urllib.request
+from pathlib import Path
+
+HERE = Path(__file__).resolve()
+sys.path.insert(0, str(HERE.parents[3] / "agent"))  # the core agent (dash_sdk, config) — addons/media/agent/media-request
+sys.path.insert(0, str(HERE.parent))
+import discover  # noqa: E402  (importing starts nothing)
+
+
+def main():
+    if len(sys.argv) not in (3, 4) or sys.argv[1] not in ("movie", "series") or not sys.argv[2].isdigit():
+        sys.exit(__doc__)
+    kind, tid = sys.argv[1], int(sys.argv[2])
+    seasons = "all"
+    if len(sys.argv) == 4:
+        if kind != "series" or not all(x.isdigit() and int(x) > 0 for x in sys.argv[3].split(",")):
+            sys.exit(__doc__)
+        seasons = [int(x) for x in sys.argv[3].split(",")]
+    body = {"mediaType": "movie", "mediaId": tid} if kind == "movie" \
+        else {"mediaType": "tv", "mediaId": tid, "seasons": seasons}
+    req = urllib.request.Request(f"http://{discover.ip('dl')}:5055/api/v1/request", data=json.dumps(body).encode(),
+                                 headers={"X-Api-Key": discover.seerr_settings()["main"]["apiKey"],
+                                          "Content-Type": "application/json"}, method="POST")
+    try:
+        with urllib.request.urlopen(req, timeout=40) as r:
+            res = json.load(r)
+    except urllib.error.HTTPError as e:
+        sys.exit(f"Seerr refused: HTTP {e.code} {e.read()[:300].decode(errors='replace')}")
+    title = ((res.get("media") or {}).get("tmdbId")) or tid
+    print(f"Requested {kind} (TMDB {title}): Seerr request #{res.get('id')}, status {res.get('status')} "
+          f"(1 = pending approval, 2 = approved and sent to the downloader)", flush=True)
+
+
+if __name__ == "__main__":
+    main()

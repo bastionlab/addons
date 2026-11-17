@@ -7,12 +7,12 @@ const vpnOk = computed(() => m.value?.vpn && m.value.vpn.up && m.value.vpn.killS
 const chips = computed(() => m.value
   ? [
       { text: vpnOk.value ? 'VPN ok' : 'VPN!', tone: vpnOk.value ? 'ok' : 'bad' },
-      ...(downloading.value ? [{ text: `${downloading.value} ↓`, tone: 'accent' }] : []),
+      ...(downloading.value ? [{ text: `${downloading.value} downloading`, tone: 'accent' }] : []),
       { text: bytes(m.value.sizes?.used) },
     ]
   : [])
 // large card: the download queue
-const more = computed(() => Object.values(m.value?.queues ?? {}).flat().filter(Boolean).slice(0, 4).map((i: any) => ({ text: `${i.title}${i.sub ? ` · ${i.sub}` : ''}`, sub: i.progress != null ? `${Math.round(i.progress)}%` : '', tone: i.error ? 'bad' : '' })))
+const more = computed(() => Object.values(m.value?.queues ?? {}).flat().filter(Boolean).slice(0, 8).map((i: any) => ({ text: `${i.title}${i.sub ? ` · ${i.sub}` : ''}`, sub: i.progress != null ? `${Math.round(i.progress)}%` : '', tone: i.error ? 'bad' : '' })))
 </script>
 
 <template>
