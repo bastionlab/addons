@@ -123,11 +123,11 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
           <ul class="obj"><li v-for="o in x.objectives" :key="o">{{ o }}</li></ul>
           <h4>The plan</h4>
           <ol class="plan">
-            <li v-for="(s, i) in x.sections" :key="i" :class="{ ok: read(i) }" @click="go(1 + i)">
+            <li v-for="(s, i) in x.sections" :key="i" class="press" :class="{ ok: read(i) }" @click="go(1 + i)">
               <span>{{ s.title }}</span><span class="faint">{{ read(i) ? 'read' : `${s.minutes} min` }}</span>
             </li>
-            <li @click="go(1 + x.sections.length)"><span>Quiz · {{ x.quiz.length }} questions</span><span class="faint">{{ score.answered ? `${score.right}/${score.total}` : '' }}</span></li>
-            <li @click="go(1 + x.sections.length + x.quiz.length)"><span>{{ x.tasks.length }} hands-on tasks</span><span class="faint">{{ (p.tasks ?? []).length ? `${p.tasks.length} done` : '' }}</span></li>
+            <li class="press" @click="go(1 + x.sections.length)"><span>Quiz · {{ x.quiz.length }} questions</span><span class="faint">{{ score.answered ? `${score.right}/${score.total}` : '' }}</span></li>
+            <li class="press" @click="go(1 + x.sections.length + x.quiz.length)"><span>{{ x.tasks.length }} hands-on tasks</span><span class="faint">{{ (p.tasks ?? []).length ? `${p.tasks.length} done` : '' }}</span></li>
           </ol>
         </template>
 
@@ -144,7 +144,7 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.body.
           <div class="md q" v-html="md(x.quiz[step.i].q)" />
           <div class="opts">
             <button
-              v-for="(o, oi) in x.quiz[step.i].options" :key="oi" type="button" class="opt"
+              v-for="(o, oi) in x.quiz[step.i].options" :key="oi" type="button" class="opt press"
               :class="{ right: answered(step.i) && oi === x.quiz[step.i].answer, wrong: p.quiz?.[step.i] === oi && oi !== x.quiz[step.i].answer, dim: answered(step.i) && oi !== x.quiz[step.i].answer && p.quiz?.[step.i] !== oi }"
               :disabled="answered(step.i)" @click="answer(step.i, oi)"
             >

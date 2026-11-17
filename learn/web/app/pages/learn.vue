@@ -67,6 +67,10 @@ async function ask(now: boolean) {
 
 // --- library filters ---
 const q = ref('')
+const dq = ref('')
+let dqT: ReturnType<typeof setTimeout> | undefined
+watch(q, (v) => { clearTimeout(dqT); dqT = setTimeout(() => (dq.value = v), 250) })
+onBeforeUnmount(() => clearTimeout(dqT))
 const track = ref('')
 const show = ref<'all' | 'open' | 'done'>('all')
 const tracks = computed(() => {
@@ -104,7 +108,7 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
       <div class="label faint small">This week · next lesson {{ nextLabel }}, 12:00</div>
       <Skeleton v-if="!loaded" kind="lines" :n="6" />
       <template v-else-if="hero?.lesson">
-        <div class="hero" @click="open(hero.id)">
+        <div class="hero press" @click="open(hero.id)">
           <div class="pills">
             <span class="pill accent">{{ trackIcon(hero.lesson.track) }} {{ hero.lesson.track }}</span>
             <span class="pill">{{ hero.lesson.level }}</span>
@@ -155,7 +159,7 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
           <button type="button" class="btn primary" :disabled="!topic.trim()" @click="ask(true)">Write now</button>
         </div>
       </form>
-      <ul v-if="upNext.length || working.length" class="queue">
+      <TransitionGroup v-if="upNext.length || working.length" name="list" tag="ul" class="queue">
         <li v-for="l in working.filter(x => x !== hero)" :key="l.id"><span class="spin sm" /> {{ l.topic || 'Claude’s pick' }} <span class="faint small">{{ l.status === 'writing' ? 'writing…' : 'waiting' }}</span></li>
         <li v-for="(l, i) in upNext" :key="l.id">
           <span class="faint small">#{{ i + 1 }}</span> {{ l.topic }}
@@ -163,13 +167,13 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
           <button type="button" class="btn ghost" title="write it now" aria-label="write it now" @click="post({ action: 'write', id: l.id })"><Icon name="play" :size="16"/></button>
           <button type="button" class="btn ghost" title="remove" aria-label="remove" @click="post({ action: 'delete', id: l.id })"><Icon name="x" :size="16"/></button>
         </li>
-      </ul>
+      </TransitionGroup>
     </Panel>
 
     <LearnSkills v-else-if="tab === 'skills'" :skills="skills" :updating="lessons.some(l => l.skills === 'writing' || l.skills === 'pending')" @post="post" />
 
     <!-- the library -->
-    <template v-else-if="tab === 'library'">
+    <div v-else-if="tab === 'library'" key="library" class="cin">
     <div v-if="ready.length" class="filters">
       <input v-model="q" class="search" type="search" placeholder="Search" enterkeyhint="search">
       <select v-model="show">
@@ -183,8 +187,8 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
         {{ trackIcon(t) }} {{ t }} <span class="faint">{{ n }}</span>
       </button>
     </div>
-    <div class="lib">
-      <button v-for="l in library" :key="l.id" type="button" class="item" @click="open(l.id)">
+    <TransitionGroup :key="`${dq}|${track}|${show}`" name="list" tag="div" class="lib">
+      <button v-for="l in library" :key="l.id" type="button" class="item press" @click="open(l.id)">
         <span class="ic">{{ trackIcon(l.lesson.track) }}</span>
         <span class="txt">
           <b>{{ l.lesson.title }}</b>
@@ -197,24 +201,24 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
         <span v-if="l.done" class="ok done"><Icon name="circle-check" :size="16"/></span>
         <span v-else-if="lessonProgress(l).done" class="faint small">{{ lessonProgress(l).pct }}%</span>
       </button>
-      <p v-if="loaded && !ready.length" class="faint small">Nothing yet.</p>
-      <p v-else-if="ready.length && !library.length" class="faint small">Nothing matches.</p>
-    </div>
+      <p v-if="loaded && !ready.length" key="none" class="faint small">Nothing yet.</p>
+      <p v-else-if="ready.length && !library.length" key="nomatch" class="faint small">Nothing matches.</p>
+    </TransitionGroup>
     <p v-if="ready.length" class="faint small">{{ ready.length }} lessons</p>
-    </template>
+    </div>
 
     <template v-else-if="tab === 'failed'">
-      <ul class="queue">
+      <TransitionGroup name="list" tag="div" class="queue">
         <li v-for="l in failed" :key="l.id">
           <span class="bad small"><Icon name="circle-x" :size="14"/></span> {{ l.topic || 'Claude’s pick' }} <span class="faint small err">{{ l.error }}</span>
           <span class="sp" />
           <button type="button" class="btn ghost" @click="post({ action: 'write', id: l.id })">Retry</button>
           <button type="button" class="btn ghost" aria-label="remove" @click="post({ action: 'delete', id: l.id })"><Icon name="x" :size="16"/></button>
         </li>
-      </ul>
+      </TransitionGroup>
     </template>
 
-    <LearnLesson v-if="current" :key="current.id" :item="current" @close="close" @post="post" @queue="t => post({ action: 'queue', topic: t })" />
+    <Transition name="sheet"><LearnLesson v-if="current" :key="current.id" :item="current" @close="close" @post="post" @queue="t => post({ action: 'queue', topic: t })" /></Transition>
   </div>
 </template>
 
@@ -260,7 +264,6 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
 .done { font-size: 16px; }
 .spin { width: 18px; height: 18px; border-radius: 50%; border: 2px solid var(--line-2); border-top-color: var(--accent); animation: spin 1s linear infinite; flex: none; }
 .spin.sm { width: 12px; height: 12px; }
-@keyframes spin { to { transform: rotate(360deg) } }
 @media (max-width: 640px) {
   .hero { padding: 16px; }
   .hero h1 { font-size: 20px; }
@@ -268,4 +271,6 @@ const elapsed = (l: any) => Math.max(0, Math.round((Date.now() / 1000 - l.create
   .btns .btn { flex: 1; }
   .stats b { font-size: 18px; }
 }
+.cin { animation: cin var(--dur) var(--ease-out) backwards; }
+@keyframes cin { from { opacity: 0; } }
 </style>

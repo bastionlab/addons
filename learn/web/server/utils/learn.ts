@@ -74,7 +74,7 @@ const must = (id: number) => getLesson(id) ?? (() => { throw createError({ statu
 export function queueTopic(topic: string, now_: boolean) {
   const { lastInsertRowid } = db.prepare('INSERT INTO lessons (topic, status, day, created) VALUES (?, ?, ?, ?)')
     .run(topic, now_ ? 'pending' : 'queued', now_ ? berlinDay() : null, now())
-  if (now_) tick()
+  if (now_) learnTick()
   return getLesson(Number(lastInsertRowid))
 }
 
@@ -83,7 +83,7 @@ export function writeNow(id: number) {
   const l = must(id)
   if (l.status !== 'queued' && l.status !== 'failed') throw createError({ statusCode: 409, statusMessage: `lesson is ${l.status}` })
   db.prepare('UPDATE lessons SET status = \'pending\', error = NULL, day = coalesce(day, ?) WHERE id = ?').run(berlinDay(), id)
-  tick()
+  learnTick()
   return getLesson(id)
 }
 
@@ -98,7 +98,7 @@ export function setDone(id: number, done: boolean) {
   const l = must(id)
   db.prepare('UPDATE lessons SET done = ? WHERE id = ?').run(done ? now() : null, id)
   // finishing a lesson is the moment the skillset learns about it (once per lesson)
-  if (done && l.lesson && !l.skills) { db.prepare('UPDATE lessons SET skills_state = \'pending\' WHERE id = ?').run(id); tick() }
+  if (done && l.lesson && !l.skills) { db.prepare('UPDATE lessons SET skills_state = \'pending\' WHERE id = ?').run(id); learnTick() }
   return getLesson(id)
 }
 
@@ -329,7 +329,7 @@ async function check(r: any) {
 }
 
 let busy = false
-export async function tick() {
+export async function learnTick() {
   Object.assign(learnOpts, await addonSettings('learn').catch(() => ({})))
   if (busy) return
   busy = true
