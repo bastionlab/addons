@@ -47,12 +47,16 @@ watch(() => props.path, () => { open.value = false; reveal() })
 const now = ref(new Date())
 let t: ReturnType<typeof setInterval> | undefined
 const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') open.value = false }
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
 onMounted(() => {
-  t = setInterval(() => (now.value = new Date()), 15_000)
+  onHide()
+  document.addEventListener('visibilitychange', onHide)
+  t = setInterval(() => { if (!document.hidden) now.value = new Date() }, 15_000)
   window.addEventListener('keydown', onKey)
   reveal()
 })
-onUnmounted(() => { clearInterval(t); window.removeEventListener('keydown', onKey) })
+onUnmounted(() => { document.removeEventListener('visibilitychange', onHide); document.documentElement.classList.remove('skin-hidden'); clearInterval(t); window.removeEventListener('keydown', onKey) })
 const clock = computed(() => now.value.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit' }))
 const date = computed(() => now.value.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric' }))
 </script>
@@ -185,6 +189,8 @@ const date = computed(() => now.value.toLocaleDateString('en-GB', { day: '2-digi
   position: relative; display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 12px 2px 10px; border-radius: 6px;
   font: inherit; font-size: 12px; color: var(--text); background: none; border: 0; cursor: pointer;
 }
+.pin:active { background: rgba(255, 255, 255, .12); transform: scale(.96); }
+.all:active, .edit:active { background: rgba(255, 255, 255, .16); transform: scale(.96); }
 .pin:hover, .pin:focus-visible { background: rgba(255, 255, 255, .07); outline: none; }
 .pin.on { background: rgba(255, 255, 255, .1); }
 .pi { display: grid; place-items: center; width: 40px; height: 40px; border-radius: 8px; color: var(--accent); background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 22%, transparent), color-mix(in srgb, var(--accent) 6%, transparent)); }
@@ -226,6 +232,7 @@ const date = computed(() => now.value.toLocaleDateString('en-GB', { day: '2-digi
 </style>
 
 <style>
+html.skin-win11.skin-hidden *, html.skin-win11.skin-hidden *::before, html.skin-win11.skin-hidden *::after { animation-play-state: paused !important; }
 /* the page makes room for the taskbar; only while this skin is on */
 html.skin-win11 .shell.skinned { --tabbar: calc(52px + env(safe-area-inset-bottom)); }
 html.skin-win11 main.wrap { padding-bottom: calc(76px + env(safe-area-inset-bottom)); }

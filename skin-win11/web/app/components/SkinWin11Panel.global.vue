@@ -55,6 +55,7 @@ h2 { font-size: 13.5px; font-weight: 600; margin: 0; color: var(--text); }
 .actions + .ctls { margin-left: 0; }
 .ctl { display: grid; place-items: center; width: 44px; height: 34px; padding: 0; color: var(--muted); background: transparent; border: 0; cursor: pointer; }
 .ctl:hover { background: rgba(255, 255, 255, .08); color: var(--text); }
+.ctl:active { background: rgba(255, 255, 255, .14); }
 .ctl:last-child:hover { background: color-mix(in srgb, var(--accent) 25%, transparent); }
 .body { padding: 4px 16px 16px; }
 .w11-fold-enter-active { transition: opacity .25s, transform .25s cubic-bezier(.1, .9, .2, 1); }
