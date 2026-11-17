@@ -64,6 +64,7 @@ watch(() => props.tabs.length, () => nextTick(() => reveal(false)))
   -webkit-tap-highlight-color: transparent;
 }
 .tb:hover { color: var(--text); }
+.tb:active { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--text); }
 .tb.on { color: var(--warn); border-bottom-color: var(--accent); }
 .bdg { min-width: 18px; padding: 0 5px; border-radius: 2px; font: 700 10.5px/17px system-ui, sans-serif; letter-spacing: 0; text-align: center; background: var(--warn); color: var(--bg); }
 .bdg.bad { background: var(--bad); color: var(--text); }
