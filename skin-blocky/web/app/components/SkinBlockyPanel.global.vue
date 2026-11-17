@@ -43,6 +43,7 @@ function toggle() {
   background: rgba(122, 122, 122, 1); border: 2px solid rgba(0, 0, 0, 1); text-shadow: 2px 2px 0 rgba(58, 58, 58, 1);
   box-shadow: inset 2px 2px 0 rgba(170, 170, 170, 1), inset -2px -3px 0 rgba(74, 74, 74, 1);
 }
+.hd:active .ttl { transform: translateY(2px); }
 .fold:active { transform: scale(1.06, .85); }
 .actions + .fold { margin-left: 0; }
 .body { margin-top: 10px; }

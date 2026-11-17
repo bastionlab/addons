@@ -45,6 +45,7 @@ const { anchor, strip, nav, edge, measure, pick } = usePageTabs({ count: () => p
   -webkit-tap-highlight-color: transparent;
 }
 .pt:hover { color: var(--text); }
+.pt:active { transform: translateY(2px); }
 .ic { filter: drop-shadow(1px 1px 0 rgba(40, 40, 40, 1)); }
 .pt.on {
   z-index: 2; min-height: 42px; padding-bottom: 8px; margin-bottom: -4px; color: var(--text); background: var(--panel);
