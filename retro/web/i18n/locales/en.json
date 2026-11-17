@@ -10,6 +10,7 @@
     "sure": "Sure?",
     "close": "Close",
     "retry": "Retry",
+    "ctOff": "The games box (CT {ct}) is stopped. Games here still load from its disk; 3DS streaming needs it running.",
     "play": "Play",
     "add": "Add",
     "adding": "Adding…",

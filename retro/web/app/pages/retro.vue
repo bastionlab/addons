@@ -21,6 +21,10 @@ const enc = encodeURIComponent
 
 // --- library ---
 const q = ref('')
+const dq = ref('')
+let dqT: ReturnType<typeof setTimeout> | undefined
+watch(q, (v) => { clearTimeout(dqT); dqT = setTimeout(() => (dq.value = v), 250) })
+onBeforeUnmount(() => clearTimeout(dqT))
 const sys = ref('')
 const sort = ref<'az' | 'new'>('az')
 const counts = computed(() => {
@@ -47,6 +51,10 @@ const startCt = () => run('ct_start', { vmid: lib.value?.ct }, refresh)
 const cat = ref<any[] | null>(null)
 const catErr = ref('')
 const cq = ref('')
+const dcq = ref('')
+let dcqT: ReturnType<typeof setTimeout> | undefined
+watch(cq, (v) => { clearTimeout(dcqT); dcqT = setTimeout(() => (dcq.value = v), 250) })
+onBeforeUnmount(() => clearTimeout(dcqT))
 const csys = ref('')
 const shown = ref(60)
 const getting = ref<Record<string, boolean>>({})
@@ -122,11 +130,16 @@ async function pick(ev: Event) {
 <template>
   <div>
     <PageTabs v-model="tab" :tabs="tabs" />
+    <div v-if="lib && lib.ctStatus !== 'running'" class="row notice">
+      <span class="small muted">{{ $t('retro.ctOff', { ct: lib.ct }) }}</span>
+      <button class="btn sm primary" @click="startCt">{{ $t('retro.stream.start') }}</button>
+      <button class="btn sm" @click="refresh()">{{ $t('retro.retry') }}</button>
+    </div>
     <div v-if="error && !lib" class="errbox">{{ error.statusMessage || error.message }}</div>
     <Skeleton v-else-if="!lib" kind="tiles" />
 
     <!-- library -->
-    <template v-else-if="tab === 'library'">
+    <div v-else-if="tab === 'library'" key="library" class="cin">
       <div class="bar">
         <input v-model="q" type="search" :placeholder="$t('retro.search')">
         <div class="seg">
@@ -144,9 +157,9 @@ async function pick(ev: Event) {
         <div class="row center"><button class="btn primary" @click="tab = 'get'">{{ $t('retro.tabs.get') }}</button><button class="btn" @click="tab = 'add'">{{ $t('retro.tabs.add') }}</button></div>
       </div>
       <div v-else-if="!games.length" class="empty-state">{{ $t('retro.noMatch') }}</div>
-      <div v-else class="tiles">
+      <TransitionGroup v-else :key="`${dq}|${sys}|${sort}`" name="list" tag="div" class="tiles">
         <div v-for="g in games" :key="g.sys + g.file" class="game">
-          <component :is="streamed(g.sys) ? 'button' : 'a'" class="art" :href="streamed(g.sys) ? undefined : playUrl(g)" @click="streamed(g.sys) && (stream3ds = true)">
+          <component :is="streamed(g.sys) ? 'button' : 'a'" class="art press" :href="streamed(g.sys) ? undefined : playUrl(g)" @click="streamed(g.sys) && (stream3ds = true)">
             <img v-if="g.cover" :src="coverUrl(g)" alt="" loading="lazy">
             <span v-else class="ph">{{ sysName[g.sys] }}</span>
             <span class="play"><Icon :name="streamed(g.sys) ? 'ext' : 'play'" /></span>
@@ -161,7 +174,7 @@ async function pick(ev: Event) {
             </div>
           </div>
         </div>
-      </div>
+      </TransitionGroup>
 
       <Panel v-if="stream3ds" :title="$t('retro.stream.title')">
         <div v-if="lib.ctStatus !== 'running'" class="row">
@@ -176,21 +189,21 @@ async function pick(ev: Event) {
         <button class="btn sm ghost" @click="stream3ds = false">{{ $t('retro.close') }}</button>
       </Panel>
       <p class="small faint">{{ $t('retro.free', { n: bytes(lib.free) }) }}</p>
-    </template>
+    </div>
 
     <!-- free homebrew -->
-    <template v-else-if="tab === 'get'">
+    <div v-else-if="tab === 'get'" key="get" class="cin">
       <p class="small muted">{{ $t('retro.get.lead') }}</p>
       <div v-if="catErr" class="errbox">{{ catErr }} <button class="lnk" @click="loadCat">{{ $t('retro.retry') }}</button></div>
       <Skeleton v-else-if="!cat" kind="cards" />
-      <template v-else>
+      <div v-else key="own" class="cin">
         <div class="bar"><input v-model="cq" type="search" :placeholder="$t('retro.get.search', { n: cat.length })"></div>
         <div class="chips scroll-x">
           <button class="chip" :class="{ on: !csys }" @click="csys = ''">{{ $t('retro.all') }}</button>
           <button v-for="s in catSys" :key="s.key" class="chip" :class="{ on: csys === s.key }" @click="csys = csys === s.key ? '' : s.key">{{ s.name }} · {{ s.n }}</button>
         </div>
         <div v-if="!catList.length" class="empty-state">{{ $t('retro.noMatch') }}</div>
-        <div class="cat">
+        <TransitionGroup :key="`${dcq}|${csys}`" name="list" tag="div" class="cat">
           <div v-for="i in catList.slice(0, shown)" :key="i.id" class="item">
             <img v-if="i.cover" :src="i.cover" alt="" loading="lazy" class="thumb">
             <div v-else class="thumb ph">{{ sysName[i.sys] }}</div>
@@ -206,10 +219,10 @@ async function pick(ev: Event) {
               </div>
             </div>
           </div>
-        </div>
+        </TransitionGroup>
         <button v-if="catList.length > shown" class="btn ghost wide" @click="shown += 60">{{ $t('retro.more', { n: catList.length - shown }) }}</button>
-      </template>
-    </template>
+      </div>
+    </div>
 
     <!-- own files -->
     <template v-else>
@@ -249,6 +262,7 @@ async function pick(ev: Event) {
 </template>
 
 <style scoped>
+.notice { padding: 8px 12px; margin-bottom: 12px; border: 1px solid var(--line); border-left: 3px solid var(--warn); border-radius: var(--radius-sm); background: var(--panel); }
 .bar { display: flex; gap: 8px; align-items: center; margin-bottom: 8px; }
 .bar input { flex: 1; min-width: 0; }
 .chips { display: flex; gap: 6px; padding-bottom: 10px; }
@@ -278,4 +292,6 @@ async function pick(ev: Event) {
   .tiles { grid-template-columns: repeat(2, 1fr); gap: 8px; }
   .cat { grid-template-columns: 1fr; }
 }
+.cin { animation: cin var(--dur) var(--ease-out) backwards; }
+@keyframes cin { from { opacity: 0; } }
 </style>
