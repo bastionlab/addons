@@ -130,7 +130,7 @@ onUnmounted(() => document.removeEventListener('keydown', onKey))
       </div>
 
       <div v-if="err" class="bad small">{{ err }}</div>
-      <div v-else-if="!p" class="faint small">Loading history…</div>
+      <Skeleton v-else-if="!p" kind="lines" :n="2" />
       <template v-else>
         <div class="stats small">
           <span>{{ p.count }} booking{{ p.count === 1 ? '' : 's' }}</span>
