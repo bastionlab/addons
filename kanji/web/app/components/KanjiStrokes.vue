@@ -29,8 +29,8 @@ const STEP = 0.45 // seconds per stroke
 svg { width: 140px; height: 140px; background: var(--panel-2); border: 1px solid var(--line); border-radius: var(--radius-sm); cursor: pointer; }
 path { fill: none; stroke-width: 3.2; stroke-linecap: round; stroke-linejoin: round; }
 .ghost { stroke: var(--line-2); }
-.ink { stroke: var(--text); stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .4s ease-out forwards; }
-.num { font-size: 8px; fill: var(--accent); opacity: 0; animation: show .1s forwards; }
+.ink { stroke: var(--text); stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .4s var(--ease-out) forwards; }
+.num { font-size: 8px; fill: var(--accent); opacity: 0; animation: show var(--dur-fast) forwards; }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes show { to { opacity: 1; } }
 .ph { width: 140px; height: 140px; display: grid; place-items: center; text-align: center; }

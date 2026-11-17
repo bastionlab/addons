@@ -10,7 +10,10 @@ export function kun(r: string) {
 // 0 new, 1 learning, 2 young, 3 mature (server: overview().status)
 export const STATUS = ['New', 'Learning', 'Young', 'Mature'] as const
 
-export const LEVELS = [5, 4, 3, 2, 1] as const
+/** 6 = hiragana, 7 = katakana (the deck's kana cards: romaji as the meaning, no readings) */
+export const LEVELS = [5, 4, 3, 2, 1, 6, 7] as const
+export const lvName = (n: number) => (n === 6 ? 'Hiragana' : n === 7 ? 'Katakana' : `N${n}`)
+export const isKana = (n: number) => n >= 6
 
 export type KanjiCard = { k: string, n: number, s: number, m: string[], on: string[], kun: string[], w: [string, string, string][] }
 
@@ -38,10 +41,10 @@ export function loadStrokes(k: string): Promise<Strokes> {
   return PENDING.get(k)!
 }
 /** warm the cache for every kanji in a word (the pad moves on without a Loading… between them) */
-export const prefetchStrokes = (s: string) => { for (const c of new Set(s)) if (/[一-鿿]/.test(c)) loadStrokes(c).catch(() => {}) }
+export const prefetchStrokes = (s: string) => { for (const c of new Set(s)) if (/[一-鿿ぁ-ゟァ-ヿ]/.test(c) && c !== 'ー') loadStrokes(c).catch(() => {}) }
 
 /** the card's main reading as kana to read out: first on-yomi, else first kun-yomi, without the . and - */
-export const kjMain = (c: Pick<KanjiCard, 'on' | 'kun'>) => (c.on[0] ?? c.kun[0] ?? '').replace(/[.-]/g, '')
+export const kjMain = (c: Pick<KanjiCard, 'on' | 'kun'> & { k?: string, n?: number }) => (c.n && c.n >= 6 ? c.k! : (c.on[0] ?? c.kun[0] ?? '')).replace(/[.-]/g, '')
 
 // read-out audio: Google TTS cached on disk server-side (/api/kanji/speak); one clip at a time
 type KjState = 'idle' | 'load' | 'play' | 'err'

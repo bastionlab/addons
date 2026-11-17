@@ -62,7 +62,7 @@ const dayNum = (d: string) => Math.floor(Date.parse(`${d}T12:00:00Z`) / 86_400_0
 
 // --- settings ---
 export type Settings = { newPerDay: number, levels: number[], writing: boolean }
-const DEFAULTS: Settings = { newPerDay: 10, levels: [5, 4, 3, 2, 1], writing: true }
+const DEFAULTS: Settings = { newPerDay: 10, levels: [5, 4, 3, 2, 1], writing: true } // levels 6 / 7 = hiragana / katakana, opt-in
 export function getSettings(): Settings {
   const s = { ...DEFAULTS }
   for (const r of db.prepare('SELECT key, value FROM settings').all() as any[]) try { (s as any)[r.key] = JSON.parse(r.value) } catch {}
@@ -73,7 +73,7 @@ export function putSettings(p: Partial<Settings>) {
   if (p.newPerDay != null) put.run('newPerDay', JSON.stringify(Math.max(0, Math.min(100, Math.round(p.newPerDay)))))
   if (p.writing != null) put.run('writing', JSON.stringify(!!p.writing))
   if (p.levels) {
-    const l = [...new Set(p.levels.map(Number).filter(n => n >= 1 && n <= 5))].sort((a, b) => b - a)
+    const l = [...new Set(p.levels.map(Number).filter(n => n >= 1 && n <= 7))].sort((a, b) => b - a)
     if (l.length) put.run('levels', JSON.stringify(l))
   }
   return getSettings()
@@ -190,7 +190,9 @@ export function nextCard(t = now(), skip = '') {
 /** a word to write instead of the lone kanji: every kanji in it must already have a card */
 function wordFor(k: string, reps: number, seen: Set<string>) {
   if (reps % 3 !== 2) return null
-  const ok = BY_K.get(k)!.w.filter(([form]) => form.length > 1 && [...form].every(c => c === k || !/[\u4e00-\u9fff々]/.test(c) || seen.has(c)))
+  // kanji cards: its kanji must be known (kana are given); kana cards: every kana in the word must be known
+  const kana = BY_K.get(k)!.n >= 6
+  const ok = BY_K.get(k)!.w.filter(([form]) => form.length > 1 && [...form].every(c => c === k || !(kana || /[\u4e00-\u9fff々]/.test(c)) || seen.has(c)))
   return ok.length ? ok[Math.floor(reps / 3) % ok.length]! : null
 }
 
@@ -253,8 +255,8 @@ export function forget(k: string) {
 // --- progress ---
 export function kanjiOverview() {
   const t = now(), q = counts(t)
-  const levels = [5, 4, 3, 2, 1].map(n => ({ n, total: 0, seen: 0, mature: 0 }))
-  const lv = (n: number) => levels[5 - n]!
+  const levels = [5, 4, 3, 2, 1, 6, 7].map(n => ({ n, total: 0, seen: 0, mature: 0 }))
+  const lv = (n: number) => levels.find(l => l.n === n)!
   for (const x of DECK) lv(x.n).total++
   // per kanji: 0 new, 1 learning, 2 young (< 21 d), 3 mature — the browse grid colours by it
   const status: Record<string, number> = {}

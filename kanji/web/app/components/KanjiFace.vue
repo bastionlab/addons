@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { isKana } from '../utils/kanji'
 /** the back of a card: meanings, readings, example words (shared by the study screen and the info sheet) */
 import type { KanjiCard } from '../utils/kanji'
 defineProps<{ c: KanjiCard }>()
@@ -6,8 +7,8 @@ defineProps<{ c: KanjiCard }>()
 
 <template>
   <div class="face">
-    <div class="mean">{{ c.m.join(', ') }}</div>
-    <div class="reads">
+    <div class="mean">{{ c.m.join(', ') }}<KanjiSpeak v-if="isKana(c.n)" :text="c.k" :size="16" /></div>
+    <div v-if="!isKana(c.n)" class="reads">
       <div v-if="c.on.length"><span class="lab faint small">On</span><span lang="ja" class="jp">{{ c.on.map(kata).join('、') }}</span><KanjiSpeak :text="kjMain(c)" /></div>
       <div v-if="c.kun.length">
         <span class="lab faint small">Kun</span>

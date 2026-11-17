@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { lvName, isKana } from '../utils/kanji'
 /** one kanji: everything on the card, stroke order and how the card is doing */
 const props = defineProps<{ k: string }>()
 const emit = defineEmits<{ close: [], changed: [] }>()
@@ -37,7 +38,7 @@ const practice = ref(0)
           <button v-if="practice" type="button" class="lnk small" @click="practice = 0">Stroke order</button>
         </div>
         <div class="pills">
-          <span class="pill">N{{ x.n }}</span>
+          <span class="pill">{{ lvName(x.n) }}</span>
           <span class="pill">{{ x.s }} strokes</span>
           <span v-if="x.card" class="pill accent">{{ STATE[x.card.state] }}</span>
           <span v-else class="pill">New</span>
@@ -57,7 +58,7 @@ const practice = ref(0)
           <span v-for="(h, i) in x.history" :key="i" :class="{ bad: h.rating === 1 }" :title="fmt(h.ts)">{{ h.w ? 'w ' : '' }}{{ RATE[h.rating] }}</span>
         </div>
         <div class="foot">
-          <a class="lnk small" :href="`https://jisho.org/search/${encodeURIComponent(x.k)}%20%23kanji`" target="_blank" rel="noopener">Jisho</a>
+          <a v-if="!isKana(x.n)" class="lnk small" :href="`https://jisho.org/search/${encodeURIComponent(x.k)}%20%23kanji`" target="_blank" rel="noopener">Jisho</a>
           <button v-if="x.card" type="button" class="btn sm" :class="{ sure: armed === 'forget' }" @click="forget">{{ armed === 'forget' ? 'Sure?' : 'Reset to new' }}</button>
         </div>
       </template>
