@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794874557,
+  "updated": 1794874621,
   "addons": [
     {
       "id": "ai",
@@ -433,7 +433,7 @@
       "id": "skin-disco",
       "name": "Disco skin",
       "icon": "palette",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "author": "MaxJC0",
       "desc": "A party skin for Designs that stays readable: a glowing dance floor and a mirror ball, a jukebox page selector, a spinning vinyl tab bar, rainbow card borders and confetti buttons.",
       "depends_on": [
