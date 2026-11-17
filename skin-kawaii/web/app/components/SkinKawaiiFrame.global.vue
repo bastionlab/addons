@@ -77,7 +77,7 @@ onUnmounted(() => clearTimeout(bt))
 /* the bubble's tail points back at the face */
 .say::before { content: ''; position: absolute; left: -9px; top: calc(50% - 7px); border: 7px solid transparent; border-right-color: var(--line-2); border-left: 0; }
 .say::after { content: ''; position: absolute; left: -5px; top: calc(50% - 5px); border: 5px solid transparent; border-right-color: var(--panel); border-left: 0; }
-.kw-head-enter-active { animation: kwf-pop .45s cubic-bezier(.34, 1.56, .64, 1); }
+.kw-head-enter-active { animation: kwf-pop .3s cubic-bezier(.34, 1.56, .64, 1); }
 .kw-head-leave-active { transition: opacity .1s; }
 .kw-head-leave-to { opacity: 0; }
 .kw-line-enter-active { animation: kwf-pop .35s cubic-bezier(.34, 1.56, .64, 1); transform-origin: left center; }
@@ -85,6 +85,10 @@ onUnmounted(() => clearTimeout(bt))
 .kw-line-leave-to { opacity: 0; }
 @keyframes kwf-pop { 0% { opacity: 0; transform: scale(.85) translateY(6px); } 100% { opacity: 1; transform: none; } }
 @keyframes kwf-boop { 0% { transform: none; } 30% { transform: scale(1.15, .85); } 60% { transform: translateY(-5px) scale(.95, 1.06); } 100% { transform: none; } }
+@media (max-width: 640px), (pointer: coarse) {
+  .face.boop svg { animation-duration: .3s; }
+  .kw-head-enter-active, .kw-line-enter-active { animation-duration: .3s; }
+}
 @media (max-width: 640px) {
   .kw-head { gap: 10px; margin-bottom: 16px; }
   .face { width: 54px; height: 54px; }
