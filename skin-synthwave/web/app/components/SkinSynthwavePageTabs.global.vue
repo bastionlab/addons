@@ -46,6 +46,7 @@ const { anchor, strip, nav, edge, measure, pick } = usePageTabs({ count: () => p
   color: color-mix(in srgb, var(--glow) 45%, var(--muted)); text-shadow: 0 0 2px color-mix(in srgb, var(--glow) 30%, transparent);
   transition: color .2s;
 }
+.tube:active { transform: scale(.96); box-shadow: 0 0 12px color-mix(in srgb, var(--glow) 60%, transparent); }
 .tube:hover, .tube:focus-visible { color: color-mix(in srgb, var(--glow) 75%, var(--text)); outline: none; }
 .tube:focus-visible { border-color: color-mix(in srgb, var(--glow) 40%, transparent); }
 .tube.on {
@@ -59,6 +60,7 @@ const { anchor, strip, nav, edge, measure, pick } = usePageTabs({ count: () => p
 .bdg { min-width: 18px; padding: 0 5px; border-radius: 9px; font: 700 11px/17px system-ui, sans-serif; text-align: center; text-shadow: none; color: var(--bg); background: var(--warn); box-shadow: 0 0 8px var(--warn); }
 .bdg.bad { background: var(--bad); box-shadow: 0 0 8px var(--bad); }
 .bdg.ok { background: var(--ok); box-shadow: 0 0 8px var(--ok); }
+@media (max-width: 640px), (pointer: coarse) { .tube.on { animation-duration: .3s; } }
 @media (min-width: 641px) { .sw-ptabs { backdrop-filter: blur(8px); -webkit-backdrop-filter: blur(8px); } }
 @media (max-width: 640px) {
   .sw-ptabs { background: linear-gradient(180deg, rgba(18, 6, 36, .97), rgba(8, 3, 20, .97)); margin: 0 -6px 14px; }

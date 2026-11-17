@@ -45,8 +45,14 @@ function reveal() {
 }
 watch(() => props.path, reveal)
 const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') sheet.value = false }
-onMounted(() => { window.addEventListener('keydown', onKey); reveal() })
-onUnmounted(() => window.removeEventListener('keydown', onKey))
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
+onMounted(() => { onHide(); document.addEventListener('visibilitychange', onHide); window.addEventListener('keydown', onKey); reveal() })
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onHide)
+  document.documentElement.classList.remove('skin-hidden')
+  window.removeEventListener('keydown', onKey)
+})
 </script>
 
 <template>
@@ -131,6 +137,8 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 .tubes { flex: 1; min-width: 0; display: flex; align-items: center; gap: 4px; overflow-x: auto; scrollbar-width: none; padding: 4px 2px; }
 .tubes::-webkit-scrollbar { display: none; }
 .tube { position: relative; display: flex; align-items: center; gap: 6px; flex: none; min-height: 36px; padding: 4px 12px; border-radius: 18px; font: 600 15px/1 "Arial Rounded MT Bold", "Varela Round", "Trebuchet MS", system-ui, sans-serif; letter-spacing: .03em; text-decoration: none; white-space: nowrap; color: color-mix(in srgb, var(--glow) 45%, var(--faint)); text-shadow: 0 0 2px color-mix(in srgb, var(--glow) 30%, transparent); border: 1px solid transparent; transition: color .2s; }
+.tube:active { transform: scale(.96); box-shadow: 0 0 14px color-mix(in srgb, var(--glow) 70%, transparent), inset 0 0 12px color-mix(in srgb, var(--glow) 45%, transparent); }
+.ib:active { transform: scale(.94); box-shadow: 0 0 12px color-mix(in srgb, var(--cyan) 75%, transparent); }
 .tube:hover, .tube:focus-visible { color: color-mix(in srgb, var(--glow) 75%, var(--text)); text-decoration: none; outline: none; }
 .tube.on { color: var(--text); border-color: color-mix(in srgb, var(--glow) 70%, transparent); text-shadow: 0 0 3px var(--glow), 0 0 10px var(--glow), 0 0 22px var(--glow); box-shadow: 0 0 10px color-mix(in srgb, var(--glow) 45%, transparent), inset 0 0 10px color-mix(in srgb, var(--glow) 30%, transparent); animation: sw-flicker .7s linear 1; }
 @keyframes sw-flicker { 0%, 12%, 22%, 36% { opacity: .25; } 8%, 18%, 30%, 44%, 100% { opacity: 1; } }
@@ -142,8 +150,10 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   .sign { display: none; }
   .pbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; display: flex; gap: 2px; height: calc(60px + env(safe-area-inset-bottom)); padding: 4px 4px env(safe-area-inset-bottom); background: linear-gradient(180deg, rgba(18, 6, 36, .9), rgba(8, 3, 20, .97)); border-top: 1px solid color-mix(in srgb, var(--pink) 70%, transparent); box-shadow: 0 0 18px color-mix(in srgb, var(--pink) 40%, transparent); }
   .pt { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; border: 0; border-radius: 10px; background: none; color: var(--faint); font: 600 10.5px/1.1 "Trebuchet MS", system-ui, sans-serif; text-decoration: none; cursor: pointer; }
+  .pt:active { transform: scale(.94); background: color-mix(in srgb, var(--pink) 16%, transparent); }
+  .pi:active { transform: scale(.96); box-shadow: 0 0 12px color-mix(in srgb, var(--glow) 60%, transparent); }
   .pt .l { max-width: 100%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .pt.on { color: var(--text); text-shadow: 0 0 6px var(--pink), 0 0 14px var(--pink); animation: sw-flicker .6s linear 1; }
+  .pt.on { color: var(--text); text-shadow: 0 0 6px var(--pink), 0 0 14px var(--pink); animation: sw-flicker .3s linear 1; }
   .pt.on :deep(svg) { color: var(--pink); filter: drop-shadow(0 0 4px var(--pink)); }
   .pt .badge, .pt .cm { position: absolute; top: 2px; right: 10%; }
   .scrim { display: flex; align-items: flex-end; position: fixed; inset: 0; z-index: 59; background: rgba(6, 2, 16, .6); }
@@ -174,6 +184,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 <style>
 /* only while this skin is on: room for the sign (desktop) / neon bar (phone), shared colours, the VHS page change */
 html.skin-synthwave body { background: transparent; }
+html.skin-synthwave.skin-hidden *, html.skin-synthwave.skin-hidden *::before, html.skin-synthwave.skin-hidden *::after { animation-play-state: paused !important; }
 html.skin-synthwave svg.icon { stroke-width: 2; }
 @media (min-width: 641px) and (pointer: fine) { html.skin-synthwave svg.icon { filter: drop-shadow(0 0 2px currentColor) drop-shadow(0 0 5px color-mix(in srgb, currentColor 55%, transparent)); } }
 @media (min-width: 641px) { html.skin-synthwave .shell.skinned { padding-top: 62px; } }

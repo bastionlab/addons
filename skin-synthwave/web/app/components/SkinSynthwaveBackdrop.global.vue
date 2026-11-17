@@ -62,5 +62,7 @@ const STARS = Array.from({ length: 46 }, () => ({
   .sun { width: 62vw; }
   .stars i:nth-child(2n) { display: none; }
 }
+/* phone budget: stars stand still; the rolling grid is the one loop here */
+@media (max-width: 640px), (pointer: coarse) { .stars i { animation: none; } }
 @media (prefers-reduced-motion: reduce) { .stars i, .plane { animation: none; } }
 </style>

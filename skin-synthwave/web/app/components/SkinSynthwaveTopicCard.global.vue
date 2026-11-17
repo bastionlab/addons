@@ -24,6 +24,7 @@ withDefaults(defineProps<{
 <style scoped>
 .cas { position: relative; display: flex; flex-direction: column; gap: 6px; height: 100%; min-width: 0; overflow: hidden; padding: 10px 12px 12px; border-radius: var(--radius); color: var(--text); text-decoration: none; background: linear-gradient(160deg, color-mix(in srgb, var(--panel-2) 92%, transparent), color-mix(in srgb, var(--panel) 94%, transparent)); border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent); transition: box-shadow .2s, border-color .2s; }
 .cas:hover, .cas:focus-visible { text-decoration: none; outline: none; border-color: rgb(52 230 255); box-shadow: 0 0 14px rgba(52, 230, 255, .4); }
+.cas:active { transform: scale(.97); border-color: rgb(52 230 255); box-shadow: 0 0 14px rgba(52, 230, 255, .5); }
 .hd { display: flex; align-items: center; gap: 9px; min-width: 0; }
 .disc { width: 30px; height: 30px; flex: none; display: grid; place-items: center; border-radius: 50%; color: var(--accent); border: 1px solid var(--accent); box-shadow: 0 0 8px color-mix(in srgb, var(--accent) 50%, transparent), inset 0 0 6px color-mix(in srgb, var(--accent) 40%, transparent); }
 .name { font: italic 700 15px/1.2 "Trebuchet MS", system-ui, sans-serif; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
