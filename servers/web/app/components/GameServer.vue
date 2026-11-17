@@ -166,10 +166,12 @@ const pickVer = ref('')
         <button class="btn" :disabled="!!busy || opBusy" :title="`world only · last 10 kept · /srv/games/_backups/${s.id}`" @click="act('backup')">{{ s.op?.op === 'backup' && opBusy ? 'Backing up…' : 'Back up now' }}</button>
       </div>
       <div v-if="!s.backups?.length" class="small faint">No backups yet.</div>
+      <TransitionGroup name="list" tag="div" class="bks">
       <div v-for="b in s.backups" :key="b.file" class="bk small">
         <span>{{ age(b.time) }}</span><span class="faint">{{ mb(b.size) }}</span>
         <button class="btn ghost" :class="{ sure: armed === b.file }" :disabled="!!busy || opBusy" title="stops the server; the current world is kept in _trash" @click="arm(b.file) && act('restore', { file: b.file })">{{ armed === b.file ? 'Sure?' : 'Restore' }}</button>
       </div>
+      </TransitionGroup>
     </div>
 
     <div v-if="tab === 'connect'" class="pane small">
@@ -208,6 +210,7 @@ header { display: flex; align-items: center; gap: 10px; }
 .form label.inline { flex-direction: row; align-items: center; gap: 8px; flex-wrap: wrap; }
 h4 { margin: 8px 0 0; font-size: 12.5px; color: var(--muted); font-weight: 600; }
 .ver { width: auto; }
+.bks { display: flex; flex-direction: column; gap: 8px; }
 .bk { display: flex; gap: 12px; align-items: center; padding: 2px 0; border-bottom: 1px solid var(--line); }
 .bk .btn { margin-left: auto; }
 ul { margin: 0; padding-left: 18px; }
