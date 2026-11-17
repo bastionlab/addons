@@ -42,6 +42,7 @@ const WORDS = ['pow', 'zap', 'bam', 'wham']
 const FILLS = ['#ffd83d', '#ff5a5f', '#4fc3ff', '#ffffff']
 let seq = 0
 let reduced = false
+let tap = false // phone / touch: a short pop (≤ 350 ms), see the media query on .burst
 const timers = new Set<ReturnType<typeof setTimeout>>()
 function onDown(e: PointerEvent) {
   if (reduced) return
@@ -50,7 +51,7 @@ function onDown(e: PointerEvent) {
   const id = ++seq
   const word = t(`skinComic.${WORDS[id % WORDS.length]}`)
   bursts.value = [...bursts.value.slice(-3), { id, x: e.clientX, y: e.clientY, word, fill: FILLS[id % FILLS.length]!, rot: (id * 37 % 30) - 15 }]
-  const tm = setTimeout(() => { bursts.value = bursts.value.filter(b => b.id !== id); timers.delete(tm) }, 650)
+  const tm = setTimeout(() => { bursts.value = bursts.value.filter(b => b.id !== id); timers.delete(tm) }, tap ? 320 : 650)
   timers.add(tm)
 }
 // a starburst outline: 14 spikes, alternating radii
@@ -61,13 +62,20 @@ const SPIKES = Array.from({ length: 28 }, (_, i) => {
 }).join(' ')
 
 const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') pop.value = false }
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
 onMounted(() => {
+  onHide()
+  document.addEventListener('visibilitychange', onHide)
   reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
+  tap = window.matchMedia('(max-width: 640px), (pointer: coarse)').matches
   document.addEventListener('pointerdown', onDown, true)
   window.addEventListener('keydown', onKey)
   nextTick(centre)
 })
 onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onHide)
+  document.documentElement.classList.remove('skin-hidden')
   document.removeEventListener('pointerdown', onDown, true)
   window.removeEventListener('keydown', onKey)
   for (const tm of timers) clearTimeout(tm)
@@ -176,6 +184,7 @@ onUnmounted(() => {
   background: var(--panel); border: 3px solid var(--ink); border-radius: 8px 8px 0 0; transition: transform .12s;
 }
 .tab:hover { text-decoration: none; transform: translateY(-3px); }
+.tab:active { transform: translateY(0); background: var(--comic-yellow); }
 .tab.on { background: var(--comic-yellow); border-bottom-color: var(--comic-yellow); transform: translateY(-4px); padding-bottom: 10px; margin-bottom: -7px; }
 .bdg { min-width: 18px; padding: 0 5px; font-size: 11px; font-weight: 900; line-height: 16px; text-align: center; color: var(--panel); background: var(--bad); border: 2px solid var(--ink); border-radius: 999px; }
 .cm { width: 10px; height: 10px; border-radius: 50%; background: var(--accent); border: 2px solid var(--ink); }
@@ -222,6 +231,9 @@ onUnmounted(() => {
   padding: 10px; background: var(--panel); border: 3px solid var(--ink); border-radius: 14px; box-shadow: 5px 5px 0 var(--ink);
 }
 .pi { display: flex; align-items: center; gap: 8px; min-height: 34px; padding: 4px 10px; font: inherit; font-weight: 800; font-size: 13px; text-transform: uppercase; color: var(--ink); text-decoration: none; background: none; border: 2px solid transparent; border-radius: 8px; cursor: pointer; }
+.pi:active { transform: translate(2px, 2px); background: var(--comic-yellow); border-color: var(--ink); }
+.pedit:active { transform: translate(2px, 2px); box-shadow: none; }
+.fab:active { transform: translate(2px, 2px); filter: drop-shadow(1px 1px 0 var(--ink)); }
 .pi:hover, .pi.on { text-decoration: none; background: var(--comic-yellow); border-color: var(--ink); }
 .pi .bdg, .pi .ppin { margin-left: auto; }
 .phead { display: flex; align-items: center; gap: 8px; padding: 0 2px 6px; margin-bottom: 2px; border-bottom: 2px dashed var(--ink); }
@@ -248,8 +260,11 @@ onUnmounted(() => {
   100% { transform: scale(1.08) translateY(-14px) rotate(var(--r)); opacity: 0; }
 }
 
-@media (max-width: 640px) {
+@media (max-width: 640px), (pointer: coarse) {
   .star { animation: none; will-change: auto; }
+  .burst { animation-duration: .3s; }
+}
+@media (max-width: 640px) {
   .mast { padding: calc(env(safe-area-inset-top, 0px) + 10px) 12px 4px; gap: 10px; }
   .logo { padding: 4px 8px 4px 40px; gap: 5px; }
   .star { width: 46px; height: 46px; margin-top: -23px; }
@@ -274,6 +289,7 @@ onUnmounted(() => {
 </style>
 
 <style>
+html.skin-comic.skin-hidden *, html.skin-comic.skin-hidden *::before, html.skin-comic.skin-hidden *::after { animation-play-state: paused !important; }
 /* comic palette extras + room for the bubble bar; only while this skin is on */
 html.skin-comic { --comic-yellow: rgba(255, 216, 61, 1); --comic-red: rgba(227, 38, 47, 1); --comic-blue: rgba(30, 91, 216, 1); }
 /* see-through body so the newsprint Backdrop (z-index -1) shows; the tilted panel frames may poke a few px past the
