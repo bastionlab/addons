@@ -104,8 +104,7 @@ const lookNeedsFormat = computed(() => f.look !== 'button')
 </script>
 
 <template>
-  <Teleport to="body" :disabled="page">
-    <div class="bk" :class="{ pg: page }" @click.self="emit('close')">
+  <div class="bk" :class="{ pg: page }" @click.self="emit('close')">
       <div class="sh" role="dialog" :aria-label="t('widgets.title')">
         <div class="top">
           <b>{{ t('widgets.title') }}</b>
@@ -117,6 +116,7 @@ const lookNeedsFormat = computed(() => f.look !== 'button')
 
         <div v-if="tab === 'mine'" class="body">
           <div v-if="!api.list.value.length" class="empty-state">{{ t('widgets.nothingYet') }}</div>
+          <TransitionGroup name="list" tag="div" class="body">
           <div v-for="w in api.list.value" :key="w.id" class="row">
             <div class="rt">
               <div>{{ w.name }}</div>
@@ -129,6 +129,7 @@ const lookNeedsFormat = computed(() => f.look !== 'button')
             <button v-if="w.look !== 'component'" type="button" class="btn sm" @click="load(w)">{{ t('widgets.editOne') }}</button>
             <button type="button" class="btn sm" :class="{ danger: armed === w.id }" @click="arm(w.id) && api.remove(w.id)">{{ armed === w.id ? t('widgets.sure') : t('widgets.delete') }}</button>
           </div>
+          </TransitionGroup>
         </div>
 
         <div v-else-if="tab === 'library'" class="body">
@@ -216,7 +217,6 @@ const lookNeedsFormat = computed(() => f.look !== 'button')
         </div>
       </div>
     </div>
-  </Teleport>
 </template>
 
 <style scoped>
