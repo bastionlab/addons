@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794873527,
+  "updated": 1794873670,
   "addons": [
     {
       "id": "ai",
@@ -206,7 +206,7 @@
       "id": "jobs",
       "name": "Jobs",
       "icon": "briefcase",
-      "version": "1.1.5",
+      "version": "1.1.6",
       "author": "MaxJC0",
       "desc": "Reads your CV, polls job portals and scores every posting for fit, with the apply link found for you.",
       "routes": [
