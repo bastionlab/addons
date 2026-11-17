@@ -32,5 +32,7 @@ onUnmounted(() => document.removeEventListener('visibilitychange', onVis))
 @keyframes drift3 { 0% { transform: translate(0, 0) scale(1.05); } 50% { transform: translate(20vw, -14vh) scale(.92); } 100% { transform: translate(-10vw, -24vh) scale(1.1); } }
 @keyframes drift4 { 0% { transform: translate(0, 0) scale(.9); } 50% { transform: translate(-24vw, -18vh) scale(1.2); } 100% { transform: translate(-30vw, 6vh) scale(1); } }
 .paused .b { animation-play-state: paused; }
+/* phone budget: two aurora blobs drift (the only loops here), the other two are left out */
+@media (max-width: 640px), (pointer: coarse) { .b3, .b4 { display: none; } }
 @media (prefers-reduced-motion: reduce) { .b { animation: none; } }
 </style>
