@@ -63,13 +63,19 @@ const peek = ref(false)
 let reduced = false
 const onResize = () => (W.value = window.innerWidth)
 const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') sheet.value = false }
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
 onMounted(() => {
+  onHide()
+  document.addEventListener('visibilitychange', onHide)
   reduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches
   onResize()
   window.addEventListener('resize', onResize, { passive: true })
   window.addEventListener('keydown', onKey)
 })
 onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onHide)
+  document.documentElement.classList.remove('skin-hidden')
   window.removeEventListener('resize', onResize)
   window.removeEventListener('keydown', onKey)
 })
@@ -190,6 +196,7 @@ watch(() => props.full, () => (peek.value = false))
   transition: width .16s ease-out, height .16s ease-out, border-radius .16s ease-out, background .2s;
 }
 .di:hover { text-decoration: none; }
+.di:active { transform: scale(.92); }
 .di .ic { display: grid; place-items: center; width: 100%; height: 100%; line-height: 0; }
 .di .icon { width: 52%; height: 52%; }
 .di.on { background: linear-gradient(160deg, color-mix(in srgb, var(--accent) 55%, rgba(255, 255, 255, .2)), color-mix(in srgb, var(--accent) 22%, transparent)); color: var(--text); }
@@ -204,6 +211,11 @@ watch(() => props.full, () => (peek.value = false))
 .di.on .lbl { opacity: 1; transform: translate(-50%, 0) scale(1); }
 .di:hover .lbl, .di:focus-visible .lbl { opacity: 1; transform: translate(-50%, 0) scale(1); z-index: 3; background: rgba(40, 46, 80, .92); }
 .dock:has(.di:not(.on):hover) .di.on .lbl { opacity: .45; }
+/* touch has no hover (the core guard drops :hover there): the pressed or last-tapped item shows its label, as sticky hover did */
+@media (hover: none) {
+  .di:active .lbl, .di:focus .lbl { opacity: 1; transform: translate(-50%, 0) scale(1); z-index: 3; background: rgba(40, 46, 80, .92); }
+  .dock:has(.di:not(.on):focus) .di.on .lbl, .dock:has(.di:not(.on):active) .di.on .lbl { opacity: .45; }
+}
 .sep { align-self: stretch; width: 1px; margin: 6px 2px; background: rgba(255, 255, 255, .2); }
 .tool { background: rgba(255, 255, 255, .06); }
 .jobs:empty { display: none; }
@@ -281,8 +293,11 @@ watch(() => props.full, () => (peek.value = false))
 .gsheet-enter-from, .gsheet-leave-to { opacity: 0; }
 .gsheet-enter-from .sheet, .gsheet-leave-to .sheet { transform: translateY(70%) scale(.94); opacity: 0; }
 .gsheet-enter-active .app { animation: gapp .45s cubic-bezier(.34, 1.56, .64, 1) both; animation-delay: var(--d); }
+@media (max-width: 640px), (pointer: coarse) { .gsheet-enter-active .app { animation-duration: .3s; } }
 @keyframes gapp { from { opacity: 0; transform: translateY(14px) scale(.8); } }
 
+/* touch: the dock never grows on hover, so its size transition (a layout property) is dropped */
+@media (pointer: coarse) { .di { transition: background .2s; } }
 @media (max-width: 640px) {
   .dock-zone { display: none; }
   .cap { display: flex; }
@@ -309,6 +324,7 @@ watch(() => props.full, () => (peek.value = false))
 </style>
 
 <style>
+html.skin-glass.skin-hidden *, html.skin-glass.skin-hidden *::before, html.skin-glass.skin-hidden *::after { animation-play-state: paused !important; }
 /* room for the dock / capsule; only while this skin is on */
 html.skin-glass .shell.skinned { --tabbar: calc(84px + env(safe-area-inset-bottom)); }
 html.skin-glass main.wrap { padding-bottom: calc(110px + env(safe-area-inset-bottom)); }
