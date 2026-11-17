@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { lvName } from '../utils/kanji'
 useHead({ title: 'Kanji · Bastion' })
 
 const o = ref<any>(null)
@@ -47,6 +48,7 @@ const shown = computed(() => {
   return d.filter(x => x.k === s || x.m.some(m => m.toLowerCase().includes(s))
     || [...x.on, ...x.kun].some(r => r.replace(/[.-]/g, '').startsWith(ks))).slice(0, 300)
 })
+const kanaGrid = computed(() => lvl.value >= 6 && !q.value.trim())
 const st = (k: string) => o.value?.status?.[k] ?? 0
 
 // sections as tabs (?s=…); the study hero above them stays one tap away
@@ -96,8 +98,8 @@ function toggleLevel(n: number) {
       <template v-if="tab === 'progress'">
       <Panel title="JLPT progress" id="kanji-levels">
         <div class="levels">
-          <div v-for="l in o.levels" :key="l.n" class="lv">
-            <span class="name">N{{ l.n }}</span>
+          <div v-for="l in o.levels.filter((x: any) => x.n <= 5 || x.seen || o.settings.levels.includes(x.n))" :key="l.n" class="lv">
+            <span class="name">{{ lvName(l.n) }}</span>
             <div class="bar" :title="`${l.seen} seen, ${l.mature} mature of ${l.total}`">
               <i class="seen" :style="{ width: `${(100 * l.seen) / l.total}%` }" />
               <i class="mat" :style="{ width: `${(100 * l.mature) / l.total}%` }" />
@@ -134,15 +136,15 @@ function toggleLevel(n: number) {
         <input v-model="q" class="search" type="search" placeholder="Kanji, meaning or reading" enterkeyhint="search">
       </div>
       <div v-if="!q.trim()" class="chips">
-        <button v-for="n in LEVELS" :key="n" type="button" class="chip" :class="{ on: lvl === n }" @click="lvl = n">N{{ n }}</button>
+        <button v-for="n in LEVELS" :key="n" type="button" class="chip" :class="{ on: lvl === n }" @click="lvl = n">{{ lvName(n) }}</button>
       </div>
-      <div v-if="deck" class="kgrid">
+      <div v-if="deck" class="kgrid" :class="{ kana: kanaGrid }">
         <button v-for="x in shown" :key="x.k" type="button" lang="ja" :class="`s${st(x.k)}`" :title="x.m.join(', ')" @click="go({ k: x.k })">{{ x.k }}</button>
       </div>
       <Skeleton v-else kind="lines" :n="4" />
       <p v-if="deck && !shown.length" class="faint small">Nothing matches.</p>
       <div class="legend faint small"><i class="sw s0" /> new <i class="sw s1" /> learning <i class="sw s2" /> young <i class="sw s3" /> mature</div>
-      <p class="faint small">{{ deck ? deck.length : '…' }} kanji</p>
+      <p class="faint small">{{ deck ? deck.filter(x => x.n <= 5).length : '…' }} kanji · {{ deck ? deck.length - deck.filter(x => x.n <= 5).length : '…' }} kana</p>
       </template>
 
       <Panel v-else-if="tab === 'settings'" title="Settings" id="kanji-settings">
@@ -160,17 +162,17 @@ function toggleLevel(n: number) {
           </div>
         </div>
         <div class="set">
-          <span class="muted small">New cards from</span>
+          <span class="muted small">New cards from (Hiragana / Katakana are opt-in)</span>
           <div class="chips">
-            <button v-for="n in LEVELS" :key="n" type="button" class="chip" :class="{ on: o.settings.levels.includes(n) }" @click="toggleLevel(n)">N{{ n }}</button>
+            <button v-for="n in LEVELS" :key="n" type="button" class="chip" :class="{ on: o.settings.levels.includes(n) }" @click="toggleLevel(n)">{{ lvName(n) }}</button>
           </div>
         </div>
         <p class="faint small">Kanji data: KANJIDIC2 + JMdict (EDRDG), stroke order: KanjiVG.</p>
       </Panel>
     </template>
 
-    <KanjiStudy v-if="studying" :start="o.next" @close="closeStudy" />
-    <KanjiInfo v-if="infoK" :k="infoK" @close="back('k')" @changed="load" />
+    <Transition name="kfade"><KanjiStudy v-if="studying" :start="o.next" @close="closeStudy" /></Transition>
+    <Transition name="sheet"><KanjiInfo v-if="infoK" :k="infoK" @close="back('k')" @changed="load" /></Transition>
   </div>
 </template>
 
@@ -190,7 +192,7 @@ function toggleLevel(n: number) {
 .stats b { font-size: 20px; font-weight: 650; }
 .stats span { font-size: 12px; color: var(--muted); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .levels { display: flex; flex-direction: column; gap: 8px; }
-.lv { display: grid; grid-template-columns: 30px 1fr 74px; gap: 10px; align-items: center; }
+.lv { display: grid; grid-template-columns: 64px 1fr 74px; gap: 10px; align-items: center; }
 .name { font-weight: 600; font-size: 13px; }
 .bar { position: relative; height: 8px; border-radius: 8px; background: var(--track); overflow: hidden; }
 .bar i { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 8px; }
@@ -214,6 +216,7 @@ function toggleLevel(n: number) {
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 .kgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 5px; }
 .kgrid button { aspect-ratio: 1; font: inherit; font-size: 22px; border-radius: var(--radius-sm); border: 1px solid var(--line); background: var(--panel); color: var(--faint); cursor: pointer; padding: 0; }
+.kgrid.kana { grid-template-columns: repeat(auto-fill, minmax(56px, 1fr)); }
 .kgrid button:hover { border-color: var(--line-2); }
 .s1 { color: var(--warn) !important; background: var(--warn-soft) !important; border-color: transparent !important; }
 .s2 { color: var(--accent) !important; background: var(--accent-soft) !important; border-color: transparent !important; }
@@ -228,4 +231,7 @@ function toggleLevel(n: number) {
   .go { width: 100%; }
   .counts { justify-content: space-around; }
 }
+.kfade-enter-active { transition: opacity var(--dur) var(--ease-out); }
+.kfade-leave-active { transition: opacity var(--dur-fast) var(--ease-in); }
+.kfade-enter-from, .kfade-leave-to { opacity: 0; }
 </style>

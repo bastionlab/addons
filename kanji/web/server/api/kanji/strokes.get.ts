@@ -12,7 +12,9 @@ const hexOf = (k: string) => k.codePointAt(0)!.toString(16).padStart(5, '0')
 
 async function download(k: string) {
   const hex = hexOf(k)
-  const r = await fetch(`https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`, { signal: AbortSignal.timeout(8000) })
+  let r = await fetch(`https://cdn.jsdelivr.net/gh/KanjiVG/kanjivg@master/kanji/${hex}.svg`, { signal: AbortSignal.timeout(8000) }).catch(() => null)
+  // jsDelivr refuses a few files (が), GitHub has them all
+  if (!r?.ok) r = await fetch(`https://raw.githubusercontent.com/KanjiVG/kanjivg/master/kanji/${hex}.svg`, { signal: AbortSignal.timeout(8000) })
   if (!r.ok) throw createError({ statusCode: 404, statusMessage: 'no stroke order for this kanji' })
   const svg = await r.text()
   const paths = [...svg.matchAll(/<path[^>]*\sd="([MmCcSsLlHhVvZz0-9.,\s-]+)"/g)].map(m => m[1]!.trim())

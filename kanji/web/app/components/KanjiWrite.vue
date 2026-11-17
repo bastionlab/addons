@@ -1,8 +1,8 @@
 <script setup lang="ts">
 /** write a whole word from memory: its kanji one after another on the pad, the kana are given */
-const props = defineProps<{ form: string }>()
+const props = defineProps<{ form: string, all?: boolean }>()
 const emit = defineEmits<{ done: [{ mistakes: number, hints: number }] }>()
-const isKanji = (c: string) => /[一-鿿々]/.test(c)
+const isKanji = (c: string) => props.all ? /[ぁ-ゟァ-ヶ]/.test(c) : /[一-鿿々]/.test(c) // all = a kana word: every kana is written
 const chars = computed(() => [...props.form])
 const todo = computed(() => chars.value.map((c, i) => (isKanji(c) && c !== '々' ? i : -1)).filter(i => i >= 0))
 const at = ref(0) // index into todo

@@ -11,6 +11,7 @@ import { DECK } from './kanji'
 const KJ_TTS_DIR = join(process.env.NOTES_DIR || '/var/lib/dash', 'tts', 'ja')
 const KJ_TTS_OK = new Set<string>()
 for (const c of DECK) {
+  if (c.n >= 6) KJ_TTS_OK.add(c.k)
   for (const r of [...c.on, ...c.kun]) { const t = r.replace(/[.-]/g, ''); if (t) KJ_TTS_OK.add(t) }
   for (const [w, r] of c.w) { KJ_TTS_OK.add(w); KJ_TTS_OK.add(r) }
 }

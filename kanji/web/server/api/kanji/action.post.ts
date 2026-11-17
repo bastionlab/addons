@@ -10,7 +10,7 @@ export default defineEventHandler(async (event) => {
   if (action === 'settings') {
     return putSettings({
       ...(body.newPerDay != null ? { newPerDay: Number(body.newPerDay) || 0 } : {}),
-      ...(Array.isArray(body.levels) ? { levels: body.levels.slice(0, 5) } : {}),
+      ...(Array.isArray(body.levels) ? { levels: body.levels.slice(0, 7) } : {}),
       ...(body.writing != null ? { writing: body.writing === true } : {}),
     })
   }

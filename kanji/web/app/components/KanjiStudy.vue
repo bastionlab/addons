@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { lvName, isKana } from '../utils/kanji'
 /**
  * The review screen. Reading cards: kanji → Show answer → Again / Hard / Good / Easy (new ones get a guided trace).
  * Write cards: meaning (or a whole word) → write it on the pad from memory → the misses suggest the rating.
@@ -44,8 +45,14 @@ async function post(body: Record<string, any>) {
   catch (e: any) { error.value = e?.data?.statusMessage || e?.message }
   finally { busy.value = false }
 }
+// brief edge flash on the answer: red = Again, amber = Hard, green = Good/Easy
+const flash = ref(''), flashN = ref(0)
+let flashT: any
+function flashed(r: number) { flash.value = r === 1 ? 'bad' : r === 2 ? 'warn' : 'ok'; flashN.value++; clearTimeout(flashT); flashT = setTimeout(() => (flash.value = ''), 500) }
+onUnmounted(() => clearTimeout(flashT))
 async function rate(r: number) {
   if (!shown.value || !card.value) return
+  flashed(r)
   if (await post({ action: 'answer', k: card.value.id, rating: r, secs: Math.min(60, (Date.now() - t0) / 1000) })) reviewed.value++
 }
 async function undo() { if (await post({ action: 'undo' })) reviewed.value = Math.max(0, reviewed.value - 1) }
@@ -58,7 +65,7 @@ const suggested = computed(() => {
   const r = result.value
   if (!writing.value) return 3
   if (!r || r.gaveUp) return 1
-  const n = word.value ? [...word.value[0]].filter(c => /[一-鿿]/.test(c)).length : 1
+  const n = word.value ? [...word.value[0]].filter(c => /[一-鿿ぁ-ゟァ-ヶ]/.test(c) && (isKana(card.value.n) || /[一-鿿]/.test(c))).length : 1
   const bad = (r.mistakes + 2 * r.hints) / n
   return bad === 0 ? 3 : bad <= 2 ? 2 : 1
 })
@@ -113,10 +120,13 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.docum
     <p v-if="error" class="errbox">{{ error }}</p>
     <p v-if="savedOffline" class="small"><span class="pill warn">Saved offline, syncs when online</span></p>
 
+    <span v-if="flash" :key="flashN" class="flash" :class="flash" aria-hidden="true" />
+
+    <Transition name="kcard" mode="out-in">
     <!-- write card: prompt + pad, then the answer -->
     <main v-if="card && writing" :key="card.id + card.reps">
       <div class="meta">
-        <span class="pill">N{{ card.n }}</span>
+        <span class="pill">{{ lvName(card.n) }}</span>
         <span class="pill accent">{{ word ? 'write the word' : 'write' }}</span>
         <span v-if="card.state === 'new'" class="pill accent">new</span>
       </div>
@@ -128,7 +138,7 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.docum
         <div class="mean">{{ card.m.join(', ') }}</div>
         <div lang="ja" class="jp muted">{{ [...card.kun.map((r: string) => r.replace(/[.-]/g, '')), ...card.on.map(kata)].slice(0, 4).join('、') }}</div>
       </div>
-      <KanjiWrite v-if="word" ref="pad" :form="word[0]" @done="written" />
+      <KanjiWrite v-if="word" ref="pad" :form="word[0]" :all="isKana(card.n)" @done="written" />
       <KanjiTrace v-else ref="pad" :k="card.k" @done="written" />
       <template v-if="shown">
         <div class="verdict" :class="['bad', 'warn', 'ok'][suggested - 1]">
@@ -141,7 +151,7 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.docum
 
     <!-- reading card -->
     <main v-else-if="card" :key="card.id + card.reps" @click="shown = true">
-      <div class="meta"><span class="pill">N{{ card.n }}</span><span v-if="card.state === 'new'" class="pill accent">new</span><span v-if="card.lapses >= 4" class="pill warn">leech</span></div>
+      <div class="meta"><span class="pill">{{ lvName(card.n) }}</span><span v-if="card.state === 'new'" class="pill accent">new</span><span v-if="card.lapses >= 4" class="pill warn">leech</span></div>
       <div lang="ja" class="kanji">{{ card.k }}</div>
       <KanjiSpeak v-if="!shown && kjMain(card)" class="spk" :text="kjMain(card)" :size="18" />
       <template v-if="shown">
@@ -169,6 +179,7 @@ onUnmounted(() => { window.removeEventListener('keydown', onKey); document.docum
       </template>
       <button type="button" class="btn" @click="emit('close')">Close</button>
     </main>
+    </Transition>
 
     <footer v-if="card">
       <div v-if="!shown && writing" class="two">
@@ -215,5 +226,13 @@ footer { border-top: 1px solid var(--line); padding: 10px 14px calc(10px + env(s
 .rate .sugg { border-color: currentColor; box-shadow: 0 0 0 1px currentColor inset; }
 .ivl { font-size: 11px; font-weight: 400; color: var(--muted); }
 .r1 { color: var(--bad); } .r2 { color: var(--warn); } .r3 { color: var(--ok); } .r4 { color: var(--accent); }
+.flash { position: absolute; inset: 0; z-index: 2; pointer-events: none; border: 3px solid var(--ok); animation: kflash var(--dur-slow) var(--ease-out) forwards; }
+.flash.bad { border-color: var(--bad); } .flash.warn { border-color: var(--warn); }
+@keyframes kflash { from { opacity: .7; } to { opacity: 0; } }
+.kcard-enter-active { transition: opacity var(--dur) var(--ease-out), transform var(--dur) var(--ease-out); }
+.kcard-leave-active { transition: opacity var(--dur-fast) var(--ease-in), transform var(--dur-fast) var(--ease-in); }
+.kcard-enter-from { opacity: 0; transform: translateX(16px); }
+.kcard-leave-to { opacity: 0; transform: translateX(-16px); }
+@media (prefers-reduced-motion: reduce) { .flash { animation: none; opacity: 0; } }
 @media (max-width: 640px) { .kanji { font-size: 112px; } main { padding: 12px 12px 18px; gap: 10px; } }
 </style>

@@ -151,7 +151,7 @@ path, polyline { fill: none; stroke-linecap: round; stroke-linejoin: round; }
 .done .ink { stroke: var(--ok); }
 .pen { stroke: var(--accent); stroke-width: 3.6; }
 .wrong { stroke: var(--bad); stroke-width: 3.6; animation: fade .45s forwards; }
-.hint { stroke: var(--warn); stroke-width: 3.6; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .8s ease-out forwards; }
+.hint { stroke: var(--warn); stroke-width: 3.6; stroke-dasharray: 1; stroke-dashoffset: 1; animation: draw .8s var(--ease-out) forwards; }
 .start { fill: var(--accent); }
 @keyframes draw { to { stroke-dashoffset: 0; } }
 @keyframes fade { to { opacity: 0; } }
