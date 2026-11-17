@@ -234,7 +234,7 @@ const attention = computed(() => {
     <Skeleton v-if="!d && pending" kind="cards" :n="6" />
     <div v-else-if="error && !d" class="bad pad">Money API in CT 108 unreachable: {{ errText(error) }}</div>
 
-    <template v-if="d">
+    <div v-if="d" class="cin">
       <div class="strip small">
         <span class="dot" :class="d.syncing ? 'warn' : run ? (run.ok && !runErrors.length ? 'ok' : 'bad') : ''" />
         <span class="muted">{{ d.syncing ? 'syncing…' : run ? `Synced ${ago(run.finished)}` : 'not synced yet' }}</span>
@@ -248,14 +248,14 @@ const attention = computed(() => {
       <p v-if="attention" class="small warn note">{{ attention }} — <NuxtLink to="/settings#money">Settings</NuxtLink></p>
 
       <div class="tiles">
-        <button class="tile" @click="goTab('konten')"><span class="lbl">Net worth</span><span class="big num">{{ fmtEur(d.net_worth, 0) }}</span>
+        <button class="tile press" @click="goTab('konten')"><span class="lbl">Net worth</span><span class="big num">{{ fmtEur(d.net_worth, 0) }}</span>
           <span class="small faint">Accounts {{ fmtEur(d.cash, 0) }}</span></button>
-        <button class="tile" @click="goTab('monat')"><span class="lbl">{{ monthTitle(thisMonth).split(' ')[0] }}</span>
+        <button class="tile press" @click="goTab('monat')"><span class="lbl">{{ monthTitle(thisMonth).split(' ')[0] }}</span>
           <span class="big num">{{ L && month === thisMonth ? fmtEur(-L.spending, 0) : '–' }}</span>
           <span v-if="L && month === thisMonth" class="small num" :class="L.income - L.spending >= 0 ? 'ok' : 'bad'">Net {{ fmtSigned(L.income - L.spending) }}</span></button>
-        <button class="tile" @click="goTab('depot')"><span class="lbl">Depot</span><span class="big num">{{ fmtEur(d.invested_value, 0) }}</span>
+        <button class="tile press" @click="goTab('depot')"><span class="lbl">Depot</span><span class="big num">{{ fmtEur(d.invested_value, 0) }}</span>
           <span v-if="gain != null" class="small num" :class="gain >= 0 ? 'ok' : 'bad'">{{ fmtSigned(gain) }} · {{ depotIn ? fmtPct(100 * gain / depotIn) : '' }}</span></button>
-        <button class="tile" @click="goTab('abos')"><span class="lbl">Subs / month</span><span class="big num">{{ fmtEur(d.subs_monthly, 0) }}</span>
+        <button class="tile press" @click="goTab('abos')"><span class="lbl">Subs / month</span><span class="big num">{{ fmtEur(d.subs_monthly, 0) }}</span>
           <span class="small faint">{{ activeSubs.length }} active{{ nextDue ? ` · ${nextDue} this week` : '' }}</span></button>
       </div>
 
@@ -292,7 +292,7 @@ const attention = computed(() => {
         </div>
         <Panel v-if="odd.length" title="Unusual" :sub="`${odd.length} charge${odd.length > 1 ? 's' : ''}`" id="money-odd" class="oddp">
           <div v-for="a in odd" :key="a.journal_id" class="odd">
-            <button class="ob" @click="open = txOf(a)">
+            <button class="ob press" @click="open = txOf(a)">
               <span class="tp"><span class="py">{{ a.alias || a.payee }}</span><span class="faint small">{{ dayTitle(a.date) }} · {{ a.reason }}</span></span>
               <span class="num">{{ fmtEur(a.amount) }}</span>
             </button>
@@ -305,7 +305,7 @@ const attention = computed(() => {
             <div class="calkey small faint"><span><i class="k in" />Income</span><span><i class="k due" />Sub due</span><span>Number = spending €</span></div>
             <div v-if="day" class="daylist">
               <div v-if="!dayTx.length" class="faint small">No bookings on this day.</div>
-              <button v-for="t in dayTx" :key="t.journal_id" class="dtx" @click="open = t">
+              <button v-for="t in dayTx" :key="t.journal_id" class="dtx press" @click="open = t">
                 <span class="tp"><span class="py">{{ t.alias || t.payee }}</span><span class="faint small">{{ t.share_of ? `Share of ${t.share_of}` : t.category || '—' }}</span></span>
                 <span class="num" :class="t.amount > 0 ? 'ok' : ''">{{ fmtEur(t.amount) }}</span>
               </button>
@@ -314,7 +314,7 @@ const attention = computed(() => {
           </Panel>
           <Panel title="Spending by category" id="money-cats">
             <div v-if="!L.categories.length" class="faint small">No spending this month yet.</div>
-            <button v-for="c in L.categories" :key="c.name" class="cat"
+            <button v-for="c in L.categories" :key="c.name" class="cat press"
                     :title="`${c.name}: ${fmtEur(c.amount)} (line = avg of previous 3 months: ${fmtEur(c.avg)})`" @click="goTab('buchungen', { c: c.name, d: undefined })">
               <span class="cn">{{ c.name }}</span>
               <span class="bar"><i :style="{ width: (100 * c.amount / catMax) + '%' }" :class="{ over: c.avg && c.amount > c.avg * 1.2 }" />
@@ -326,7 +326,7 @@ const attention = computed(() => {
         <Panel title="Last 12 months" id="money-trend" class="gap">
           <div class="legend small"><span><i class="sw in" />Income</span><span><i class="sw out" />Spending</span></div>
           <div class="trend">
-            <button v-for="t in L.trend" :key="t.month" class="tm" :class="{ on: t.month === month }"
+            <button v-for="t in L.trend" :key="t.month" class="tm press" :class="{ on: t.month === month }"
                     :title="`${monthTitle(t.month)}: +${fmtEur(t.income, 0)} / −${fmtEur(t.spending, 0)}`" @click="setMonth(t.month)">
               <span class="bars">
                 <i class="in" :style="{ height: (100 * t.income / trendMax) + '%' }" />
@@ -369,7 +369,7 @@ const attention = computed(() => {
           <div v-if="!groups.length && !searching" class="faint small pad2">No bookings.</div>
           <section v-for="g in groups" :key="g.day" class="dg">
             <header class="dh small"><span>{{ dayTitle(g.day) }}</span><span class="num faint">{{ g.sum ? fmtEur(g.sum) : '' }}</span></header>
-            <button v-for="tx in g.txs" :key="tx.journal_id" class="tx" :class="{ picked: sel.has(tx.journal_id) }" @click="tapTx(tx)">
+            <button v-for="tx in g.txs" :key="tx.journal_id" class="tx press" :class="{ picked: sel.has(tx.journal_id) }" @click="tapTx(tx)">
               <span v-if="selecting" class="ck"><Icon v-if="sel.has(tx.journal_id)" name="check" :size="12"/></span>
               <span class="tp">
                 <span class="py">{{ tx.alias || tx.payee }}</span>
@@ -403,7 +403,7 @@ const attention = computed(() => {
       <MoneyDepot v-if="tab === 'depot'" :positions="pf?.positions ?? []" :cash="trCash" />
 
       <template v-if="tab === 'konten'">
-        <Panel title="Accounts" :sub="`${fmtEur(d.cash, 0)} total`" id="money-accounts">
+        <Panel :title="$t('money.accounts')" :sub="`${fmtEur(d.cash, 0)} total`" id="money-accounts">
           <template #actions>
             <button class="btn sm" :disabled="d.syncing" @click="act('sync')">{{ d.syncing ? 'syncing…' : 'Sync now' }}</button>
           </template>
@@ -425,8 +425,8 @@ const attention = computed(() => {
         <MoneyWorth class="gap" />
       </template>
 
-      <MoneyTxSheet v-if="open" :tx="open" :categories="d.categories" :subs="activeSubs" @close="open = null" @category="setCat" @changed="load" />
-    </template>
+      <Transition name="sheet"><MoneyTxSheet v-if="open" :tx="open" :categories="d.categories" :subs="activeSubs" @close="open = null" @category="setCat" @changed="load" /></Transition>
+    </div>
   </div>
 </template>
 
@@ -540,4 +540,6 @@ const attention = computed(() => {
   .filters { flex-wrap: wrap; overflow: visible; }
   .chip.sel { flex: 1 1 140px; min-width: 0; }
 }
+.cin { animation: cin var(--dur) var(--ease-out) backwards; }
+@keyframes cin { from { opacity: 0; } }
 </style>

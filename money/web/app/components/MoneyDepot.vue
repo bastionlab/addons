@@ -73,13 +73,13 @@ const label = (p: any) => p.label || p.name
         <button v-for="r in RANGES" :key="r[0]" :class="{ on: span === r[0] }" @click="span = r[0]">{{ r[0] === '1J' ? '1Y' : r[0] }}</button>
       </div>
       <div v-if="err" class="bad small">{{ err }}</div>
-      <div v-else-if="!h" class="faint small pad">Loading price history…</div>
+      <Skeleton v-else-if="!h" kind="lines" :n="3" />
       <MoneyLine v-else :series="series" />
     </Panel>
 
     <Panel title="Positions" :sub="`${fmtEur(total, 0)} · ${fmtSigned(total - totalIn)} total`" id="money-positions" class="gap">
       <div v-if="!positions.length" class="faint small">Connect Trade Republic to see your positions here.</div>
-      <button v-for="p in positions" :key="p.isin" class="pos" :class="{ on: pick === p.isin }" @click="pick = pick === p.isin ? '' : p.isin">
+      <button v-for="p in positions" :key="p.isin" class="pos press" :class="{ on: pick === p.isin }" @click="pick = pick === p.isin ? '' : p.isin">
         <span class="pn">
           <span class="nm">{{ label(p) }}</span>
           <span class="faint small">{{ fmtNum(p.shares, 3) }} sh. · avg {{ fmtEur(p.buyin / p.shares) }} → {{ fmtEur(p.value / p.shares) }}</span>

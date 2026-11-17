@@ -91,7 +91,8 @@ async function trCode() { if (await act('trCode', { code: tr.code })) { tr.code 
       </template>
 
       <template v-if="setup.eb">
-        <div v-for="l in d.links" :key="l.session_id" class="item">
+        <TransitionGroup name="list" tag="div">
+      <div v-for="l in d.links" :key="l.session_id" class="item">
           <span class="dot" :class="(daysLeft(l.valid_until) ?? 99) < 0 ? 'bad' : (daysLeft(l.valid_until) ?? 99) < 8 ? 'warn' : 'ok'" />
           <b>{{ l.aspsp }}</b>
           <span class="small" :class="(daysLeft(l.valid_until) ?? 99) < 8 ? 'warn' : 'faint'">
@@ -102,15 +103,18 @@ async function trCode() { if (await act('trCode', { code: tr.code })) { tr.code 
             <button class="btn ghost sm" :class="{ danger: unlinkArm === l.session_id }" @click="unlink(l.session_id)">{{ unlinkArm === l.session_id ? 'Really disconnect?' : 'Disconnect' }}</button>
           </span>
         </div>
+        </TransitionGroup>
         <button class="btn sm add" @click="openPicker">+ Connect bank / PayPal</button>
+        <Transition name="mfade">
         <div v-if="picking" class="picker">
           <input v-model="q" placeholder="Search banks…">
-          <div v-if="busy === 'ebAspsps'" class="faint small">Loading banks…</div>
-          <button v-for="a in shown" :key="a.name" class="bank" :disabled="!!busy" @click="link(a.name)">
+          <Skeleton v-if="busy === 'ebAspsps'" kind="rows" :n="3" />
+          <button v-for="a in shown" :key="a.name" class="bank press" :disabled="!!busy" @click="link(a.name)">
             <img v-if="a.logo" :src="a.logo" alt="">{{ a.name }}
           </button>
           <div v-if="aspsps.length && !shown.length" class="faint small">Nothing found</div>
         </div>
+        </Transition>
       </template>
     </div>
 
@@ -165,4 +169,7 @@ async function trCode() { if (await act('trCode', { code: tr.code })) { tr.code 
 .code { width: 90px; }
 .warn { color: var(--warn); }
 @media (max-width: 640px) { .form input { flex-basis: 100%; } }
+.mfade-enter-active { transition: opacity var(--dur) var(--ease-out); }
+.mfade-leave-active { transition: opacity var(--dur-fast) var(--ease-in); }
+.mfade-enter-from, .mfade-leave-to { opacity: 0; }
 </style>

@@ -54,8 +54,9 @@ const showHidden = ref(false)
 
     <Panel v-for="sec in sections" :key="sec.id" :title="sec.title" :sub="sec.sub" :id="sec.id" class="gap">
       <div v-if="!sec.list.length" class="faint small">None detected yet – or add one yourself.</div>
+      <TransitionGroup name="list" tag="div">
       <div v-for="s in sec.list" :key="s.key" class="sub" :class="{ ended: s.state !== 'active', open: open === s.key }">
-        <button class="row" @click="expand(s)">
+        <button class="row press" @click="expand(s)">
           <span class="sp">
             <span class="nm">{{ subName(s) }}</span>
             <span class="faint small">
@@ -89,15 +90,18 @@ const showHidden = ref(false)
           </button>
         </div>
       </div>
+      </TransitionGroup>
       <div v-if="sec.id === 'money-subs'" class="more small">
         <button v-if="ended.length" class="btn ghost" @click="showEnded = !showEnded">{{ showEnded ? 'Hide ended' : `${ended.length} ended` }}</button>
         <button v-if="hidden.length" class="btn ghost" @click="showHidden = !showHidden">{{ hidden.length }} hidden</button>
       </div>
       <div v-if="showHidden && sec.id === 'money-subs'">
-        <div v-for="h in hidden" :key="h.key" class="hid small">
+        <TransitionGroup name="list" tag="div">
+      <div v-for="h in hidden" :key="h.key" class="hid small">
           <span class="faint">{{ subName(h) }} · {{ fmtEur(h.amount) }} / {{ PERIODS[h.period]?.per }}</span>
           <button class="btn ghost" @click="emit('act', 'subRestore', { key: h.key })">Restore</button>
         </div>
+        </TransitionGroup>
       </div>
     </Panel>
   </div>
