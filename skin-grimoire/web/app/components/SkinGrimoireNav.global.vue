@@ -25,8 +25,14 @@ function pick(to: string) { if (editing.value) toggle(to); else { close(); navig
 function search() { close(); emit('search') }
 watch(() => props.path, close)
 const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') close() }
-onMounted(() => window.addEventListener('keydown', onKey))
-onUnmounted(() => window.removeEventListener('keydown', onKey))
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
+onMounted(() => { onHide(); document.addEventListener('visibilitychange', onHide); window.addEventListener('keydown', onKey) })
+onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onHide)
+  document.documentElement.classList.remove('skin-hidden')
+  window.removeEventListener('keydown', onKey)
+})
 </script>
 
 <template>
@@ -113,6 +119,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 .page { position: relative; display: flex; align-items: center; gap: 10px; min-height: 34px; padding: 4px 26px 4px 8px; flex: none; color: var(--muted); font-size: 14px; text-decoration: none; border-radius: 2px; }
 .page .l { flex: 1; }
 .page:hover { text-decoration: none; color: var(--text); }
+.page:active, .find:active { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--text); }
 .page.on { color: var(--warn); background: color-mix(in srgb, var(--warn) 7%, transparent); }
 /* the ribbon bookmark on the open page */
 .page.on::after { content: ''; position: absolute; right: 6px; top: -3px; width: 9px; height: calc(100% + 9px); background: var(--accent); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 78%, 0 100%); }
@@ -144,6 +151,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   }
   .tab { position: relative; flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; min-width: 0; height: 56px; padding: 8px 2px 0; font: inherit; font-size: 11px; color: var(--muted); background: none; border: 0; text-decoration: none; cursor: pointer; -webkit-tap-highlight-color: transparent; }
   .tab:hover { text-decoration: none; }
+  .tab:active { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--text); }
   .tab.on { color: var(--warn); }
   .tab.on::before { content: ''; position: absolute; top: -1px; left: 50%; width: 10px; height: 11px; margin-left: -5px; background: var(--accent); clip-path: polygon(0 0, 100% 0, 100% 100%, 50% 65%, 0 100%); }
   .ti { position: relative; display: grid; place-items: center; }
@@ -162,6 +170,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 .sh { display: flex; align-items: center; gap: 8px; padding: 0 2px 8px; border-bottom: 1px solid color-mix(in srgb, var(--warn) 25%, transparent); }
 .sh .st { flex: 1; }
 .sb { display: inline-flex; align-items: center; justify-content: center; min-width: 36px; height: 34px; padding: 0 10px; font: inherit; font-size: 13px; color: var(--muted); background: none; border: 1px solid color-mix(in srgb, var(--warn) 30%, transparent); border-radius: 3px; cursor: pointer; }
+.sb:active { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--text); }
 .sb.on { color: var(--bg); background: var(--warn); border-color: var(--warn); }
 .hint { margin: 0; font-size: 12.5px; font-style: italic; color: var(--muted); }
 .entries { min-height: 0; overflow-y: auto; display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
@@ -171,6 +180,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
   background: none; border: 1px solid color-mix(in srgb, var(--warn) 20%, transparent); border-radius: 3px;
 }
 .entry .l { flex: 1; }
+.entry:active { background: color-mix(in srgb, var(--warn) 16%, transparent); color: var(--text); }
 .entry.on { color: var(--warn); border-color: color-mix(in srgb, var(--warn) 60%, transparent); }
 .entry.pinned { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 10%, transparent); }
 .entry.dim { opacity: .45; }
@@ -202,6 +212,7 @@ html.skin-grimoire .sec { letter-spacing: .14em; text-transform: uppercase; font
 html.skin-grimoire :is(input:not([type="checkbox"]):not([type="radio"]):not([type="range"]), select, textarea) { border-radius: 3px; border-color: color-mix(in srgb, var(--warn) 22%, var(--line)); }
 html.skin-grimoire :is(input, select, textarea):focus-visible { outline: 1px solid var(--warn); }
 /* page change: a quiet fade */
+html.skin-grimoire.skin-hidden *, html.skin-grimoire.skin-hidden *::before, html.skin-grimoire.skin-hidden *::after { animation-play-state: paused !important; }
 html.skin-grimoire .skin-grimoire-leave-active { transition: opacity 120ms ease-in; }
 html.skin-grimoire .skin-grimoire-enter-active { transition: opacity 220ms ease-out; }
 html.skin-grimoire .skin-grimoire-leave-to, html.skin-grimoire .skin-grimoire-enter-from { opacity: 0; }

@@ -37,6 +37,7 @@ function toggle() {
 header { display: flex; align-items: center; gap: 4px 8px; flex-wrap: wrap; min-height: 32px; margin: -4px 0 12px -8px; cursor: pointer; user-select: none; }
 .folded header { margin-bottom: -4px; }
 h2 { margin: 0; min-width: 0; font: 600 13px/1.3 Georgia, "Palatino Linotype", serif; letter-spacing: .16em; text-transform: uppercase; color: var(--warn); }
+header:active h2 { color: var(--text); }
 .sub { min-width: 0; font-size: 12px; font-style: italic; color: var(--muted); }
 .actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; cursor: default; }
 .fold { display: grid; place-items: center; width: 32px; height: 32px; flex: none; padding: 0; border: 0; background: none; color: var(--faint); cursor: pointer; -webkit-tap-highlight-color: transparent; }

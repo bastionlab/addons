@@ -34,6 +34,7 @@ withDefaults(defineProps<{
   transition: border-color .2s;
 }
 .gm-card:hover { text-decoration: none; border-color: var(--warn); }
+.gm-card:active { border-color: var(--warn); background: color-mix(in srgb, var(--warn) 10%, var(--panel)); }
 .hd { display: flex; align-items: center; gap: 10px; min-width: 0; }
 .ic { color: var(--warn); }
 .txt { display: flex; flex-direction: column; min-width: 0; flex: 1; }
