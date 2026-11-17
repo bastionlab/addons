@@ -7,6 +7,11 @@ const show = computed(() => (tab.value === 'searches' ? 'passed' : tab.value) as
 const { selected, d, error, pending, load, searches, st, counts, feed, tabs, feedback, verdict, isBusy, onChanged } = useHunter('/api/jobs', 30000,
   sel => ({ search: sel ?? undefined, show: show.value, limit: 200 }), [show])
 
+// feed row transitions are for single postings leaving or arriving; a filter change or a re-sort swaps the whole
+// list without per-row motion, so the group is keyed by the filter its data was loaded for
+const gkey = ref('')
+watch(d, () => { gkey.value = `${tab.value}|${selected.value ?? ''}` }, { immediate: true })
+
 const VIEWS = computed(() => [
   { v: 'passed', label: 'Matches', n: counts.value.passed },
   { v: 'applied', label: 'Saved & applied', n: counts.value.applied },
@@ -51,12 +56,12 @@ function applied(item: any, v: boolean) {
         <template v-else-if="show === 'passed' && counts.rejected">No matches yet · {{ counts.rejected }} rejected.</template>
         <template v-else>Nothing here.</template>
       </div>
-      <div v-else class="list">
+      <TransitionGroup v-else :key="gkey" name="list" tag="div" class="list" move-class="nomove">
         <JobPosting
           v-for="i in feed" :key="i.search_id + ':' + i.source + ':' + i.source_id" :item="i"
           :busy="isBusy(i)" @verdict="verdict(i, $event)" @applied="applied(i, $event)"
         />
-      </div>
+      </TransitionGroup>
       </template>
     </template>
   </div>

@@ -9,7 +9,7 @@ const chips = computed(() => jobs.value
     ]
   : [])
 // large card: the best current matches
-const more = computed(() => (jobs.value?.feed ?? []).slice(0, 4).map((i: any) => ({ text: i.title, sub: i.company ?? i.employer ?? '' })))
+const more = computed(() => (jobs.value?.feed ?? []).slice(0, 8).map((i: any) => ({ text: i.title, sub: i.company ?? i.employer ?? '' })))
 </script>
 
 <template>
