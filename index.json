@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794874726,
+  "updated": 1794874825,
   "addons": [
     {
       "id": "ai",
@@ -459,7 +459,7 @@
       "id": "skin-grimoire",
       "name": "Grimoire skin",
       "icon": "palette",
-      "version": "0.3.2",
+      "version": "0.3.3",
       "author": "MaxJC0",
       "desc": "A quiet old-book skin for Designs: dark leather and gold rules, serif ink, a ribbon bookmark on the open page, pages as parchment leaves.",
       "depends_on": [
