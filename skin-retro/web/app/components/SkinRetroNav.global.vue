@@ -22,7 +22,7 @@ function go(to: string) { if (editing.value) return toggle(to); open.value = fal
 
 const now = ref(new Date())
 let t: ReturnType<typeof setInterval> | undefined
-onMounted(() => (t = setInterval(() => (now.value = new Date()), 15_000)))
+onMounted(() => (t = setInterval(() => { if (!document.hidden) now.value = new Date() }, 15_000)))
 onUnmounted(() => clearInterval(t))
 const clock = computed(() => now.value.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }))
 const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') open.value = false }
@@ -33,6 +33,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 <template>
   <div class="retro-nav">
     <div v-if="open" class="scrim" @click="open = false" />
+    <Transition name="rmenu">
     <div v-if="open" class="menu" role="menu">
       <div class="stripe"><span>{{ 'bastion' }}</span></div>
       <div class="items">
@@ -52,6 +53,7 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
         </button>
       </div>
     </div>
+    </Transition>
     <nav class="bar" :data-skin-bar="open ? undefined : ''">
       <button type="button" class="start" :class="{ down: open }" :aria-expanded="open" @click="open = !open">
         <Icon name="grid" :size="16" /><b>{{ $t('skinRetro.start') }}</b>
@@ -103,7 +105,15 @@ onUnmounted(() => window.removeEventListener('keydown', onKey))
 .items { flex: 1; overflow-y: auto; padding: 3px; }
 .item { display: flex; align-items: center; gap: 10px; width: 100%; min-height: 36px; padding: 4px 10px; border: 0; background: none; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
 .item:hover, .item:focus-visible, .item.on { background: var(--accent); color: var(--line-2); outline: none; }
+.item:active { background: var(--accent); color: var(--line-2); }
+.start:active, .tb:active { border-color: var(--text) var(--line-2) var(--line-2) var(--text); background: var(--panel-2); padding-top: 1px; }
+.ql:active { border-color: var(--text) var(--line-2) var(--line-2) var(--text); background: var(--panel-2); }
 .item .l { flex: 1; }
+/* the Start menu pops up and drops away in a few hard steps */
+.rmenu-enter-active { transition: opacity .12s steps(3, end), transform .12s steps(3, end); }
+.rmenu-leave-active { transition: opacity .08s linear; }
+.rmenu-enter-from { opacity: 0; transform: translateY(8px); }
+.rmenu-leave-to { opacity: 0; }
 .cm { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
 .cm.input { background: var(--warn); }
 hr { border: 0; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line-2); margin: 3px 0; }
@@ -130,6 +140,6 @@ html.skin-retro svg.icon { stroke-width: 2.2; stroke-linecap: square; stroke-lin
 .skin-retro-enter-from { opacity: 0; transform: translateY(6px); }
 .skin-retro-leave-to { opacity: 0; }
 @media (prefers-reduced-motion: reduce) {
-  .skin-retro-enter-active, .skin-retro-leave-active { transition: none; }
+  .skin-retro-enter-active, .skin-retro-leave-active, .rmenu-enter-active, .rmenu-leave-active { transition: none; }
 }
 </style>
