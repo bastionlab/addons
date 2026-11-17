@@ -62,6 +62,7 @@ const spot = computed(() => {
 @keyframes m3-turn { to { transform: rotate(360deg); } }
 @keyframes m3-breathe { from { transform: scale(1); } to { transform: scale(1.06, .94); } }
 .paused .turn, .paused .pill { animation-play-state: paused; }
+@media (max-width: 640px), (pointer: coarse) { .pill { animation: none; } }
 @media (max-width: 640px) {
   .cookie { top: -10vmin; right: -22vmin; width: 80vmin; height: 80vmin; }
   .pill { animation: none; }

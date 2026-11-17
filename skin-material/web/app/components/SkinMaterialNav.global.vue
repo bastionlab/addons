@@ -43,6 +43,7 @@ const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') drawer.value = fal
 // M3 ripple: a circle grows from the touch point inside the touched control, then fades. It lives in a fixed,
 // clipped box over the control, so the control's own styles are never touched.
 const RIPPLE = '.btn, .chip, .seg > button, .m3-item, .m3-panel > header, .m3-rip'
+const tap = typeof window !== 'undefined' && window.matchMedia('(max-width: 640px), (pointer: coarse)').matches // phone: a shorter ripple (≤ 350 ms)
 function ripple(e: PointerEvent) {
   if (e.pointerType === 'mouse' && e.button !== 0) return
   if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return
@@ -60,10 +61,14 @@ function ripple(e: PointerEvent) {
   Object.assign(dot.style, { width: `${size}px`, height: `${size}px`, left: `${e.clientX - r.left - size / 2}px`, top: `${e.clientY - r.top - size / 2}px`, background: cs.color })
   box.appendChild(dot)
   document.body.appendChild(box)
-  setTimeout(() => box.remove(), 700)
+  setTimeout(() => box.remove(), tap ? 400 : 700)
 }
 
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
 onMounted(() => {
+  onHide()
+  document.addEventListener('visibilitychange', onHide)
   window.addEventListener('keydown', onKey)
   window.addEventListener('scroll', onScroll, { passive: true })
   document.addEventListener('pointerdown', ripple, { passive: true })
@@ -72,6 +77,8 @@ onMounted(() => {
   onScroll()
 })
 onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onHide)
+  document.documentElement.classList.remove('skin-hidden')
   window.removeEventListener('keydown', onKey)
   window.removeEventListener('scroll', onScroll)
   document.removeEventListener('pointerdown', ripple)
@@ -194,7 +201,7 @@ onUnmounted(() => {
 .m3-dest { text-decoration: none; }
 @media (hover: hover) { .m3-dest:hover { color: var(--text); } }
 .ind { position: relative; display: grid; place-items: center; width: 64px; height: 32px; }
-.pill { position: absolute; inset: 0; border-radius: 16px; background: var(--m3-sec); opacity: 0; transform: scaleX(.32); transition: transform .38s cubic-bezier(.2, 0, 0, 1), opacity .16s; }
+.pill { position: absolute; inset: 0; border-radius: 16px; background: var(--m3-sec); opacity: 0; transform: scaleX(.32); transition: transform .3s cubic-bezier(.2, 0, 0, 1), opacity .16s; }
 .m3-dest.on .pill { opacity: 1; transform: scaleX(1); }
 .ic { position: relative; transition: transform .25s cubic-bezier(.2, 0, 0, 1); }
 .m3-dest.on .ic { color: var(--m3-on-sec); }
@@ -233,7 +240,7 @@ onUnmounted(() => {
 .dbdg { font-size: 12px; font-weight: 600; color: var(--bad); }
 hr { border: 0; border-top: 1px solid var(--line); margin: 6px 16px; flex: none; }
 .m3d-enter-active, .m3d-leave-active { transition: opacity .3s; }
-.m3d-enter-active .m3-drawer { transition: transform .4s cubic-bezier(.05, .7, .1, 1); }
+.m3d-enter-active .m3-drawer { transition: transform .3s cubic-bezier(.05, .7, .1, 1); }
 .m3d-leave-active .m3-drawer { transition: transform .2s cubic-bezier(.3, 0, .8, .15); }
 .m3d-enter-from, .m3d-leave-to { opacity: 0; }
 .m3d-enter-from .m3-drawer, .m3d-leave-to .m3-drawer { transform: translateX(-100%); }
@@ -257,6 +264,7 @@ hr { border: 0; border-top: 1px solid var(--line); margin: 6px 16px; flex: none;
 </style>
 
 <style>
+html.skin-material.skin-hidden *, html.skin-material.skin-hidden *::before, html.skin-material.skin-hidden *::after { animation-play-state: paused !important; }
 /* the skin's global part: tonal roles from the tokens, room for the bars, ripples, controls, page transition */
 html.skin-material {
   --m3-sec: color-mix(in srgb, var(--accent) 26%, var(--panel));
@@ -280,6 +288,10 @@ html.skin-material body { font-family: Roboto, "Google Sans", "Google Sans Text"
   html.skin-material .m3-nav:not(.full) ~ main.wrap { padding-top: calc(68px + env(safe-area-inset-top)); }
 }
 html.skin-material .m3-ripple-box { position: fixed; z-index: 61; overflow: hidden; pointer-events: none; animation: m3-rip-fade .7s linear forwards; }
+@media (max-width: 640px), (pointer: coarse) {
+  html.skin-material .m3-ripple-box { animation-duration: .35s; }
+  html.skin-material .m3-ripple-dot { animation-duration: .3s; }
+}
 html.skin-material .m3-ripple-dot { position: absolute; border-radius: 50%; opacity: .14; transform: scale(0); animation: m3-rip .45s cubic-bezier(.2, 0, 0, 1) forwards; }
 @keyframes m3-rip { to { transform: scale(1); } }
 @keyframes m3-rip-fade { 0%, 55% { opacity: 1; } 100% { opacity: 0; } }
@@ -313,5 +325,7 @@ html.skin-material .skin-material-leave-to { opacity: 0; transform: translateX(-
   html.skin-material .skin-material-enter-active, html.skin-material .skin-material-leave-active { transition: none; }
   html.skin-material .skin-material-enter-from, html.skin-material .skin-material-leave-to { transform: none; }
   html.skin-material .m3-ripple-box { display: none; }
+  /* no ripple: a static pressed state layer instead */
+  html.skin-material .m3-item:active, html.skin-material .m3-rip:active, html.skin-material .m3-panel > header:active { background-color: color-mix(in srgb, var(--text) 12%, transparent); }
 }
 </style>
