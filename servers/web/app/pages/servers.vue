@@ -71,7 +71,7 @@ const ctStart = async () => { await $fetch('/api/games/ct-start', { method: 'POS
       CT {{ g.ct }} (gameservers) is {{ g.ctStatus }}. <button class="btn" @click="ctStart">Start it</button>
     </div>
 
-    <template v-else-if="g">
+    <div v-else-if="g" class="cin">
       <div class="strip small">
         <span class="pill">CT {{ g.ct }} · RAM {{ gb(g.mem.total - g.mem.avail) }}/{{ gb(g.mem.total) }} GB</span>
         <span class="pill">disk {{ gb(g.disk.free) }} GB free</span>
@@ -90,7 +90,7 @@ const ctStart = async () => { await $fetch('/api/games/ct-start', { method: 'POS
       </div>
       <Panel v-else title="New server" id="games-new">
         <div class="tpls">
-          <button v-for="t in g.templates" :key="t.id" type="button" class="tpl" :class="{ on: pick === t.id }" @click="choose(t)">
+          <button v-for="t in g.templates" :key="t.id" type="button" class="tpl press" :class="{ on: pick === t.id }" @click="choose(t)">
             <span class="ico">{{ t.icon }}</span>
             <span><b>{{ t.name }}</b><br><span class="small faint">{{ t.desc }}</span><br><span class="small faint">~{{ t.ram }} GB RAM</span></span>
           </button>
@@ -112,7 +112,8 @@ const ctStart = async () => { await $fetch('/api/games/ct-start', { method: 'POS
           <span v-if="cerr" class="small bad">{{ cerr }}</span>
         </div>
       </Panel>
-    </template>
+    </div>
+    <Skeleton v-else kind="cards" :n="2" />
   </div>
 </template>
 
@@ -129,4 +130,6 @@ const ctStart = async () => { await $fetch('/api/games/ct-start', { method: 'POS
 .form label { display: flex; flex-direction: column; gap: 4px; font-size: 12.5px; color: var(--muted); }
 .form label.inline { flex-direction: row; align-items: center; gap: 8px; flex-wrap: wrap; }
 .row { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; }
+.cin { animation: cin var(--dur) var(--ease-out) backwards; }
+@keyframes cin { from { opacity: 0; } }
 </style>
