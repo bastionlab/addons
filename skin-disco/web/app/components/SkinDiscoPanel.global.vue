@@ -69,6 +69,7 @@ const turn = computed(() => {
   100% { opacity: 1; transform: none; }
 }
 .folded { align-self: start; padding-bottom: 12px; }
+.hd:active .ttl { transform: scale(.97); transform-origin: left center; }
 .hd { display: flex; align-items: center; gap: 9px; flex-wrap: wrap; min-height: 32px; cursor: pointer; user-select: none; -webkit-tap-highlight-color: transparent; }
 .led { flex: none; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 8px var(--accent), 0 0 2px var(--text); }
 .ttl { margin: 0; font-size: 15px; font-weight: 800; font-style: italic; letter-spacing: .03em; color: var(--text); text-shadow: 0 0 10px rgba(255, 63, 180, .45); }

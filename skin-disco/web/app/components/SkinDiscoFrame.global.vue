@@ -69,7 +69,7 @@ const SPARKS = [{ l: '6%', t: '18%', d: '0s' }, { l: '38%', t: '-6%', d: '.7s' }
 @keyframes sheen { 0%, 60% { transform: translateX(-120%) skewX(-18deg); } 100% { transform: translateX(320%) skewX(-18deg); } }
 .spk { position: absolute; font-size: 11px; font-style: normal; color: var(--text); text-shadow: 0 0 6px rgba(255, 255, 255, .9); animation: twinkle 2.8s ease-in-out infinite; opacity: 0; pointer-events: none; }
 @keyframes twinkle { 0%, 100% { opacity: 0; transform: scale(.3) rotate(0); } 50% { opacity: 1; transform: scale(1) rotate(90deg); } }
-.dmq-enter-active { transition: transform .4s cubic-bezier(.3, 1.6, .5, 1), opacity .2s; }
+.dmq-enter-active { transition: transform .3s cubic-bezier(.3, 1.6, .5, 1), opacity .2s; }
 .dmq-leave-active { transition: opacity .1s; }
 .dmq-enter-from { transform: translateY(-24px) scale(.85); opacity: 0; }
 .dmq-leave-to { opacity: 0; }

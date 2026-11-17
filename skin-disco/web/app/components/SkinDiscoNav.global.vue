@@ -262,6 +262,7 @@ onUnmounted(() => {
 .song .sl, .song .si { color: rgba(40, 18, 46, 1); }
 .song::before { content: ''; position: absolute; left: 40px; right: 6px; top: 50%; height: 0; border-top: 1px dashed rgba(180, 60, 110, .25); pointer-events: none; }
 .song:hover { text-decoration: none; transform: translateX(3px); }
+.song:active { transform: translateX(5px) scale(.97); }
 .code {
   flex: none; width: 30px; height: 28px; display: grid; place-items: center; border-radius: 4px;
   font-size: 12px; font-weight: 900; color: var(--text); background: rgba(150, 30, 90, 1);
@@ -290,6 +291,7 @@ onUnmounted(() => {
   box-shadow: 0 0 10px rgba(63, 216, 255, .25);
 }
 .find:hover { box-shadow: 0 0 16px rgba(63, 216, 255, .55); }
+.find:active, .pfind:active, .dedit:active { transform: scale(.94); box-shadow: 0 0 16px rgba(63, 216, 255, .7); }
 .coin { display: flex; align-items: center; gap: 10px; padding: 6px 10px; background: rgba(214, 206, 236, .12); border: 1.5px solid rgba(214, 206, 236, .4); border-radius: 8px; }
 .slot { flex: none; width: 6px; height: 26px; border-radius: 3px; background: rgba(0, 0, 0, .8); box-shadow: 0 0 0 2px rgba(214, 206, 236, .6), 0 0 10px var(--ok); }
 .coin.warn .slot { box-shadow: 0 0 0 2px rgba(214, 206, 236, .6), 0 0 10px var(--warn); }
@@ -341,6 +343,8 @@ onUnmounted(() => {
   color: var(--muted); text-decoration: none; -webkit-tap-highlight-color: transparent;
 }
 .vt:hover { text-decoration: none; }
+.vt:active .vi { transform: scale(.86); }
+.vt.on:active .vi { transform: translateY(-9px) scale(.9); }
 .vmore { background: none; border: 0; font: inherit; cursor: pointer; }
 .dscrim { position: fixed; inset: 0; z-index: 59; background: rgba(10, 4, 20, .55); }
 .dsheet {
