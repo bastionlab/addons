@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794874351,
+  "updated": 1794874422,
   "addons": [
     {
       "id": "ai",
@@ -394,7 +394,7 @@
       "id": "skin-blocky",
       "name": "Blocky skin",
       "icon": "palette",
-      "version": "0.1.3",
+      "version": "0.1.4",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: a voxel sandbox look with a block landscape, an item hotbar, an inventory grid and achievement toasts.",
       "depends_on": [
