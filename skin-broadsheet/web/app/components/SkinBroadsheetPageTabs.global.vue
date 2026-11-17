@@ -64,6 +64,7 @@ onMounted(() => nextTick(() => reveal(false)))
   font-family: var(--bs-disp); font-weight: 800; font-size: 12px; line-height: 1;
 }
 .lb { font-variant: small-caps; text-transform: lowercase; letter-spacing: .08em; }
+.pt:active { background: var(--text); color: var(--bg); }
 .pt:hover .lb { text-decoration: underline; text-underline-offset: 4px; }
 .pt.on .lb { font-weight: 800; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
 .pt.on .lt { background: var(--text); color: var(--bg); }

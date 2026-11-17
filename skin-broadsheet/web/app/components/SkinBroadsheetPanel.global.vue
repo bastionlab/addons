@@ -60,6 +60,9 @@ h2 { margin: 2px 0 0; font-family: var(--bs-disp); font-weight: 800; font-size: 
 .fb {
   margin-left: auto; min-height: 28px; padding: 0 2px; background: none; border: 0; color: var(--faint); font: inherit; font-style: italic; font-size: 12px; cursor: pointer;
 }
+.hd:active h2 { text-decoration: underline; }
+.hd:active .dc { color: var(--text); }
+.cont:active, .fb:active { color: var(--text); text-decoration: underline; }
 .fb:hover { color: var(--accent); text-decoration: underline; }
 .actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; margin-left: auto; padding-left: 8px; cursor: default; }
 .rule { height: 0; margin: 8px 0 12px; border: 0; border-top: 1px solid var(--line-2); }

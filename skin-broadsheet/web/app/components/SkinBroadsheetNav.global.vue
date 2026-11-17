@@ -39,11 +39,15 @@ const news = computed(() => props.stateText || t('skinBroadsheet.storm'))
 
 let tick: ReturnType<typeof setInterval> | undefined
 const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') sheet.value = false }
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
 onMounted(() => {
-  tick = setInterval(() => (now.value = new Date()), 60_000)
+  onHide()
+  document.addEventListener('visibilitychange', onHide)
+  tick = setInterval(() => { if (!document.hidden) now.value = new Date() }, 60_000)
   window.addEventListener('keydown', onKey)
 })
-onUnmounted(() => { if (tick) clearInterval(tick); window.removeEventListener('keydown', onKey) })
+onUnmounted(() => { document.removeEventListener('visibilitychange', onHide); document.documentElement.classList.remove('skin-hidden'); if (tick) clearInterval(tick); window.removeEventListener('keydown', onKey) })
 </script>
 
 <template>
@@ -210,6 +214,7 @@ onUnmounted(() => { if (tick) clearInterval(tick); window.removeEventListener('k
 }
 .ix + .ix::before { content: ''; position: absolute; left: 0; top: 11px; bottom: 11px; border-left: 1px solid var(--line-2); }
 .ix:hover { text-decoration: underline; text-underline-offset: 4px; }
+.ix:active { background: var(--ink); color: var(--bg) !important; text-decoration: none; }
 .ix.on { font-weight: 800; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 5px; }
 sup { font-size: 10px; margin-left: 2px; }
 .bd { color: var(--bad); font-weight: 800; font-variant: normal; }
@@ -246,6 +251,8 @@ sup { font-size: 10px; margin-left: 2px; }
   color: var(--muted); text-decoration: none; -webkit-tap-highlight-color: transparent;
 }
 .pt:hover { text-decoration: none; }
+.pt:active { background: var(--ink); color: var(--bg); }
+.sbtn:active, .fkey:active { background: var(--bg); color: var(--ink); box-shadow: inset 0 0 0 1px var(--ink); }
 .ptl { max-width: 100%; font-size: 12px; font-variant: small-caps; text-transform: lowercase; letter-spacing: .05em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .pt.on { color: var(--ink); }
 .pt.on .ptl { font-weight: 800; text-decoration: underline; text-underline-offset: 3px; }
@@ -288,6 +295,9 @@ sup { font-size: 10px; margin-left: 2px; }
   display: flex; align-items: center; gap: 10px; width: 100%; min-height: 44px; padding: 0 2px; background: none; border: 0; border-bottom: 1px dotted var(--line-2);
   color: var(--ink); font: inherit; font-size: 17px; text-align: left; cursor: pointer;
 }
+.row:active { background: var(--ink); color: var(--bg); }
+.row:active .icon, .row:active .pg { color: var(--bg); }
+.ib:active, .xb:active { background: var(--ink); color: var(--bg); }
 .row .icon { flex: none; color: var(--muted); }
 .rl { font-variant: small-caps; text-transform: lowercase; letter-spacing: .06em; }
 .row.on .rl { font-weight: 800; text-decoration: underline; text-underline-offset: 4px; }
@@ -296,7 +306,7 @@ sup { font-size: 10px; margin-left: 2px; }
 .pg { flex: none; font-family: var(--disp); font-weight: 800; font-style: italic; color: var(--accent); }
 .sh-foot { display: flex; justify-content: space-between; gap: 10px; margin-top: 12px; padding-top: 6px; border-top: 3px double var(--ink); font-size: 12.5px; font-variant: small-caps; letter-spacing: .05em; }
 .bsheet-enter-active, .bsheet-leave-active { transition: opacity .25s; }
-.bsheet-enter-active .sheet { transition: transform .35s cubic-bezier(.2, .8, .3, 1); }
+.bsheet-enter-active .sheet { transition: transform .3s cubic-bezier(.2, .8, .3, 1); }
 .bsheet-leave-active .sheet { transition: transform .2s ease-in; }
 .bsheet-enter-from, .bsheet-leave-to { opacity: 0; }
 .bsheet-enter-from .sheet, .bsheet-leave-to .sheet { transform: translateY(40%) rotateX(18deg); }
@@ -323,7 +333,7 @@ sup { font-size: 10px; margin-left: 2px; }
   .tk-l { font-size: 12px; padding: 0 8px; }
   html.kb .pbar { display: none; }
 }
-@media (max-width: 640px) and (pointer: coarse) { .tk-t { animation: none; } }
+@media (max-width: 640px), (pointer: coarse) { .tk-t { animation: none; } }
 @media (prefers-reduced-motion: reduce) {
   .tk-t { animation: none; }
   .mk.busy { animation: none; }
@@ -340,6 +350,8 @@ html.skin-broadsheet {
   --ptabs-top: 38px;
 }
 html.skin-broadsheet body { font-family: var(--bs-serif); }
+html.skin-broadsheet.skin-hidden *, html.skin-broadsheet.skin-hidden *::before, html.skin-broadsheet.skin-hidden *::after { animation-play-state: paused !important; }
+
 /* engraved look: thin ink strokes; emoji print in ink too (one-colour font, see SKINS.md) */
 html.skin-broadsheet svg.icon { stroke-width: 1.4; stroke-linecap: butt; }
 html.skin-broadsheet .shell.skinned { --tabbar: 0px; }
