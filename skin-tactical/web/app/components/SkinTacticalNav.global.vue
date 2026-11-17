@@ -41,11 +41,17 @@ function onKey(e: KeyboardEvent) {
   }
 }
 watch(() => props.full, v => document.documentElement.classList.toggle('tac-full', v))
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
 onMounted(() => {
+  onHide()
+  document.addEventListener('visibilitychange', onHide)
   document.documentElement.classList.toggle('tac-full', props.full)
   window.addEventListener('keydown', onKey)
 })
 onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onHide)
+  document.documentElement.classList.remove('skin-hidden')
   window.removeEventListener('keydown', onKey)
   document.documentElement.classList.remove('tac-full')
 })
@@ -146,6 +152,8 @@ onUnmounted(() => {
 .slots-v { flex: 1; overflow-y: auto; padding: 6px 4px; display: flex; flex-direction: column; gap: 1px; }
 .row { display: flex; align-items: center; gap: 9px; min-height: 34px; padding: 3px 8px 3px 6px; color: var(--muted); font-size: 13.5px; text-decoration: none; border-left: 2px solid transparent; }
 .row:hover, .row:focus-visible { color: var(--text); background: color-mix(in srgb, var(--amb) 8%, transparent); text-decoration: none; outline: none; }
+.row:active { color: var(--bg); background: var(--amb); }
+.sb:active { color: var(--bg); background: var(--amb); border-color: var(--amb); }
 .row.on { color: var(--text); border-left-color: var(--amb); background: color-mix(in srgb, var(--amb) 14%, transparent); }
 .row .no { width: 14px; flex: none; font-size: 11px; color: var(--faint); text-align: right; }
 .row.on .no, .row.on .ic { color: var(--amb); }
@@ -167,6 +175,8 @@ onUnmounted(() => {
   .full .ptop { display: none; }
   .pbar { display: flex; gap: 3px; position: fixed; left: 0; right: 0; bottom: 0; z-index: 60; height: calc(54px + env(safe-area-inset-bottom)); padding: 3px 3px calc(3px + env(safe-area-inset-bottom)); background: var(--bg); border-top: 1px solid var(--line-2); }
   .ws { position: relative; flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 0 2px; color: var(--muted); background: transparent; border: 0; border-top: 2px solid transparent; font: inherit; text-decoration: none; cursor: pointer; }
+  .ws:active, .cell:active { color: var(--bg); background: var(--amb); border-color: var(--amb); }
+  .ws:active :deep(svg), .ws:active .no, .cell:active .no { color: var(--bg); }
   .ws.on { color: var(--text); border-top-color: var(--amb); background: color-mix(in srgb, var(--amb) 10%, transparent); }
   .ws.on :deep(svg) { color: var(--amb); }
   .ws .no { position: absolute; top: 2px; left: 4px; font-size: 9.5px; color: var(--faint); }
@@ -196,6 +206,7 @@ onUnmounted(() => {
 
 <style>
 /* only while this skin is on: room for the column / phone bars, square crisp icons, mono emoji, page transition */
+html.skin-tactical.skin-hidden *, html.skin-tactical.skin-hidden *::before, html.skin-tactical.skin-hidden *::after { animation-play-state: paused !important; }
 html.skin-tactical body { background: transparent; font-family: "Bahnschrift", "Arial Narrow", "Roboto Condensed", system-ui, 'Bastion Emoji', sans-serif; }
 html.skin-tactical svg.icon { stroke-width: 2; stroke-linecap: square; stroke-linejoin: miter; shape-rendering: geometricPrecision; }
 @media (min-width: 641px) {

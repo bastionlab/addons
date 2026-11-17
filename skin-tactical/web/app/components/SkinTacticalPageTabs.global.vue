@@ -44,6 +44,7 @@ const { anchor, strip, nav, edge, measure, pick } = usePageTabs({ count: () => p
   color: var(--muted); font: inherit; font-size: 13px; font-weight: 600; white-space: nowrap; cursor: pointer;
 }
 .cat:hover, .cat:focus-visible { color: var(--text); outline: none; }
+.cat:active { color: var(--bg); background: var(--accent); }
 .cat.on { color: var(--text); border-bottom-color: var(--accent); }
 .cat.on .ic { color: var(--accent); }
 .bdg { min-width: 18px; padding: 0 5px; font-size: 11px; line-height: 17px; text-align: center; font-weight: 700; color: var(--bg); background: var(--warn); }
