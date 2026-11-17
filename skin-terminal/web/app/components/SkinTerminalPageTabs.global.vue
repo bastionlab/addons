@@ -74,6 +74,7 @@ onBeforeUnmount(() => window.removeEventListener('keydown', onKey))
   color: var(--muted); font: inherit; white-space: pre; cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
 .pt:hover { color: var(--text); background: color-mix(in srgb, var(--accent) 12%, transparent); }
+.pt:active { color: var(--bg); background: var(--accent); }
 .pt.on { background: var(--text); color: var(--bg); font-weight: 700; text-shadow: none; }
 .ix { opacity: .75; }
 .bdg { margin-left: 4px; font-weight: 700; color: var(--warn); }

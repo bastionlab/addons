@@ -201,7 +201,11 @@ const boot = ref(false)
 const BOOT = ['boot1', 'boot2', 'boot3', 'boot4', 'boot5', 'boot6', 'boot7']
 let bootT: ReturnType<typeof setTimeout> | undefined
 
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
 onMounted(() => {
+  onHide()
+  document.addEventListener('visibilitychange', onHide)
   window.addEventListener('keydown', onGlobalKey)
   nextTick(() => reveal(false))
   if (user.value === 'user') {
@@ -221,6 +225,8 @@ onMounted(() => {
   } catch {}
 })
 onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onHide)
+  document.documentElement.classList.remove('skin-hidden')
   window.removeEventListener('keydown', onGlobalKey)
   trackKb(false)
   if (bootT) clearTimeout(bootT)
@@ -341,6 +347,8 @@ onUnmounted(() => {
   color: var(--accent); font-size: 13.5px; font-weight: 600; text-decoration: none; -webkit-tap-highlight-color: transparent;
 }
 .dir:hover { text-decoration: none; background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.dir:active, .pin:active, .ib:active, .corner:active, .tag:active, .ac button:active { color: var(--bg); background: var(--accent); text-shadow: none; }
+.dir:active .bd, .dir:active .st { color: var(--bg); }
 button.dir { background: none; border: 0; font-family: inherit; cursor: pointer; }
 .dir .dn { color: inherit; }
 .dir .st { margin-left: -3px; color: var(--warn); }
@@ -448,6 +456,7 @@ html.skin-terminal {
   --ptabs-top: calc(36px + env(safe-area-inset-top, 0px));
 }
 html.skin-terminal body { font-family: var(--tm-mono); }
+html.skin-terminal.skin-hidden *, html.skin-terminal.skin-hidden *::before, html.skin-terminal.skin-hidden *::after { animation-play-state: paused !important; }
 /* thin phosphor line icons */
 html.skin-terminal svg.icon { stroke-width: 1.4; stroke-linecap: square; stroke-linejoin: miter; }
 html.skin-terminal .shell.skinned { --tabbar: calc(84px + env(safe-area-inset-bottom)); }

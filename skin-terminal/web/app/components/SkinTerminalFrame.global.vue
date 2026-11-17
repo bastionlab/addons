@@ -23,6 +23,7 @@ function type() {
   n.value = 0
   const step = () => {
     if (n.value >= cmd.value.length) return
+    if (document.hidden) { n.value = cmd.value.length; return } // no typing timers while the tab is hidden
     n.value++
     timer = setTimeout(step, 26 + Math.random() * 40)
   }

@@ -52,6 +52,8 @@ h2 {
 }
 .br { color: var(--line-2); font-weight: 400; padding: 0 5px; text-shadow: none; }
 .hd:hover h2 { color: var(--text); }
+.hd:active h2 { color: var(--bg); background: var(--accent); text-shadow: none; }
+.fold:active { color: var(--bg); background: var(--accent); }
 .sub { display: flex; align-items: center; min-height: 28px; padding: 0 6px; background: var(--panel); font-size: 12px; color: var(--faint); min-width: 0; }
 .fill { flex: 1; }
 .actions { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; min-height: 28px; padding: 0 4px; background: var(--panel); cursor: default; }
