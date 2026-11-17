@@ -43,29 +43,39 @@ const said = ref('')
 const hearts = ref<{ id: number, x: number, r: number, d: number }[]>([])
 let hid = 0
 let last = 0
+let tap = false // phone / touch: shorter, smaller bursts (see the media query on .hop/.pop)
 const timers = new Set<ReturnType<typeof setTimeout>>()
 const later = (fn: () => void, ms: number) => { const h = setTimeout(() => { timers.delete(h); fn() }, ms); timers.add(h) }
 let sayTimer: ReturnType<typeof setTimeout> | undefined
 function doHop() { hop.value = false; nextTick(() => { hop.value = true; later(() => (hop.value = false), 650) }) }
 function pet() {
   doHop()
-  for (let i = 0; i < 6; i++) {
+  for (let i = 0; i < (tap ? 3 : 6); i++) {
     const id = ++hid
     hearts.value.push({ id, x: Math.round(Math.random() * 60 - 30), r: Math.round(Math.random() * 50 - 25), d: Math.round(Math.random() * 160) })
-    later(() => (hearts.value = hearts.value.filter(h => h.id !== id)), 1300)
+    later(() => (hearts.value = hearts.value.filter(h => h.id !== id)), tap ? 600 : 1300)
   }
   let n = last
   while (n === last) n = 1 + Math.floor(Math.random() * 10)
   last = n
   said.value = t(`skinKawaii.msg.m${n}`)
   clearTimeout(sayTimer)
-  sayTimer = setTimeout(() => (said.value = ''), 3000)
+  sayTimer = setTimeout(() => (said.value = ''), tap ? 1500 : 3000)
 }
 watch(() => props.path, () => { doHop(); reveal() })
 
 const onVis = () => (paused.value = document.hidden)
-onMounted(() => { onVis(); document.addEventListener('visibilitychange', onVis); reveal() })
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, rule in the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
+onMounted(() => {
+  tap = window.matchMedia('(max-width: 640px), (pointer: coarse)').matches
+  onHide()
+  document.addEventListener('visibilitychange', onHide)
+  onVis(); document.addEventListener('visibilitychange', onVis); reveal()
+})
 onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onHide)
+  document.documentElement.classList.remove('skin-hidden')
   document.removeEventListener('visibilitychange', onVis)
   clearTimeout(sayTimer)
   for (const h of timers) clearTimeout(h)
@@ -196,6 +206,7 @@ onUnmounted(() => {
 .sheet .brand { padding: 0 6px; }
 .find { display: flex; align-items: center; gap: 8px; min-height: 36px; padding: 0 14px; border-radius: 999px; font: inherit; font-weight: 700; color: var(--muted); background: var(--panel); border: 2px solid var(--line); cursor: pointer; }
 .find:hover { color: var(--accent); }
+.find:active { transform: translateY(2px); }
 .jobs:empty { display: none; }
 .stickers { flex: 1; min-height: 0; overflow-y: auto; display: flex; flex-direction: column; gap: 9px; padding: 6px 6px 10px; scrollbar-width: thin; }
 .sticker {
@@ -204,6 +215,7 @@ onUnmounted(() => {
   box-shadow: 0 2px 0 var(--line-2), 0 6px 12px rgba(214, 69, 140, .12);
   transform: rotate(var(--tilt)); transition: transform .35s cubic-bezier(.34, 1.56, .64, 1), background .2s;
 }
+.sticker:active { transform: rotate(0deg) scale(.96); }
 .sticker:hover, .sticker.on { transform: rotate(0deg) scale(1.04); text-decoration: none; }
 .sticker.on { background: color-mix(in srgb, var(--accent) 13%, var(--panel)); color: var(--accent); }
 .si { flex: none; display: grid; place-items: center; width: 30px; height: 30px; border-radius: 50%; color: var(--text); }
@@ -231,6 +243,9 @@ onUnmounted(() => {
 .pop { position: absolute; left: 50%; top: 18px; color: var(--accent); font-size: 18px; pointer-events: none; opacity: 0; animation: kwheart 1.1s ease-out forwards; }
 .kw-say-enter-active { animation: kwpopin .4s cubic-bezier(.34, 1.56, .64, 1); }
 .kw-say-leave-active { transition: opacity .2s, transform .2s; }
+.kscrim.kw-say-enter-active { animation: kwfade .25s ease-out; }
+.kscrim.kw-say-enter-active .kmore { animation: kwpopin .3s cubic-bezier(.34, 1.56, .64, 1); transform-origin: 50% 100%; }
+@keyframes kwfade { from { opacity: 0; } to { opacity: 1; } }
 .kw-say-leave-to { opacity: 0; transform: translateY(4px); }
 @keyframes kwblink { 0%, 90%, 100% { transform: scaleY(1); } 93% { transform: scaleY(.12); } 96% { transform: scaleY(1); } }
 @keyframes kwtail { from { transform: rotate(-6deg); } to { transform: rotate(8deg); } }
@@ -271,6 +286,7 @@ onUnmounted(() => {
   .bub .bow { position: absolute; top: -3px; left: 24px; transform: translateX(-50%) rotate(-10deg); }
   .bub .badge { top: 0; right: auto; left: 28px; }
   .bub .cm { top: 3px; right: auto; left: 32px; }
+  .kedit:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--line); }
   button.bub { border: 0; background: none; font: inherit; cursor: pointer; }
   button.bub.on { background: color-mix(in srgb, var(--accent) 10%, transparent); }
   .kscrim { display: flex; align-items: flex-end; position: fixed; inset: 0; z-index: 59; padding: 0 10px calc(84px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--text) 18%, transparent); }
@@ -295,7 +311,13 @@ onUnmounted(() => {
 }
 
 /* phone budget: the mascot's SVG parts stay still */
-@media (max-width: 640px) and (pointer: coarse) { .eyes, .tail { animation: none; } }
+@media (max-width: 640px), (pointer: coarse) {
+  .eyes, .tail { animation: none; }
+  /* per-tap bits on a phone: a short hop / bubble / hearts, ≤ 350 ms each */
+  .hop .cat { animation-duration: .3s; }
+  .pop { animation-duration: .35s; }
+  .kw-say-enter-active { animation-duration: .3s; }
+}
 @media (prefers-reduced-motion: reduce) {
   .eyes, .tail, .hop .cat, .bub.on, .bub:active .bi, .kpage:active .si, .cm.busy, .kw-say-enter-active { animation: none; }
   .sticker { transition: none; }
@@ -304,6 +326,7 @@ onUnmounted(() => {
 </style>
 
 <style>
+html.skin-kawaii.skin-hidden *, html.skin-kawaii.skin-hidden *::before, html.skin-kawaii.skin-hidden *::after { animation-play-state: paused !important; }
 /* room for the sidebar (desktop) and the floating bubble bar (phone); only while this skin is on */
 @media (min-width: 901px) { html.skin-kawaii .shell.skinned { padding-left: 232px; } }
 @media (max-width: 900px) and (min-width: 641px) { html.skin-kawaii .shell.skinned { padding-left: 98px; } }

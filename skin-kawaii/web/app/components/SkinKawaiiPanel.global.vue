@@ -44,6 +44,7 @@ const tape = computed(() => [...(props.title || 'x')].reduce((s, c) => s + c.cha
 .t1 .tape { left: auto; right: 30px; transform: rotate(3deg); background: repeating-linear-gradient(-45deg, rgba(170, 214, 255, .85) 0 6px, rgba(232, 244, 255, .85) 6px 12px); }
 .t2 .tape { left: 40%; transform: rotate(-2deg); background: repeating-linear-gradient(90deg, rgba(255, 223, 140, .85) 0 7px, rgba(255, 247, 214, .85) 7px 14px); }
 .t3 .tape { background: repeating-linear-gradient(45deg, rgba(200, 176, 255, .85) 0 5px, rgba(244, 236, 255, .85) 5px 10px); transform: rotate(5deg); }
+.hd:active h2 { transform: translateY(2px); }
 .hd { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-height: 30px; margin-bottom: 12px; cursor: pointer; user-select: none; }
 .folded .hd { margin-bottom: 0; }
 h2 { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 15px; font-weight: 800; color: var(--text); }
@@ -54,7 +55,7 @@ h2 { display: flex; align-items: center; gap: 6px; margin: 0; font-size: 15px; f
 .actions + .tg { margin-left: 0; }
 .chev { transform: rotate(90deg); transition: transform .35s cubic-bezier(.34, 1.56, .64, 1); }
 .folded .chev { transform: rotate(0deg); }
-.kw-fold-enter-active { animation: kwfold .5s cubic-bezier(.34, 1.56, .64, 1); transform-origin: top center; }
+.kw-fold-enter-active { animation: kwfold .35s cubic-bezier(.34, 1.56, .64, 1); transform-origin: top center; }
 .kw-fold-leave-active { transition: opacity .15s, transform .15s; transform-origin: top center; }
 .kw-fold-leave-to { opacity: 0; transform: scaleY(.85); }
 @keyframes kwfold { 0% { opacity: 0; transform: scale(.94, .7); } 60% { opacity: 1; transform: scale(1.01, 1.04); } 100% { transform: none; } }

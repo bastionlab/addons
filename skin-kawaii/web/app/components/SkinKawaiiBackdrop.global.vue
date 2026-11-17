@@ -29,7 +29,7 @@ const SHAPE: Record<string, string> = {
 <template>
   <div class="kw-bg" :class="{ paused }" aria-hidden="true">
     <div class="sun" />
-    <div v-for="(c, i) in CLOUDS" :key="`c${i}`" class="cloud" :style="{ top: `${c.top}%`, animationDuration: `${c.d}s`, animationDelay: `${c.o}s` }">
+    <div v-for="(c, i) in CLOUDS" :key="`c${i}`" class="cloud" :class="{ extra: i >= 2 }" :style="{ top: `${c.top}%`, animationDuration: `${c.d}s`, animationDelay: `${c.o}s` }">
       <svg :width="220 * c.s" :height="90 * c.s" viewBox="0 0 220 90">
         <path d="M30 78c-16 0-26-10-24-22 2-11 13-17 24-14 2-16 17-27 34-23 7-14 24-20 39-13 10-9 27-9 37 1 12-6 29 0 31 15 17-1 29 10 27 26-1 13-13 20-25 20z" fill="#ffffff" fill-opacity=".85" />
         <path d="M30 78h139c12 0 24-7 25-20-10 9-24 10-40 6-12 9-35 10-50 2-15 9-38 9-52 1-10 7-22 9-36 6 2 3 8 5 14 5z" fill="#f4dcef" fill-opacity=".6" />
@@ -57,10 +57,11 @@ const SHAPE: Record<string, string> = {
 @keyframes kwdrift { from { transform: translateX(-260px); } to { transform: translateX(110vw); } }
 @keyframes kwrise { from { transform: translateY(0); opacity: 0; } 8% { opacity: .85; } 85% { opacity: .85; } to { transform: translateY(-110vh); opacity: 0; } }
 @keyframes kwsway { from { transform: translateX(-10px) rotate(-14deg); } to { transform: translateX(10px) rotate(14deg); } }
-@media (max-width: 640px) and (pointer: coarse) {
-  .cloud, .bit, .sway { animation: none; }
+/* phone budget: only two clouds drift (the only loops here); bits and sways stand still */
+@media (max-width: 640px), (pointer: coarse) {
+  .bit, .sway { animation: none; }
   .bit { bottom: auto; top: 30%; opacity: .5; }
-  .cloud { transform: translateX(20vw); }
+  .cloud.extra { display: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .cloud, .bit, .sway { animation: none; }
