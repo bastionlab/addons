@@ -63,6 +63,10 @@ html.skin-blocky .skin-blocky-enter-active {
 html.skin-blocky .skin-blocky-leave-active { transition: opacity .12s steps(3); }
 html.skin-blocky .skin-blocky-leave-to { opacity: 0; }
 @keyframes skin-blocky-dissolve { from { --skin-blocky-s: 0px; } to { --skin-blocky-s: 32px; } }
+@media (max-width: 640px), (pointer: coarse) {
+  html.skin-blocky .skin-blocky-enter-active { -webkit-mask-image: none; mask-image: none; animation: none; transition: opacity .12s; }
+  html.skin-blocky .skin-blocky-enter-from { opacity: 0; }
+}
 @media (prefers-reduced-motion: reduce) {
   html.skin-blocky .skin-blocky-enter-active { -webkit-mask-image: none; mask-image: none; animation: none; transition: opacity .12s; }
   html.skin-blocky .skin-blocky-enter-from { opacity: 0; }

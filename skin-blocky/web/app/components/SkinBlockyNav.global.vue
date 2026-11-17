@@ -81,12 +81,18 @@ function onWheel(e: WheelEvent) {
 }
 const bar = ref<HTMLElement | null>(null)
 const wheelGuard = (e: WheelEvent) => { e.preventDefault(); onWheel(e) }
+// every loop in this skin pauses while the tab is hidden (html.skin-hidden, see the style block below)
+const onHide = () => document.documentElement.classList.toggle('skin-hidden', document.hidden)
 onMounted(() => {
+  onHide()
+  document.addEventListener('visibilitychange', onHide)
   window.addEventListener('keydown', onKey)
   bar.value?.addEventListener('wheel', wheelGuard, { passive: false })
   clockT = setInterval(() => { if (!document.hidden) clock.value = new Date() }, 30000)
 })
 onUnmounted(() => {
+  document.removeEventListener('visibilitychange', onHide)
+  document.documentElement.classList.remove('skin-hidden')
   window.removeEventListener('keydown', onKey)
   bar.value?.removeEventListener('wheel', wheelGuard)
   clearInterval(clockT)
@@ -236,6 +242,7 @@ onUnmounted(() => {
 .slot + .slot { margin-left: 2px; }
 .slot:hover { text-decoration: none; background: rgba(170, 170, 170, .65); }
 .item { filter: drop-shadow(2px 2px 0 rgba(40, 40, 40, 1)); }
+.slot:active { transform: translateY(2px); background: rgba(110, 110, 110, .7); box-shadow: inset 2px 2px 0 rgba(30, 30, 30, 1), inset -2px -2px 0 rgba(150, 150, 150, .9); }
 .slot.on { z-index: 1; outline: 4px solid rgba(255, 255, 255, 1); outline-offset: 0; box-shadow: inset 0 0 0 2px rgba(0, 0, 0, 1), 0 0 0 6px rgba(0, 0, 0, .9); background: rgba(160, 160, 160, .7); }
 .slot.on .item { transform: translateY(-1px) scale(1.1); }
 .empty { pointer-events: none; }
@@ -286,6 +293,7 @@ onUnmounted(() => {
 }
 .gslot { font: inherit; border: 0; cursor: pointer; }
 .gslot:hover { text-decoration: none; background: rgba(170, 170, 170, 1); }
+.gslot:active { transform: translateY(2px); background: rgba(120, 120, 120, 1); box-shadow: inset 2px 2px 0 rgba(30, 30, 30, 1), inset -2px -2px 0 rgba(200, 200, 200, 1); }
 .gslot.pinned { outline: 3px solid rgba(255, 255, 85, 1); outline-offset: -1px; }
 .gslot.dim { opacity: .45; }
 .gpin {
@@ -315,7 +323,8 @@ onUnmounted(() => {
   .barrow { gap: 4px; }
   html.kb .hud { display: none; }
 }
-@media (max-width: 640px) and (pointer: coarse) { .hearts.low .pip { animation: none; } }
+/* phone: no per-tap item name, no shaking hearts */
+@media (max-width: 640px), (pointer: coarse) { .hearts.low .pip { animation: none; } .iname { display: none; } }
 @media (prefers-reduced-motion: reduce) {
   .hearts.low .pip, .glint::after { animation: none; }
   .bkinv-enter-active .gui { transition: none; }
@@ -328,6 +337,7 @@ html.skin-blocky .shell.skinned { --tabbar: calc(96px + env(safe-area-inset-bott
 html.skin-blocky main.wrap { padding-bottom: calc(var(--tabbar) + 44px); }
 /* icons as chunky pixel items: square ends, hard corners, heavier strokes, no anti-aliased curves */
 html.skin-blocky svg.icon { stroke-width: 2.6; stroke-linecap: square; stroke-linejoin: miter; shape-rendering: crispEdges; }
+html.skin-blocky.skin-hidden *, html.skin-blocky.skin-hidden *::before, html.skin-blocky.skin-hidden *::after { animation-play-state: paused !important; }
 @keyframes skin-blocky-click { 0% { transform: scale(1.06, .82); } 100% { transform: scale(1, 1); } }
 @media (prefers-reduced-motion: reduce) { html.skin-blocky .btn:active { animation: none !important; } }
 </style>

@@ -96,7 +96,7 @@ const trees = TREE_COLS.map(c => ({ x: c * 16, base: near[c]!.top }))
     </svg>
 
     <svg
-      v-for="(c, i) in clouds" :key="i" class="cloud" :viewBox="`0 0 ${c.w} ${c.h}`" shape-rendering="crispEdges"
+      v-for="(c, i) in clouds" :key="i" class="cloud" :class="{ extra: i >= 2 }" :viewBox="`0 0 ${c.w} ${c.h}`" shape-rendering="crispEdges"
       :style="{ top: c.top, width: `${c.w * 2.4 * c.scale}px`, animationDuration: c.dur, animationDelay: c.delay }"
     >
       <rect v-for="(p, k) in c.cells" :key="k" :x="p.x" :y="p.y" width="8" height="8" fill="#ffffff" />
@@ -191,9 +191,12 @@ const trees = TREE_COLS.map(c => ({ x: c * 16, base: near[c]!.top }))
 .dusk .dark, .dawn .dark { opacity: .12; }
 
 .paused .stars i, .paused .cloud { animation-play-state: paused; }
-@media (max-width: 640px) and (pointer: coarse) {
-  .stars i, .cloud { animation: none; }
-  .cloud { transform: translateX(30vw); }
+/* phone budget: 2 clouds drift (the only loops), stars stand still, no glow filter, no 4 s sky fades */
+@media (max-width: 640px), (pointer: coarse) {
+  .stars i { animation: none; }
+  .cloud.extra { display: none; }
+  .sun, .dusk .sun, .dawn .sun { filter: none; }
+  .sky, .stars, .dark { transition: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .stars i, .cloud { animation: none; }
