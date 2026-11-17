@@ -35,6 +35,8 @@ h2 { font-size: 13px; font-weight: 700; margin: 0; color: var(--line-2); }
 .actions { margin-left: auto; display: flex; gap: 4px; flex-wrap: wrap; cursor: default; }
 .ctl { margin-left: auto; display: grid; place-items: center; width: 22px; height: 20px; padding: 0; font: 700 12px/1 Tahoma, sans-serif; background: var(--panel); color: var(--text); border: 2px solid; border-color: var(--line-2) var(--text) var(--text) var(--line-2); cursor: pointer; }
 .actions + .ctl { margin-left: 0; }
+.ctl:active { border-color: var(--text) var(--line-2) var(--line-2) var(--text); padding-top: 1px; }
+.bar:active h2 { transform: translate(1px, 1px); }
 .body { padding: 12px 10px 10px; }
 @media (pointer: coarse) { .ctl { width: 34px; height: 30px; } }
 </style>

@@ -75,6 +75,7 @@ watch(() => props.tabs.length, () => nextTick(measure))
   border-radius: 4px 4px 0 0; box-shadow: inset -1px 0 0 var(--line); cursor: pointer; -webkit-tap-highlight-color: transparent;
 }
 .tab:hover { background: var(--panel-2); }
+.tab:active { background: var(--panel-2); border-color: var(--text) var(--line-2) transparent var(--text); padding-top: 2px; }
 .tab.on {
   z-index: 1; height: 40px; margin: 0 -3px 0 -2px; padding: 0 14px 2px; font-weight: 700; background: var(--panel);
 }

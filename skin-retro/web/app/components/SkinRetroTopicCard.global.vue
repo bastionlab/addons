@@ -22,6 +22,8 @@ withDefaults(defineProps<{
 <style scoped>
 .tile { display: flex; flex-direction: column; height: 100%; min-width: 0; overflow: hidden; color: var(--text); text-decoration: none; background: var(--panel); border: 2px solid; border-color: var(--line-2) var(--text) var(--text) var(--line-2); padding: 2px; }
 .tile:hover { text-decoration: none; }
+.tile:active { border-color: var(--text) var(--line-2) var(--line-2) var(--text); }
+.tile:active .body { transform: translate(1px, 1px); }
 .bar { display: flex; align-items: center; gap: 6px; padding: 3px 6px; background: var(--accent); color: var(--line-2); font-weight: 700; font-size: 12.5px; }
 .name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .body { display: flex; flex-direction: column; gap: 4px; padding: 6px 6px 4px; min-height: 0; overflow: hidden; font-size: 12.5px; }
