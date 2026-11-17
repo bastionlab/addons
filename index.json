@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794874079,
+  "updated": 1794874138,
   "addons": [
     {
       "id": "ai",
@@ -323,7 +323,7 @@
       "id": "notes",
       "name": "Notes",
       "icon": "note",
-      "version": "1.0.3",
+      "version": "1.0.4",
       "author": "MaxJC0",
       "desc": "Quick-capture notebook the local model tidies: one topic per note, todos, pasted images, undo.",
       "routes": [
