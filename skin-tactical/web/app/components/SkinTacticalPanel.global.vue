@@ -36,6 +36,7 @@ function toggle() {
 .hd { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; min-height: 32px; cursor: pointer; user-select: none; }
 h2 { margin: 0; font: 700 14px/1.2 "Bahnschrift", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif; text-transform: uppercase; letter-spacing: .1em; color: var(--text); }
 .hd:hover h2 { color: var(--accent); }
+.hd:active h2 { color: var(--accent); transform: translateY(1px); }
 .sub { font-size: 12px; color: var(--faint); min-width: 0; }
 .actions { margin-left: auto; display: flex; gap: 6px; flex-wrap: wrap; cursor: default; }
 .ctl { margin-left: auto; width: 32px; height: 30px; display: grid; place-items: center; padding: 0; border: 1px solid var(--line); background: transparent; color: var(--muted); cursor: pointer; }
