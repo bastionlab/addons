@@ -1,6 +1,6 @@
 {
   "format": 1,
-  "updated": 1794875098,
+  "updated": 1794875174,
   "addons": [
     {
       "id": "ai",
@@ -524,7 +524,7 @@
       "id": "skin-tactical",
       "name": "Tactical HUD skin",
       "icon": "palette",
-      "version": "0.3.3",
+      "version": "0.3.4",
       "author": "MaxJC0",
       "desc": "A whole-app skin for Designs: a calm tactical HUD: condensed uppercase type, amber on olive-black, square edges, a numbered loadout column and a weapon-slot tab bar on the phone.",
       "depends_on": [
